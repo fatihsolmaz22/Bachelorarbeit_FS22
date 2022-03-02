@@ -25,5 +25,5 @@ Once the project has been loaded go to **"File"** --> **"Settings"**.</br></br>
 Install the Poetry plugin as shown below.</br></br>
 ![poetry_plugin_img](https://github.com/fatihsolmaz22/Bachelorarbeit_FS22/blob/main/README_resources/04_Poetry_Plugin_Installation.png)
 
-After the installation of the plugin open a Python script e.g. test.py. The IDE recognizes that there is no Python Interpreter configured for the project and suggests three options. Click on **"Create a poetry environment using pyproject.toml"** to complete the project setup</br></br>
+After the installation of the plugin open a Python script e.g. test.py. The IDE recognizes that there is no Python Interpreter configured for the project and suggests three options. Click on **"Create a poetry environment using pyproject.toml"** to complete the project setup.</br></br>
 ![poetry_plugin_img](https://github.com/fatihsolmaz22/Bachelorarbeit_FS22/blob/main/README_resources/05_Create_poetry_using_pyproject.png)
