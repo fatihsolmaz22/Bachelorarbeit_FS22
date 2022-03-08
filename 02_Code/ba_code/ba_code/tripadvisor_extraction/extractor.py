@@ -55,6 +55,7 @@ def main():
     next_page.history = [] # TODO: this is because first site redirects, but we want to stop the loop when it redirects at last+1 page
     while not next_page.history :
         print("Review Page {} to {} loaded.".format(review_page_count, review_page_count+10))
+        print("-------------------------")
 
         # TODO: here you can use the loaded page and extract reviews from it 0-10, 10-20, etc.
         page_interpreter = load_page_interpreter(next_page)
