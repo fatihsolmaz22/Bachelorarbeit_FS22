@@ -26,7 +26,7 @@ Install [Poetry](https://python-poetry.org/docs/) which is a tool for dependency
 
 ```poetry shell```
 
-#### 4. See all availible commands
+#### 4. See all available commands
 
 ```python cli_executor.py --help```
 
