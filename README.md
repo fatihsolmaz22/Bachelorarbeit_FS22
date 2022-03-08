@@ -3,7 +3,7 @@
 ## Setup
 Clone this project to a local folder.
 
-### Poetry
+### Install Poetry
 Install [Poetry](https://python-poetry.org/docs/) which is a tool for dependency management and packaging in Python. Poetry requires Python 2.7 or 3.5+. You can install Poetry using the following commands.
 
 #### osx / linux / bashonwindows:
