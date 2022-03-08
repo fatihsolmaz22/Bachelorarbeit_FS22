@@ -7,12 +7,34 @@ Clone this project to a local folder.
 Install [Poetry](https://python-poetry.org/docs/) which is a tool for dependency management and packaging in Python. Poetry requires Python 2.7 or 3.5+. You can install Poetry using the following commands.
 
 #### osx / linux / bashonwindows:
-curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
+```curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python```
 
 #### or windows powershell:
-(Invoke-WebRequest -Uri https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py -UseBasicParsing).Content | python
+```(Invoke-WebRequest -Uri https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py -UseBasicParsing).Content | python```
 
-### PyCharm
+### Run the project from shell
+
+#### 1. Go to project folder
+
+```cd ba_code```
+
+#### 2. Get all the packages
+
+```poetry install```
+
+#### 3. Get into poetry environment
+
+```poetry shell```
+
+#### 4. See all availible commands
+
+```python cli_executor.py --help```
+
+#### 5. Execute a predefined command
+
+e.g. ```python cli_executor.py extract-reviews```
+
+### Run the project with PyCharm
 Download and install [PyCharm](https://www.jetbrains.com/de-de/pycharm/) which is a Python IDE. Open the IDE after the installation and click on **"Open"** as depicted below.</br></br>
 ![pycharm_window_img](https://github.com/fatihsolmaz22/Bachelorarbeit_FS22/blob/main/README_resources/01_PyCharm_Window.png)
 
