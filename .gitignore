@@ -115,3 +115,6 @@ dmypy.json
 
 # Idea stuff
 .idea/
+
+# Restaurant data
+restaurant_data
