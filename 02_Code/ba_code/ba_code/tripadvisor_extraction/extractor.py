@@ -85,7 +85,7 @@ def main():
         all_reviews_data = []
 
         browser_tool = BrowserTool()
-        main_page_element = browser_tool.get_main_page_element(RestaurantURLs.NOOCH_STEINFELS.value)
+        main_page_element = browser_tool.get_main_page_element(restaurant.value)
         has_next_page = True
 
         page_count = 1
@@ -119,7 +119,7 @@ def main():
             page_count += 1
 
         jsonString = json.dumps(all_reviews_data)
-        with open("../resources/tripadvisor_review_data_{}.json".format(restaurant.name), "w+") as json_file:
+        with open("../../resources/review_data/tripadvisor_review_data_{}.json".format(restaurant.name), "w+") as json_file:
             json_file.write(jsonString)
 
 if __name__ == "__main__":

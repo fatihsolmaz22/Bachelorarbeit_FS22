@@ -1,5 +1,5 @@
 import pandas as pd
-from restaurant_uri import RestaurantUri
+from ba_code.restaurant_data_preprocessing.restaurant_uri import RestaurantUri
 
 
 class RestaurantDataExtractor:
