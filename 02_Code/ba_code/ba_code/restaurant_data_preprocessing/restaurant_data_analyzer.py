@@ -14,12 +14,13 @@ class RestaurantDataAnalyzer:
 
     def plot_turnover_per_month(self, restaurant_uri):
         df_turnover_per_month = self.__restaurantDataExtractor \
-            .get_turnover_per_month_dataframe(restaurant_uri)
+                                    .get_turnover_per_month_dataframe(
+                                                        restaurant_uri)
 
         plt.figure()
         df_turnover_per_month.plot()
         plt.title("Turnover per month: " + self.__get_restaurant_name(
-                                                restaurant_uri))
+                                                        restaurant_uri))
         plt.xlabel('month')
         plt.ylabel('turnover CHF')
         plt.legend(loc="upper left")
@@ -27,9 +28,12 @@ class RestaurantDataAnalyzer:
         plt.show()
 
     def __get_restaurant_name(self, restaurant_uri):
-        restaurant_uri_array = str(restaurant_uri).lower().split(".")[1].split("_")
-        restaurant_uri_array = [element.capitalize() for element in restaurant_uri_array]
-        return ' '.join(restaurant_uri_array)
+        restaurant_name_location_array = str(restaurant_uri).lower() \
+                                                            .split(".")[1]\
+                                                            .split("_")
+        restaurant_name_location_array = \
+            [element.capitalize() for element in restaurant_name_location_array]
+        return ' '.join(restaurant_name_location_array)
 
 
 restaurantDataAnalyzer = RestaurantDataAnalyzer()
