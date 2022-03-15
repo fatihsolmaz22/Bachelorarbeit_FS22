@@ -118,3 +118,6 @@ dmypy.json
 
 # Restaurant data
 restaurant_data
+
+# Poetry
+poetry.lock
