@@ -1,100 +1,126 @@
-from bs4 import BeautifulSoup
-import requests
+import time
+import json
 from enum import Enum
-from lxml.html import fromstring
+import datetime
+from selenium.common.exceptions import NoSuchElementException
+from browser_tool import BrowserTool
+from tripadvisor_strings import RestaurantURLs, HtmlAttributeValues
+from browser_tool_strings import HtmlTags, HtmlAttributes, XPathStringFunctions
 
-cookies = {"pwv":"2", "pws":"functional|analytics|content_recommendation|targeted_advertising|social_media"}
-headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36',
-           "Upgrade-Insecure-Requests": "1","DNT": "1",
-           "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-           "Accept-Language": "en-US,en;q=0.5", "Accept-Encoding": "gzip, deflate"}
+class JsonFormat(Enum):
+    rating = "rating"
+    date = "date"
+    content = "content"
 
-class SelectorStrings(Enum):
-    AttributeSelectorTemplate = '{}[{}{}="{}"]'
-    divTag = "div"
-    pTag = "p"
-    spanTag = "span"
-    classAttribute = "class"
-    titleAttribute = "title"
-    ReviewContainer = "review-container"
-    ContentInsideOfReview = "partial_entry"
-    RatingPartialMatcher = "ui_bubble_rating bubble_"
-    RatingDate = "ratingDate"
+def click_on_all_languages(browser_tool, main_page_element):
+    browser_tool.click_element_on_page(html_element=main_page_element,
+                                       html_tag=HtmlTags.INPUT_TAG.value,
+                                       attribute_name=HtmlAttributes.ID.value,
+                                       attribute_value=HtmlAttributeValues.ALL_LANGUAGES.value)
 
-class RestaurantURL(Enum):
-    NoochSteinfels = "https://www.tripadvisor.com/Restaurant_Review-g188113-d1023285-Reviews-or{}-Nooch_Asian_Kitchen_Steinfels-Zurich.html"
+def click_on_more_button(browser_tool, main_page_element):
+    try:
+        browser_tool.click_element_on_page(html_element=main_page_element,
+                                       html_tag=HtmlTags.SPAN_TAG.value,
+                                       attribute_name=HtmlAttributes.CLASS.value,
+                                       attribute_value=HtmlAttributeValues.MORE_BUTTON.value)
+    except NoSuchElementException:
+        pass
 
-def load_page(url):
-    return requests.get(url, cookies=cookies, headers=headers)
+def expand_information_on_page(browser_tool, main_page_element):
+    click_on_all_languages(browser_tool, main_page_element)
+    click_on_more_button(browser_tool, main_page_element)
 
-def get_page_interpreter(loaded_page):
-    return BeautifulSoup(loaded_page.content, "lxml")
+def go_next_page(browser_tool, main_page_element):
+    has_next_page = True
+    try:
+        browser_tool.click_element_on_page(html_element=main_page_element,
+                                           html_tag=HtmlTags.A_TAG.value,
+                                           attribute_name=HtmlAttributes.CLASS.value,
+                                           attribute_value=HtmlAttributeValues.NEXT_PAGE.value)
+    except NoSuchElementException:
+        has_next_page = False
+    return has_next_page
 
-def get_html_elements_by_css_selector(element, html_tag, attribute_name, attribute_value, partial_matching=False, get_first_element=False):
-    empty_string = ""
-    contains_string = "*"
-    contains_value = contains_string if partial_matching else empty_string
-    css_selector = SelectorStrings.AttributeSelectorTemplate.value.format(html_tag, attribute_name,
-                                                                          contains_value, attribute_value)
-    html_elements = element.select(css_selector)
-    return_value = html_elements if not get_first_element else html_elements[0]
-    return return_value
+def get_all_reviews_on_page(browser_tool, main_page_element):
+    return browser_tool.get_html_elements_by_css_selector(html_element=main_page_element,
+                                                          html_tag=HtmlTags.DIV_TAG.value,
+                                                          attribute_name=HtmlAttributes.CLASS.value,
+                                                          attribute_value=HtmlAttributeValues.ALL_REVIEWS.value)
 
-def redirected(page):
-    return page.history
+def get_rating_of_review(browser_tool, review_element):
+    rating_element = browser_tool.get_html_elements_by_css_selector(html_element=review_element,
+                                                            html_tag=HtmlTags.SPAN_TAG.value,
+                                                            attribute_name=HtmlAttributes.CLASS.value,
+                                                            attribute_value=HtmlAttributeValues.RATING_PARTIAL_MATCHER.value,
+                                                            string_function_value=XPathStringFunctions.CONTAINS_STRING.value,
+                                                            get_first_element=True)
+    rating_element_class_name = rating_element.get_attribute(HtmlAttributes.CLASS.value)
+    rating_raw = int(rating_element_class_name.replace(HtmlAttributeValues.RATING_PARTIAL_MATCHER.value, ""))/10
+    return rating_raw
+
+def get_content_of_review(browser_tool, review_element):
+    content_element = browser_tool.get_html_elements_by_css_selector(html_element=review_element,
+                                                                     html_tag=HtmlTags.P_TAG.value,
+                                                                     attribute_name=HtmlAttributes.CLASS.value,
+                                                                     attribute_value=HtmlAttributeValues.REVIEW_CONTENT.value,
+                                                                     get_first_element=True)
+    content_raw = content_element.text.replace("\n", "")
+    return content_raw
+
+def get_date_of_review(browser_tool, review_element):
+    date_element = browser_tool.get_html_elements_by_css_selector(html_element=review_element,
+                                                                  html_tag=HtmlTags.SPAN_TAG.value,
+                                                                 attribute_name=HtmlAttributes.CLASS.value,
+                                                                 attribute_value=HtmlAttributeValues.REVIEW_DATE.value,
+                                                                 string_function_value=XPathStringFunctions.CONTAINS_STRING.value,
+                                                                 get_first_element=True)
+    date_raw_string = date_element.get_attribute(HtmlAttributes.TITLE.value)
+    review_date_formatted = datetime.datetime.strptime(date_raw_string, "%B %d, %Y").strftime("%d-%m-%Y")
+    return review_date_formatted
 
 def main():
 
-    review_count = 0
-    next_page = load_page(RestaurantURL.NoochSteinfels.value.format(review_count))
-    # cleaning history because first site redirects, but we want to stop the loop when it redirects at last+1 page
-    next_page.history = []
-    while not redirected(next_page):
-        reviews_per_page = 10
-        print("Review Page {} to {} loaded.".format(review_count, review_count + reviews_per_page))
-        print("----------------------------")
+    for restaurant in RestaurantURLs:
+        all_reviews_data = []
 
-        # # TODO: here you can use the loaded page and extract reviews from it 0-10, 10-20, etc.
-        page_interpreter = get_page_interpreter(next_page)
-        all_reviews = get_html_elements_by_css_selector(page_interpreter,
-                                                        SelectorStrings.divTag.value,
-                                                        SelectorStrings.classAttribute.value,
-                                                        SelectorStrings.ReviewContainer.value)
-        for review_element in all_reviews:
-            # print(review_element.select('p[class="partial_entry"]')[0].text)
-            # print("---------------------------")
-            # TODO: rating
-            rating_class_name = get_html_elements_by_css_selector(review_element,
-                                                    SelectorStrings.spanTag.value,
-                                                    SelectorStrings.classAttribute.value,
-                                                    SelectorStrings.RatingPartialMatcher.value,
-                                                    partial_matching=True,
-                                                    get_first_element=True)[SelectorStrings.classAttribute.value][1]
-            review_rating = int(rating_class_name.replace("bubble_", "")) / 10
-            print(review_rating)
+        browser_tool = BrowserTool()
+        main_page_element = browser_tool.get_main_page_element(RestaurantURLs.NOOCH_STEINFELS.value)
+        has_next_page = True
 
-            # TODO: text of review
-            review_text = get_html_elements_by_css_selector(review_element,
-                                                    SelectorStrings.pTag.value,
-                                                    SelectorStrings.classAttribute.value,
-                                                    SelectorStrings.ContentInsideOfReview.value,
-                                                    get_first_element=True).text
-            print(review_text)
+        page_count = 1
+        while has_next_page:
+            print("\n\n\n-----------------PAGE {}--------------------".format(page_count))
+            expand_information_on_page(browser_tool, main_page_element)
 
-            # TODO: rating date (Format: September 29, 2015)
-            review_date = get_html_elements_by_css_selector(review_element,
-                                                            SelectorStrings.spanTag.value,
-                                                            SelectorStrings.classAttribute.value,
-                                                            SelectorStrings.RatingDate.value,
-                                                            get_first_element=True)[SelectorStrings.titleAttribute.value]
-            print(review_date)
+            all_reviews = get_all_reviews_on_page(browser_tool, main_page_element)
 
-            print("----------------------------")
+            for review_element in all_reviews:
+                # # TODO: review date (Format: 29-09-2015)
+                date_of_review = get_date_of_review(browser_tool, review_element)
+                print(date_of_review)
 
-        # TODO: here it goes to the next page of the restaurant review website
-        review_count += reviews_per_page
-        next_page = load_page(RestaurantURL.NoochSteinfels.value.format(review_count))
+                # TODO: rating
+                rating_of_review = get_rating_of_review(browser_tool, review_element)
+                print(rating_of_review)
 
+                # TODO: text of review
+                content_of_review = get_content_of_review(browser_tool, review_element)
+                print(content_of_review)
+
+                print("----------------------------")
+
+                all_reviews_data += [{ JsonFormat.date.value:date_of_review,
+                                       JsonFormat.rating.value:rating_of_review,
+                                       JsonFormat.content.value:content_of_review}]
+
+            # TODO: here it goes to the next page of the restaurant review website
+            has_next_page = go_next_page(browser_tool, main_page_element)
+            page_count += 1
+
+        jsonString = json.dumps(all_reviews_data)
+        with open("./review_data/tripadvisor_review_data_{}.json".format(restaurant.name), "w+") as json_file:
+            json_file.write(jsonString)
 
 if __name__ == "__main__":
     main()
