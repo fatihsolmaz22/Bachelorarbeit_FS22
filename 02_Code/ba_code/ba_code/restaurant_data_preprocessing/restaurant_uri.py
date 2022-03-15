@@ -5,7 +5,7 @@ import os
 os.chdir("../../resources/restaurant_data")
 
 
-class RestaurantData(Enum):
+class RestaurantUri(Enum):
     BUTCHER_BADENERSTRASSE = os.path.join(os.getcwd(),
                                           'Butcher_Badenerstrasse_2019-2022.csv')
     BUTCHER_NIEDERDORF = os.path.join(os.getcwd(),
