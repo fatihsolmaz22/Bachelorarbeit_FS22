@@ -11,17 +11,19 @@ class RestaurantDataExtractor:
     def __initialize_dataframes(self):
         for restaurant_data in RestaurantData:
             df = pd.read_csv(restaurant_data.value)
+            df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d')
             self.__restaurant_dfs[restaurant_data] = df
 
     def get_dataframe(self, restaurant_data):
         return self.__restaurant_dfs[restaurant_data]
 
-"""
-Call Example
-restaurantDataExtractor = RestaurantDataExtractor()
+    def get_turnover_per_day_dataframe(self, restaurant_data):
+        df = self.__restaurant_dfs[restaurant_data]
+        df_date_turnover = df.filter(items=['date', 'turnover'])
+        return df_date_turnover.groupby(['date']).sum()
 
-df = restaurantDataExtractor.get_dataframe(RestaurantData.BUTCHER_BADENERSTRASSE)
-
-print(df)
-"""
-
+    def get_turnover_per_month_dataframe(self, restaurant_data):
+        df = self.__restaurant_dfs[restaurant_data]
+        df_date_turnover = df.filter(items=['date', 'turnover'])
+        return df_date_turnover.groupby(pd.Grouper(key='date', axis=0,
+                                                   freq='m')).sum()
