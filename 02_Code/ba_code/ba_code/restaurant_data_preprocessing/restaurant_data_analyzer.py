@@ -1,5 +1,5 @@
 from restaurant_data_extractor import RestaurantDataExtractor
-from restaurant_uri import RestaurantUri
+from ba_code.restaurant_data_preprocessing.restaurant_uri import RestaurantUri
 import matplotlib.pyplot as plt
 
 
@@ -33,4 +33,4 @@ class RestaurantDataAnalyzer:
 
 
 restaurantDataAnalyzer = RestaurantDataAnalyzer()
-restaurantDataAnalyzer.plot_turnover_per_month(RestaurantUri.BUTCHER_BADENERSTRASSE)
+restaurantDataAnalyzer.plot_turnover_per_month_all_restaurants()

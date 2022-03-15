@@ -18,12 +18,14 @@ class RestaurantDataExtractor:
         return self.__restaurant_dfs[restaurant_uri]
 
     def get_turnover_per_day_dataframe(self, restaurant_uri):
-        df = self.__restaurant_dfs[restaurant_uri]
-        df_date_turnover = df.filter(items=['date', 'turnover'])
+        df_date_turnover = self.__get_date_turnover_dataframe(restaurant_uri)
         return df_date_turnover.groupby(['date']).sum()
 
     def get_turnover_per_month_dataframe(self, restaurant_uri):
-        df = self.__restaurant_dfs[restaurant_uri]
-        df_date_turnover = df.filter(items=['date', 'turnover'])
+        df_date_turnover = self.__get_date_turnover_dataframe(restaurant_uri)
         return df_date_turnover.groupby(pd.Grouper(key='date', axis=0,
                                                    freq='m')).sum()
+    
+    def __get_date_turnover_dataframe(self, restaurant_uri):
+        df = self.__restaurant_dfs[restaurant_uri]
+        return df.filter(items=['date', 'turnover'])
