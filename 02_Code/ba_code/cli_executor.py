@@ -1,5 +1,5 @@
 import typer
-from ba_code.tripadvisor_extraction import extractor
+from ba_code.web_scraping.tripadvisor_review import extractor
 
 app = typer.Typer()
 
