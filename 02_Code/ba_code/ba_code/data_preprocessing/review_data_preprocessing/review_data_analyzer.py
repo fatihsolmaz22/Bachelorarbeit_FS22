@@ -1,8 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from ba_code.data_preprocessing.restaurant_data.restaurant_data_extractor import RestaurantDataExtractor
-from ba_code.data_preprocessing.restaurant_data.restaurant_uri import RestaurantUri
-from ba_code.data_preprocessing.review_data.review_uri import ReviewUri
+from ba_code.data_preprocessing.restaurant_data_preprocessing.restaurant_data_extractor import RestaurantDataExtractor
+from ba_code.data_preprocessing.restaurant_data_preprocessing.restaurant_uri import RestaurantUri
+from ba_code.data_preprocessing.review_data_preprocessing.review_uri import ReviewUri
 
 
 class ReviewDataAnalyzer:
