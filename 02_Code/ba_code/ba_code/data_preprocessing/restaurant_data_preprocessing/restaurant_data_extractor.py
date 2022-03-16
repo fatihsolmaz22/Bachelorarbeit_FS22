@@ -1,7 +1,7 @@
 import pandas as pd
 from ba_code.data_preprocessing.restaurant_data_preprocessing.restaurant_uri import RestaurantUri
 
-
+# TODO: not clean, code duplication (interface or superclass)
 class RestaurantDataExtractor:
 
     def __init__(self):

@@ -1,54 +1,40 @@
-import pandas as pd
-import matplotlib.pyplot as plt
-from ba_code.data_preprocessing.restaurant_data_preprocessing.restaurant_data_extractor import RestaurantDataExtractor
-from ba_code.data_preprocessing.restaurant_data_preprocessing.restaurant_uri import RestaurantUri
+from review_data_extractor import ReviewDataExtractor
 from ba_code.data_preprocessing.review_data_preprocessing.review_uri import ReviewUri
+import matplotlib.pyplot as plt
 
 
+# TODO: not clean, code duplication (interface or superclass)
 class ReviewDataAnalyzer:
 
-    # def __init__(self):
-    #     df = pd.read_json("../../resources/review_data/tripadvisor_review_data_NOOCH_STEINFELS.json")
-    #     print(df.head(5))
+    def __init__(self):
+        self.__reviewDataExtractor = ReviewDataExtractor()
 
-    def get_monthly_rating_dataframe_for_restaurant(self, review_uri):
-        template = "../../../resources/review_data/tripadvisor_review_data_{}.json"
-        path_to_restaurant_json = template.format(review_uri.name)
-        df = pd.read_json(path_to_restaurant_json)
-        df = df.filter(items=["date", "rating"])
-        return df.groupby(pd.Grouper(key='date', axis=0,
-                                     freq='m')).mean().fillna(0)
+    def plot_rating_per_month_all_restaurants(self):
+        for review_uri in ReviewUri:
+            self.plot_rating_per_month(review_uri)
+
+    def plot_rating_per_month(self, review_uri):
+        df_turnover_per_month = self.__reviewDataExtractor \
+            .get_monthly_rating_for_restaurant_dataframe(review_uri)
+
+        plt.figure()
+        df_turnover_per_month.plot()
+        plt.title("Rating per month: " + self.__get_restaurant_name(
+            review_uri))
+        plt.xlabel('month')
+        plt.ylabel('rating')
+        plt.legend(loc="upper left")
+        plt.grid()
+        plt.show()
+
+    def __get_restaurant_name(self, review_uri):
+        restaurant_name_location_array = str(review_uri).lower() \
+            .split(".")[1] \
+            .split("_")
+        restaurant_name_location_array = \
+            [element.capitalize() for element in restaurant_name_location_array]
+        return ' '.join(restaurant_name_location_array)
 
 
-def main():
-    review_data_analyzer = ReviewDataAnalyzer()
-    df_review_data = review_data_analyzer.get_monthly_rating_dataframe_for_restaurant(
-        ReviewUri.NOOCH_BADENERSTRASSE)
-
-    restaurant_data_extractor = RestaurantDataExtractor()
-    df_restaurant_data = restaurant_data_extractor.get_turnover_per_month_dataframe(RestaurantUri.NOOCH_BADENERSTRASSE)
-
-    print(df_review_data.head(5))
-    print(df_restaurant_data.head(5))
-
-    # plot ###################################################################
-    color = 'red'
-    fig, ax1 = plt.subplots()
-    ax1.set_xlabel('date ')
-    ax1.set_ylabel('rating', color=color)
-    ax1.tick_params(axis='y', labelcolor=color)
-    df_review_data.plot(ax=ax1, color=color)
-
-    color = 'blue'
-    ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
-    ax2.set_ylabel('turnover in CHF', color=color)
-    ax2.tick_params(axis='y', labelcolor=color)
-    df_restaurant_data.plot(ax=ax2, color=color)
-
-    fig.tight_layout()  # otherwise the right y-label is slightly clipped
-    plt.legend(loc="upper left")
-    plt.show()
-    # plot ###################################################################"""
-
-if __name__ == '__main__':
-    main()
+restaurantDataAnalyzer = ReviewDataAnalyzer()
+restaurantDataAnalyzer.plot_rating_per_month_all_restaurants()

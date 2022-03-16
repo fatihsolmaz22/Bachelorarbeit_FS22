@@ -2,7 +2,7 @@ from restaurant_data_extractor import RestaurantDataExtractor
 from ba_code.data_preprocessing.restaurant_data_preprocessing.restaurant_uri import RestaurantUri
 import matplotlib.pyplot as plt
 
-
+# TODO: not clean, code duplication (interface or superclass)
 class RestaurantDataAnalyzer:
 
     def __init__(self):
@@ -14,8 +14,7 @@ class RestaurantDataAnalyzer:
 
     def plot_turnover_per_month(self, restaurant_uri):
         df_turnover_per_month = self.__restaurantDataExtractor \
-            .get_turnover_per_month_dataframe(
-            restaurant_uri)
+            .get_turnover_per_month_dataframe(restaurant_uri)
 
         plt.figure()
         df_turnover_per_month.plot()

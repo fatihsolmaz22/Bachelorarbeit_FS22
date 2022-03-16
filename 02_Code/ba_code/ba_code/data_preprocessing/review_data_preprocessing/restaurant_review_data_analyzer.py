@@ -1,0 +1,41 @@
+import matplotlib.pyplot as plt
+from ba_code.data_preprocessing.restaurant_data_preprocessing.restaurant_data_extractor import RestaurantDataExtractor
+from ba_code.data_preprocessing.review_data_preprocessing.review_data_extractor import ReviewDataExtractor
+from ba_code.data_preprocessing.restaurant_data_preprocessing.restaurant_uri import RestaurantUri
+from ba_code.data_preprocessing.review_data_preprocessing.review_uri import ReviewUri
+
+# TODO: move this outside of the package after enum path bug fix
+class RestaurantReviewDataAnalyzer:
+
+    def __init__(self):
+        self.__restaurantDataExtractor = RestaurantDataExtractor()
+        self.__reviewDataExtractor = ReviewDataExtractor()
+
+    # TODO: not clean
+    def plot_restaurant_rating_and_turnover(self, restaurant_uri, review_uri):
+        df_restaurant_data = self.__restaurantDataExtractor.get_turnover_per_month_dataframe(restaurant_uri)
+        df_review_data = self.__reviewDataExtractor.get_monthly_rating_for_restaurant_dataframe(review_uri)
+
+        # plot ###################################################################
+        color = 'red'
+        fig, ax1 = plt.subplots()
+        ax1.set_xlabel('date ')
+        ax1.set_ylabel('rating', color=color)
+        ax1.tick_params(axis='y', labelcolor=color)
+        df_review_data.plot(ax=ax1, color=color)
+
+        color = 'blue'
+        ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
+        ax2.set_ylabel('turnover in CHF', color=color)
+        ax2.tick_params(axis='y', labelcolor=color)
+        df_restaurant_data.plot(ax=ax2, color=color)
+
+        fig.tight_layout()  # otherwise the right y-label is slightly clipped
+        plt.legend(loc="upper left")
+        plt.show()
+        # plot ###################################################################"""
+
+
+restaurantReviewDataAnalyzer = RestaurantReviewDataAnalyzer()
+restaurantReviewDataAnalyzer.plot_restaurant_rating_and_turnover(RestaurantUri.NOOCH_BADENERSTRASSE,
+                                                                 ReviewUri.NOOCH_BADENERSTRASSE)

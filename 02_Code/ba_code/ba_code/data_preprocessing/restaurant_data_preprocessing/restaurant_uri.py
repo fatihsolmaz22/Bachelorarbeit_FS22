@@ -1,7 +1,7 @@
 from enum import Enum
 import os
 
-# TODO: better solution for this
+# TODO: buggy, better solution for this needed!!
 path = "../../../resources/restaurant_data"
 
 
