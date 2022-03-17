@@ -7,6 +7,7 @@ import time
 
 from browser_tool_strings import XPathTemplates
 
+# TODO: change everything to static, rename to scraping tool
 class BrowserTool:
 
     @staticmethod

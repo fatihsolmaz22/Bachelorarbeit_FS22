@@ -7,6 +7,7 @@ class XPathTemplates(Enum):
     ATTRIBUTE_SELECTOR_BASE = './/{}[@{}="{}"]'
     ATTRIBUTE_SELECTOR_STRING_FUNCTIONS = './/{}[{}(@{}, "{}")]'
 
+# TODO: add function to remove necessity of .value to get value of Enum when calling
 class HtmlTags(Enum):
     A_TAG = "a"
     DIV_TAG = "div"
