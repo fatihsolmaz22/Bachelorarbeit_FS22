@@ -2,7 +2,7 @@ import json
 import datetime
 from selenium.common.exceptions import NoSuchElementException
 from ba_code.web_scraping.scraping.scraping_tool import ScrapingTool
-from ba_code.web_scraping.tripadvisor_review.tripadvisor_strings import RestaurantURLs, HtmlAttributeValues
+from ba_code.web_scraping.tripadvisor_review.tripadvisor_constants import RestaurantURLs, HtmlAttributeValues
 from ba_code.web_scraping.scraping.scraping_constants import HtmlTags, HtmlAttributes, XPathStringFunctions
 
 class JsonFormat:
