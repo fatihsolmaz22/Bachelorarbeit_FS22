@@ -131,7 +131,7 @@ def main():
             has_next_page = go_next_page(main_page_element)
             page_count += 1
 
-        restaurant_info_json = [{JsonFormat.RESTAURANT_NAME:restaurant.name,
+        restaurant_info_json = [{JsonFormat.RESTAURANT_NAME:str(restaurant),
                                  JsonFormat.OVERALL_RATING:overall_rating,
                                  JsonFormat.ALL_REVIEWS:all_reviews_data}]
 

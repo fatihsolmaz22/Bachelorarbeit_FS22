@@ -6,7 +6,6 @@ import time
 
 from ba_code.web_scraping.scraping.scraping_constants import XPathTemplates
 
-# TODO: change everything to static, rename to scraping tool
 class ScrapingTool:
 
     @staticmethod
