@@ -1,6 +1,4 @@
-import time
 import json
-from enum import Enum
 import datetime
 from selenium.common.exceptions import NoSuchElementException
 from ba_code.web_scraping.scraping.scraping_tool import ScrapingTool
