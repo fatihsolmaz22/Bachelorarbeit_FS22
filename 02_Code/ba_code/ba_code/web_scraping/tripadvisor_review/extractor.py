@@ -8,6 +8,9 @@ from ba_code.web_scraping.tripadvisor_review.tripadvisor_strings import Restaura
 from ba_code.web_scraping.scraping.scraping_constants import HtmlTags, HtmlAttributes, XPathStringFunctions
 
 class JsonFormat:
+    RESTAURANT_NAME = "restaurant_name"
+    OVERALL_RATING = "overall_rating"
+    ALL_REVIEWS = "all_reviews"
     RATING = "rating"
     DATE = "date"
     CONTENT = "content"
@@ -41,6 +44,13 @@ def go_next_page(main_page_element):
     except NoSuchElementException:
         has_next_page = False
     return has_next_page
+
+def get_overall_rating_of_restaurant(main_page_element):
+    return float(ScrapingTool.get_html_elements_by_css_selector(html_element=main_page_element,
+                                                   html_tag=HtmlTags.SPAN_TAG,
+                                                   attribute_name=HtmlAttributes.CLASS,
+                                                   attribute_value=HtmlAttributeValues.OVERALL_RATING,
+                                                   get_first_element=True).text)
 
 def get_all_reviews_on_page(main_page_element):
     return ScrapingTool.get_html_elements_by_css_selector(html_element=main_page_element,
@@ -85,8 +95,12 @@ def main():
         all_reviews_data = []
 
         main_page_element = ScrapingTool.get_main_page_element(restaurant.value)
-        has_next_page = True
 
+        # TODO: get overall rating of restaurant
+        overall_rating = get_overall_rating_of_restaurant(main_page_element)
+        print(overall_rating)
+
+        has_next_page = True
         page_count = 1
         while has_next_page:
             print("\n\n\n-----------------PAGE {}--------------------".format(page_count))
@@ -117,7 +131,11 @@ def main():
             has_next_page = go_next_page(main_page_element)
             page_count += 1
 
-        jsonString = json.dumps(all_reviews_data)
+        restaurant_info_json = [{JsonFormat.RESTAURANT_NAME:restaurant.name,
+                                 JsonFormat.OVERALL_RATING:overall_rating,
+                                 JsonFormat.ALL_REVIEWS:all_reviews_data}]
+
+        jsonString = json.dumps(restaurant_info_json)
         with open("../../../resources/review_data/tripadvisor_review_data_{}.json".format(restaurant.name), "w+") as json_file:
             json_file.write(jsonString)
 
