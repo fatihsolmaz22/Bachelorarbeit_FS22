@@ -14,6 +14,11 @@ class RestaurantDataExtractor:
             df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d')
             self.__restaurant_dfs[restaurant_uri] = df
 
+    def get_restaurant_name(self, restaurant_uri):
+        restaurant_name_location_array = str(restaurant_uri).lower().split(".")[1].split("_")
+        restaurant_name_location_array = [element.capitalize() for element in restaurant_name_location_array]
+        return ' '.join(restaurant_name_location_array)
+
     def get_dataframe(self, restaurant_uri):
         return self.__restaurant_dfs[restaurant_uri]
 

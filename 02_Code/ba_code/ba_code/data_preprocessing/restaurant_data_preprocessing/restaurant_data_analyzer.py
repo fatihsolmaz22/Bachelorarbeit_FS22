@@ -2,6 +2,7 @@ from restaurant_data_extractor import RestaurantDataExtractor
 from ba_code.data_preprocessing.restaurant_data_preprocessing.restaurant_uri import RestaurantUri
 import matplotlib.pyplot as plt
 
+
 # TODO: not clean, code duplication (interface or superclass)
 class RestaurantDataAnalyzer:
 
@@ -18,21 +19,13 @@ class RestaurantDataAnalyzer:
 
         plt.figure()
         df_turnover_per_month.plot()
-        plt.title("Turnover per month: " + self.__get_restaurant_name(
-            restaurant_uri))
+        plt.title("Turnover per month: " + self.__restaurantDataExtractor
+                  .get_restaurant_name(restaurant_uri))
         plt.xlabel('month')
         plt.ylabel('turnover CHF')
         plt.legend(loc="upper left")
         plt.grid()
         plt.show()
-
-    def __get_restaurant_name(self, restaurant_uri):
-        restaurant_name_location_array = str(restaurant_uri).lower() \
-            .split(".")[1] \
-            .split("_")
-        restaurant_name_location_array = \
-            [element.capitalize() for element in restaurant_name_location_array]
-        return ' '.join(restaurant_name_location_array)
 
 
 restaurantDataAnalyzer = RestaurantDataAnalyzer()

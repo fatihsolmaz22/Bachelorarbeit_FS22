@@ -19,21 +19,13 @@ class ReviewDataAnalyzer:
 
         plt.figure()
         df_turnover_per_month.plot()
-        plt.title("Rating per month: " + self.__get_restaurant_name(
-            review_uri))
+        plt.title("Rating per month: " + self.__reviewDataExtractor
+                                             .get_restaurant_name(review_uri))
         plt.xlabel('month')
         plt.ylabel('rating')
         plt.legend(loc="upper left")
         plt.grid()
         plt.show()
-
-    def __get_restaurant_name(self, review_uri):
-        restaurant_name_location_array = str(review_uri).lower() \
-            .split(".")[1] \
-            .split("_")
-        restaurant_name_location_array = \
-            [element.capitalize() for element in restaurant_name_location_array]
-        return ' '.join(restaurant_name_location_array)
 
 
 restaurantDataAnalyzer = ReviewDataAnalyzer()

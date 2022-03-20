@@ -4,14 +4,13 @@ from ba_code.data_preprocessing.review_data_preprocessing.review_data_extractor 
 from ba_code.data_preprocessing.restaurant_data_preprocessing.restaurant_uri import RestaurantUri
 from ba_code.data_preprocessing.review_data_preprocessing.review_uri import ReviewUri
 
-# TODO: move this outside of the package after enum path bug fix
+
 class RestaurantReviewDataAnalyzer:
 
     def __init__(self):
         self.__restaurantDataExtractor = RestaurantDataExtractor()
         self.__reviewDataExtractor = ReviewDataExtractor()
 
-    # TODO: not clean
     def plot_restaurant_rating_and_turnover(self, restaurant_uri, review_uri):
         df_restaurant_data = self.__restaurantDataExtractor.get_turnover_per_month_dataframe(restaurant_uri)
         df_review_data = self.__reviewDataExtractor.get_monthly_rating_for_restaurant_dataframe(review_uri)
