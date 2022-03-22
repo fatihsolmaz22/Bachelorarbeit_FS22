@@ -12,12 +12,11 @@ class ReviewDataExtractor:
     def __load_review_data(self):
         for review_uri in ReviewUri:
             review_data = json.load(open(review_uri.value))
-            # TODO: Tell Fatih to store json differently [0]
-            df = pd.DataFrame(review_data[0]['all_reviews'])
+            df = pd.DataFrame(review_data['all_reviews'])
             df['date'] = pd.to_datetime(df['date'], format='%d-%m-%Y')
             self.__review_data[review_uri] = {
-                'restaurant_name': review_data[0]['restaurant_name'],
-                'overall_rating': review_data[0]['overall_rating'],
+                'restaurant_name': review_data['restaurant_name'],
+                'overall_rating': review_data['overall_rating'],
                 'dataframe': df
             }
 
