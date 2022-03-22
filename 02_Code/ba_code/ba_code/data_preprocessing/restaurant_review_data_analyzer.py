@@ -18,16 +18,16 @@ class RestaurantReviewDataAnalyzer:
         # plot ###################################################################
         color = 'red'
         fig, ax1 = plt.subplots()
-        ax1.set_xlabel('date ')
+        ax1.set_xlabel('date')
         ax1.set_ylabel('rating', color=color)
         ax1.tick_params(axis='y', labelcolor=color)
-        df_review_data.interpolate().plot(ax=ax1, color=color)
+        df_review_data.plot(ax=ax1, color=color, marker='o')
 
         color = 'blue'
         ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
         ax2.set_ylabel('turnover in CHF', color=color)
         ax2.tick_params(axis='y', labelcolor=color)
-        df_restaurant_data.plot(ax=ax2, color=color)
+        df_restaurant_data.plot(ax=ax2, color=color, marker='o')
 
         fig.tight_layout()  # otherwise the right y-label is slightly clipped
         plt.title("Restaurant: " + self.__reviewDataExtractor.get_restaurant_name(review_uri))

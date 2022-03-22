@@ -28,7 +28,7 @@ class ReviewDataAnalyzer:
 
     def __plot_dataframe(self, df, x, y, title, x_label, y_label, review_uri):
         plt.figure()
-        df.plot(x=x, y=y)
+        df.plot(x=x, y=y, marker='o')
         plt.title(title + ": " + self.__reviewDataExtractor.get_restaurant_name(review_uri))
         plt.xlabel(x_label)
         plt.ylabel(y_label)
