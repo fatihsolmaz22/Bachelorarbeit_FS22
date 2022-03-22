@@ -1,8 +1,7 @@
 from enum import Enum
 
 class RestaurantURLs(Enum):
-    # NOOCH_STEINFELS = "https://www.tripadvisor.com/Restaurant_Review-g188113-d1023285-Reviews-Nooch_Asian_Kitchen_Steinfels-Zurich.html"
-    NOOCH_BADENERSTRASSE = "https://www.tripadvisor.com/Restaurant_Review-g188113-d2437418-Reviews-Nooch_Asian_Kitchen_Badenerstrasse-Zurich.html"
+    # TODO: add google review links
 
     def __str__(self):
         return str(self.name.replace("_", " ").title())
@@ -11,3 +10,7 @@ class HtmlAttributeValues:
     AGREE_TO_TERMS = "VfPpkd-vQzf8d"
     OPEN_REVIEWS = "Yr7JMd-pane-hSRGPd"
     TOTAL_REVIEWS_COUNT = "gm2-caption"
+    OVERALL_RATING = "gm2-display-2"
+    ALL_REVIEWS = "ODSEW-ShBeI NIyLF-haAclf gm2-body-2"
+    REVIEW_DATE = "ODSEW-ShBeI-RgZmSc-date"
+    REVIEW_CONTENT = "ODSEW-ShBeI-text"
