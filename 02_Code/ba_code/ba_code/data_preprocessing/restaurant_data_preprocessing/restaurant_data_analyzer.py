@@ -17,12 +17,18 @@ class RestaurantDataAnalyzer:
         df_turnover_per_month = self.__restaurantDataExtractor \
             .get_turnover_per_month_dataframe(restaurant_uri)
 
+        title = "Turnover per month"
+        x_label = "month"
+        y_label = "turnover in CHF"
+        self.__plot_dataframe(df_turnover_per_month,
+                              title, x_label, y_label, restaurant_uri)
+
+    def __plot_dataframe(self, df, title, x_label, y_label, restaurant_uri):
         plt.figure()
-        df_turnover_per_month.plot()
-        plt.title("Turnover per month: " + self.__restaurantDataExtractor
-                  .get_restaurant_name(restaurant_uri))
-        plt.xlabel('month')
-        plt.ylabel('turnover CHF')
+        df.interpolate().plot()
+        plt.title(title + ": " + self.__restaurantDataExtractor.get_restaurant_name(restaurant_uri))
+        plt.xlabel(x_label)
+        plt.ylabel(y_label)
         plt.legend(loc="upper left")
         plt.grid()
         plt.show()

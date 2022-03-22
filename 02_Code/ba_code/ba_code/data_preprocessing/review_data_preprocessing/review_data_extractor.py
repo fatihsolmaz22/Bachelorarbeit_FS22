@@ -13,22 +13,27 @@ class ReviewDataExtractor:
         for review_uri in ReviewUri:
             review_data = json.load(open(review_uri.value))
             # TODO: Tell Fatih to store json differently [0]
-            restaurant_name = review_data[0]['restaurant_name']
-            overall_rating = review_data[0]['overall_rating']
             df = pd.DataFrame(review_data[0]['all_reviews'])
             df['date'] = pd.to_datetime(df['date'], format='%d-%m-%Y')
-
             self.__review_data[review_uri] = {
-                'restaurant_name': restaurant_name,
-                'overall_rating': overall_rating,
+                'restaurant_name': review_data[0]['restaurant_name'],
+                'overall_rating': review_data[0]['overall_rating'],
                 'dataframe': df
             }
 
-    def get_monthly_rating_for_restaurant_dataframe(self, review_uri):
+    def get_overall_monthly_rating_for_restaurant_dataframe(self, review_uri):
+        df_date_rating = self.__get_date_rating_dataframe(review_uri)
+        return df_date_rating.groupby(pd.Grouper(key='date', axis=0,
+                                                 freq='m')).mean()
+
+    def get_overall_yearly_rating_for_restaurant_dataframe(self, review_uri):
+        df_date_rating = self.__get_date_rating_dataframe(review_uri)
+        return df_date_rating.groupby(pd.Grouper(key='date', axis=0,
+                                                 freq='Y')).mean()
+
+    def __get_date_rating_dataframe(self, review_uri):
         df = self.__review_data[review_uri]['dataframe']
-        df = df.filter(items=["date", "rating"])
-        return df.groupby(pd.Grouper(key='date', axis=0,
-                                     freq='m')).mean().fillna(0)
+        return df.filter(items=["date", "rating"])
 
     def get_restaurant_name(self, review_uri):
         return self.__review_data[review_uri]['restaurant_name']
@@ -38,5 +43,3 @@ class ReviewDataExtractor:
 
     def get_dataframe(self, review_uri):
         return self.__review_data[review_uri]['dataframe']
-
-
