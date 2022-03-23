@@ -11,6 +11,7 @@ class HtmlTags:
     P_TAG = "p"
     SPAN_TAG = "span"
     INPUT_TAG = "input"
+    BUTTON_TAG = "button"
 
 class HtmlAttributes:
     CLASS = "class"
