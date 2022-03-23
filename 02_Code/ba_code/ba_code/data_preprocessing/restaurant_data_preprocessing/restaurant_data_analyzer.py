@@ -25,7 +25,7 @@ class RestaurantDataAnalyzer:
 
     def __plot_dataframe(self, df, title, x_label, y_label, restaurant_uri):
         plt.figure()
-        df.interpolate().plot()
+        df.plot(marker='o')
         plt.title(title + ": " + self.__restaurantDataExtractor.get_restaurant_name(restaurant_uri))
         plt.xlabel(x_label)
         plt.ylabel(y_label)
