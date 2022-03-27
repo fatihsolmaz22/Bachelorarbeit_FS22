@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from ba_code.data_preprocessing.restaurant_data_preprocessing.restaurant_data_extractor import RestaurantDataExtractor
 from ba_code.data_preprocessing.review_data_preprocessing.review_data_extractor import ReviewDataExtractor
-from ba_code.data_preprocessing.restaurant_data_preprocessing.restaurant_uri import RestaurantUri
+from ba_code.data_preprocessing.restaurant_data_preprocessing.restaurant_constants import RestaurantUri
 from ba_code.data_preprocessing.review_data_preprocessing.review_uri import ReviewUri
 
 

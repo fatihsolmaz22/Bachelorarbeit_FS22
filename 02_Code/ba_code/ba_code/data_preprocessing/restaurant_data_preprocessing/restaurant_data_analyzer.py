@@ -1,5 +1,5 @@
 from restaurant_data_extractor import RestaurantDataExtractor
-from ba_code.data_preprocessing.restaurant_data_preprocessing.restaurant_uri import RestaurantUri
+from ba_code.data_preprocessing.restaurant_data_preprocessing.restaurant_constants import Restaurant
 import matplotlib.pyplot as plt
 
 
@@ -10,23 +10,26 @@ class RestaurantDataAnalyzer:
         self.__restaurantDataExtractor = RestaurantDataExtractor()
 
     def plot_turnover_per_month_all_restaurants(self):
-        for restaurant_uri in RestaurantUri:
-            self.plot_turnover_per_month(restaurant_uri)
+        for restaurant in Restaurant:
+            self.plot_turnover_per_month(restaurant)
 
-    def plot_turnover_per_month(self, restaurant_uri):
+    def plot_turnover_per_month(self, restaurant):
         df_turnover_per_month = self.__restaurantDataExtractor \
-            .get_turnover_per_month_dataframe(restaurant_uri)
+            .get_turnover_per_month_dataframe(restaurant)
+
+        if df_turnover_per_month.empty:
+            return
 
         title = "Turnover per month"
         x_label = "month"
         y_label = "turnover in CHF"
         self.__plot_dataframe(df_turnover_per_month,
-                              title, x_label, y_label, restaurant_uri)
+                              title, x_label, y_label, restaurant)
 
-    def __plot_dataframe(self, df, title, x_label, y_label, restaurant_uri):
+    def __plot_dataframe(self, df, title, x_label, y_label, restaurant):
         plt.figure()
         df.plot(marker='o')
-        plt.title(title + ": " + self.__restaurantDataExtractor.get_restaurant_name(restaurant_uri))
+        plt.title(title + ": " + restaurant.value)
         plt.xlabel(x_label)
         plt.ylabel(y_label)
         plt.legend(loc="upper left")
