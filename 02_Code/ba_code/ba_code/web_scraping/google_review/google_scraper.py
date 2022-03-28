@@ -1,5 +1,7 @@
 import json
 import datetime
+import time
+import math
 from selenium.common.exceptions import NoSuchElementException
 from ba_code.web_scraping.scraping.scraping_tool import ScrapingTool
 from ba_code.web_scraping.google_review.google_constants import RestaurantURLs, HtmlAttributeValues
@@ -16,45 +18,114 @@ def main():
                                        attribute_name=HtmlAttributes.CLASS,
                                        attribute_value=HtmlAttributeValues.AGREE_TO_TERMS)
 
-    # TODO: click on rezensionen
+    # TODO: click on all reviews
     ScrapingTool.click_element_on_page(html_element=main_page_element,
                                        html_tag=HtmlTags.BUTTON_TAG,
                                        attribute_name=HtmlAttributes.CLASS,
                                        attribute_value=HtmlAttributeValues.OPEN_REVIEWS)
 
-    # TODO: get all reviews
-    all_reviews = ScrapingTool.get_html_elements_by_css_selector(
+    # TODO: get overall rating
+    overall_rating = float(ScrapingTool.get_html_elements_by_css_selector(
         html_element=main_page_element,
         html_tag=HtmlTags.DIV_TAG,
         attribute_name=HtmlAttributes.CLASS,
-        attribute_value=HtmlAttributeValues.ALL_REVIEWS
-    )
+        attribute_value=HtmlAttributeValues.OVERALL_RATING,
+        get_first_element=True
+    ).text.replace(",", "."))
+    print(overall_rating)
 
-    for review in all_reviews:
-        # TODO: get review date
-        date = ScrapingTool.get_html_elements_by_css_selector(
-            html_element=review,
-            html_tag=HtmlTags.SPAN_TAG,
-            attribute_name=HtmlAttributes.CLASS,
-            attribute_value=HtmlAttributeValues.REVIEW_DATE,
-            get_first_element=True
-        ).text
+    # TODO: get total reviews count & calculate how many times you have to scroll (10 reviews per scroll)
+    total_reviews_count = int(ScrapingTool.get_html_elements_by_css_selector(
+        html_element=main_page_element,
+        html_tag=HtmlTags.DIV_TAG,
+        attribute_name=HtmlAttributes.CLASS,
+        attribute_value=HtmlAttributeValues.TOTAL_REVIEWS_COUNT,
+        get_first_element=True).text.split(" ")[0].replace("’", ""))
+    print(total_reviews_count)
 
-        print(date)
+    scroll_amount = math.floor(total_reviews_count / 10)
+    print("Scrolling {} times..".format(scroll_amount))
 
-        # TODO: get review content
+    scroll_box = ScrapingTool.get_html_elements_by_css_selector(
+        html_element=main_page_element,
+        html_tag=HtmlTags.DIV_TAG,
+        attribute_name=HtmlAttributes.CLASS,
+        attribute_value=HtmlAttributeValues.SCROLL_BOX,
+        get_first_element=True)
 
-        content = ScrapingTool.get_html_elements_by_css_selector(
-            html_element=review,
-            html_tag=HtmlTags.SPAN_TAG,
-            attribute_name=HtmlAttributes.CLASS,
-            attribute_value=HtmlAttributeValues.REVIEW_CONTENT,
-            get_first_element=True
-        ).text
+    all_reviews = []
 
-        print(content)
+    for i in range(scroll_amount):
+        """
+        Through passing a simple JavaScript snippet to the chrome driver(driver.execute_script) 
+        we set the scroll element’s(scrollable_div) vertical position(.scrollTop) to it’s height (.scrollHeight).
+        """
+        main_page_element.execute_script('arguments[0].scrollTop = arguments[0].scrollHeight',
+                scroll_box)
+        print(i+1)
+        time.sleep(3)
+        if i != 0 and i % 50 == 0:
+            current_all_reviews = ScrapingTool.get_html_elements_by_css_selector(
+                html_element=main_page_element,
+                html_tag=HtmlTags.DIV_TAG,
+                attribute_name=HtmlAttributes.CLASS,
+                attribute_value=HtmlAttributeValues.ALL_REVIEWS
+            )
 
-        print("-------------------")
+            all_reviews += [current_all_reviews]
+            j = 0
+            for review in current_all_reviews:
+                main_page_element.execute_script(
+                    "arguments[0].parentNode.removeChild(arguments[0])", review)
+                time.sleep(0.2)
+                j+=1
+                print("anotha one bites the dust ", j)
+            time.sleep(3)
+
+    print("-------------------------")
+
+    # TODO: get all reviews
+
+    print(all_reviews)
+
+
+    # for review in all_reviews:
+    #     # TODO: get review date
+    #     date = ScrapingTool.get_html_elements_by_css_selector(
+    #         html_element=review,
+    #         html_tag=HtmlTags.SPAN_TAG,
+    #         attribute_name=HtmlAttributes.CLASS,
+    #         attribute_value=HtmlAttributeValues.REVIEW_DATE,
+    #         get_first_element=True
+    #     ).text
+    #
+    #     print(date)
+    #
+    #     # TODO: get review rating
+    #
+    #     rating = ScrapingTool.get_html_elements_by_css_selector(
+    #         html_element=review,
+    #         html_tag=HtmlTags.SPAN_TAG,
+    #         attribute_name=HtmlAttributes.CLASS,
+    #         attribute_value=HtmlAttributeValues.REVIEW_RATING,
+    #         get_first_element=True
+    #     ).get_attribute("aria-label")
+    #
+    #     print(rating)
+    #
+    #     # TODO: get review content
+    #
+    #     content = ScrapingTool.get_html_elements_by_css_selector(
+    #         html_element=review,
+    #         html_tag=HtmlTags.SPAN_TAG,
+    #         attribute_name=HtmlAttributes.CLASS,
+    #         attribute_value=HtmlAttributeValues.REVIEW_CONTENT,
+    #         get_first_element=True
+    #     ).text
+    #
+    #     print(content)
+    #
+    #     print("-------------------")
 
 if __name__ == '__main__':
     main()

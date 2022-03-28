@@ -12,8 +12,11 @@ class HtmlTags:
     SPAN_TAG = "span"
     INPUT_TAG = "input"
     BUTTON_TAG = "button"
+    UL = "ul"
+    LI = "li"
 
 class HtmlAttributes:
     CLASS = "class"
     TITLE = "title"
     ID = "id"
+    DATA_VALUE = "data-value"
