@@ -102,14 +102,18 @@ class AuthorStats(Enum):
     PHOTOS = "Photos"
 
 def get_stats_as_dict_from_list(list_of_stats):
-    stats_dict = {}
+    stats_dict = \
+        {
+            AuthorStats.CONTRIBUTIONS.name.lower():0,
+            AuthorStats.CITIES_VISITED.name.lower():0,
+            AuthorStats.HELPFUL_VOTES.name.lower():0,
+            AuthorStats.PHOTOS.name.lower():0
+        }
     for stat in list_of_stats:
         for stat_attribute in AuthorStats:
             if stat_attribute.value in stat:
                 stat_value = int(stat.replace(",", "").split(" ")[0])
-                stats_dict[stat_attribute.value] = stat_value
-            else:
-                stats_dict[stat_attribute.value] = 0
+                stats_dict[stat_attribute.name.lower()] = stat_value
     return stats_dict
 
 class AuthorDistribution(Enum):
@@ -137,8 +141,8 @@ def get_distr_as_dict_from_list(list_of_distr):
     return distr_dict
 
 class AuthorInfo:
-    AUTHOR_LEVEL = "Author Level"
-    AUTHOR_MEMBER_SINCE = "Author Member Since"
+    AUTHOR_LEVEL = "author_level"
+    AUTHOR_MEMBER_SINCE = "author_member_since"
 
 def main():
 
