@@ -11,15 +11,39 @@ class JsonFormat:
     RESTAURANT_NAME = "restaurant_name"
     OVERALL_RATING = "overall_rating"
     ALL_REVIEWS = "all_reviews"
-    REVIEW_DATA = "review_data"
-    RATING = "rating"
-    DATE = "date"
-    CONTENT = "content"
-    REVIEW_LIKES = "likes"
-    AUTHOR_DATA = "author_data"
-    AUTHOR_INFO = "author_info"
-    AUTHOR_STATS = "author_stats"
-    AUTHOR_DISTRIBUTION = "author_distribution"
+
+    class AllReviews:
+        AUTHOR_DATA = "author_data"
+        REVIEW_DATA = "review_data"
+
+        class AuthorData:
+            AUTHOR_LEVEL = "author_level"
+            AUTHOR_MEMBER_SINCE = "author_member_since"
+            AUTHOR_STATS = "author_stats"
+            AUTHOR_DISTRIBUTION = "author_distribution"
+
+            class AuthorStats(Enum):
+                CONTRIBUTIONS = "Contributions"
+                CITIES_VISITED = "Cities visited"
+                HELPFUL_VOTES = "Helpful votes"
+                PHOTOS = "Photos"
+
+            class AuthorDistribution(Enum):
+                REVIEW_5 = "review_value_5"
+                REVIEW_4 = "review_value_4"
+                REVIEW_3 = "review_value_3"
+                REVIEW_2 = "review_value_2"
+                REVIEW_1 = "review_value_1"
+
+                @classmethod
+                def list(cls):
+                    return list(map(lambda c: c.value, cls))
+
+        class ReviewData:
+            RATING = "rating"
+            DATE = "date"
+            CONTENT = "content"
+            LIKES = "likes"
 
 def click_on_all_languages(main_page_element):
     ScrapingTool.click_element_on_page(html_element=main_page_element,
@@ -95,37 +119,20 @@ def get_date_of_review(review_element):
     review_date_formatted = datetime.datetime.strptime(date_raw_string, "%B %d, %Y").strftime("%d-%m-%Y")
     return review_date_formatted
 
-class AuthorStats(Enum):
-    CONTRIBUTIONS = "Contributions"
-    CITIES_VISITED = "Cities visited"
-    HELPFUL_VOTES = "Helpful votes"
-    PHOTOS = "Photos"
-
 def get_stats_as_dict_from_list(list_of_stats):
     stats_dict = \
         {
-            AuthorStats.CONTRIBUTIONS.name.lower():0,
-            AuthorStats.CITIES_VISITED.name.lower():0,
-            AuthorStats.HELPFUL_VOTES.name.lower():0,
-            AuthorStats.PHOTOS.name.lower():0
+            JsonFormat.AllReviews.AuthorData.AuthorStats.CONTRIBUTIONS.name.lower():0,
+            JsonFormat.AllReviews.AuthorData.AuthorStats.CITIES_VISITED.name.lower():0,
+            JsonFormat.AllReviews.AuthorData.AuthorStats.HELPFUL_VOTES.name.lower():0,
+            JsonFormat.AllReviews.AuthorData.AuthorStats.PHOTOS.name.lower():0
         }
     for stat in list_of_stats:
-        for stat_attribute in AuthorStats:
+        for stat_attribute in JsonFormat.AllReviews.AuthorData.AuthorStats:
             if stat_attribute.value in stat:
                 stat_value = int(stat.replace(",", "").split(" ")[0])
                 stats_dict[stat_attribute.name.lower()] = stat_value
     return stats_dict
-
-class AuthorDistribution(Enum):
-    REVIEW_5 = "review_value_5"
-    REVIEW_4 = "review_value_4"
-    REVIEW_3 = "review_value_3"
-    REVIEW_2 = "review_value_2"
-    REVIEW_1 = "review_value_1"
-
-    @classmethod
-    def list(cls):
-        return list(map(lambda c: c.value, cls))
 
 def get_distr_as_dict_from_list(list_of_distr):
     distr_dict = {}
@@ -135,14 +142,10 @@ def get_distr_as_dict_from_list(list_of_distr):
             distr_value = list_of_distr[i]
         except Exception:
             pass
-        distr_key = AuthorDistribution.list()[i]
+        distr_key = JsonFormat.AllReviews.AuthorData.AuthorDistribution.list()[i]
         distr_dict[distr_key] = distr_value
 
     return distr_dict
-
-class AuthorInfo:
-    AUTHOR_LEVEL = "author_level"
-    AUTHOR_MEMBER_SINCE = "author_member_since"
 
 def main():
 
@@ -296,20 +299,20 @@ def main():
 
                 all_reviews_data += \
                     [{
-                        JsonFormat.AUTHOR_DATA:
+                        JsonFormat.AllReviews.AUTHOR_DATA:
                             {
-                                 AuthorInfo.AUTHOR_LEVEL:author_level,
-                                 AuthorInfo.AUTHOR_MEMBER_SINCE:author_member_since,
-                                 JsonFormat.AUTHOR_STATS:author_stats_dict,
-                                 JsonFormat.AUTHOR_DISTRIBUTION:author_distr_dict
+                                 JsonFormat.AllReviews.AuthorData.AUTHOR_LEVEL:author_level,
+                                 JsonFormat.AllReviews.AuthorData.AUTHOR_MEMBER_SINCE:author_member_since,
+                                 JsonFormat.AllReviews.AuthorData.AUTHOR_STATS:author_stats_dict,
+                                 JsonFormat.AllReviews.AuthorData.AUTHOR_DISTRIBUTION:author_distr_dict
                              }
                         ,
-                        JsonFormat.REVIEW_DATA:
+                        JsonFormat.AllReviews.REVIEW_DATA:
                             {
-                                 JsonFormat.DATE:date_of_review,
-                                 JsonFormat.RATING:rating_of_review,
-                                 JsonFormat.CONTENT:content_of_review,
-                                 JsonFormat.REVIEW_LIKES:likes
+                                 JsonFormat.AllReviews.ReviewData.DATE:date_of_review,
+                                 JsonFormat.AllReviews.ReviewData.RATING:rating_of_review,
+                                 JsonFormat.AllReviews.ReviewData.CONTENT:content_of_review,
+                                 JsonFormat.AllReviews.ReviewData.LIKES:likes
                              }
                     }]
 
