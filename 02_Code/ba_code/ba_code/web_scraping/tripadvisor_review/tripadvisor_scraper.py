@@ -274,15 +274,18 @@ def main():
                 print(content_of_review)
 
                 # TODO: Likes of review
-                likes = ScrapingTool.get_html_elements_by_css_selector(
-                    html_element=review_element,
-                    html_tag=HtmlTags.SPAN_TAG,
-                    attribute_name=HtmlAttributes.CLASS,
-                    attribute_value=HtmlAttributeValues.NUM_OF_LIKES,
-                    get_first_element=True,
-                    string_function_value=XPathStringFunctions.CONTAINS_STRING
-                ).text
-                likes = 0 if likes == "" else int(likes)
+                likes = 0
+                try:
+                    likes = int(ScrapingTool.get_html_elements_by_css_selector(
+                        html_element=review_element,
+                        html_tag=HtmlTags.SPAN_TAG,
+                        attribute_name=HtmlAttributes.CLASS,
+                        attribute_value=HtmlAttributeValues.NUM_OF_LIKES,
+                        get_first_element=True,
+                        string_function_value=XPathStringFunctions.CONTAINS_STRING
+                    ).text)
+                except Exception:
+                    pass
                 print(likes)
 
                 print("----------------------------\n")

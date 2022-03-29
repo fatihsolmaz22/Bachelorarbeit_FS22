@@ -9,7 +9,7 @@ data = json.load(f)
 
 # Iterating through the json
 # list
-print(data["all_reviews"][0]["author_data"])
+print(data["all_reviews"][14]["review_data"])
 
 # Closing file
 f.close()
