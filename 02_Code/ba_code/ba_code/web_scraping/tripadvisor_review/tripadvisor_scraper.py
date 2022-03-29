@@ -287,25 +287,24 @@ def main():
 
                 print("----------------------------\n")
 
-                all_reviews_data += [
-                    [
-                        {JsonFormat.AUTHOR_DATA:
+                all_reviews_data += \
+                    [{
+                        JsonFormat.AUTHOR_DATA:
                             {
                                  AuthorInfo.AUTHOR_LEVEL:author_level,
                                  AuthorInfo.AUTHOR_MEMBER_SINCE:author_member_since,
                                  JsonFormat.AUTHOR_STATS:author_stats_dict,
                                  JsonFormat.AUTHOR_DISTRIBUTION:author_distr_dict
                              }
-                         },
-                        {JsonFormat.REVIEW_DATA:
+                        ,
+                        JsonFormat.REVIEW_DATA:
                             {
                                  JsonFormat.DATE:date_of_review,
                                  JsonFormat.RATING:rating_of_review,
                                  JsonFormat.CONTENT:content_of_review,
                                  JsonFormat.REVIEW_LIKES:likes
                              }
-                         }
-                    ]]
+                    }]
 
             # TODO: here it goes to the next page of the restaurant review website
             has_next_page = go_next_page(main_page_element)

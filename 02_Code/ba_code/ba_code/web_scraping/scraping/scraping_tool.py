@@ -44,4 +44,4 @@ class ScrapingTool:
     def click_element_on_page(html_element, html_tag, attribute_name, attribute_value):
         css_selector = ScrapingTool.__get_css_selector(html_tag, attribute_name, attribute_value)
         html_element.find_element(by=By.XPATH, value=css_selector).click()
-        time.sleep(3)
+        time.sleep(2)
