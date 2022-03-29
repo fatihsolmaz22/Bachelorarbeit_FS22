@@ -6,20 +6,9 @@ from selenium.common.exceptions import NoSuchElementException
 from ba_code.web_scraping.scraping.scraping_tool import ScrapingTool
 from ba_code.web_scraping.tripadvisor_review.tripadvisor_constants import RestaurantURLs, HtmlAttributeValues
 from ba_code.web_scraping.scraping.scraping_constants import HtmlTags, HtmlAttributes, XPathStringFunctions
+from ba_code.web_scraping.tripadvisor_review.tripadvisor_json_format import RestaurantInfo, AllReviews, AuthorData
+from ba_code.web_scraping.tripadvisor_review.tripadvisor_json_format import AuthorStats, AuthorDistribution, ReviewData
 
-class JsonFormat:
-    RESTAURANT_NAME = "restaurant_name"
-    OVERALL_RATING = "overall_rating"
-    ALL_REVIEWS = "all_reviews"
-    REVIEW_DATA = "review_data"
-    RATING = "rating"
-    DATE = "date"
-    CONTENT = "content"
-    REVIEW_LIKES = "likes"
-    AUTHOR_DATA = "author_data"
-    AUTHOR_INFO = "author_info"
-    AUTHOR_STATS = "author_stats"
-    AUTHOR_DISTRIBUTION = "author_distribution"
 
 def click_on_all_languages(main_page_element):
     ScrapingTool.click_element_on_page(html_element=main_page_element,
@@ -95,12 +84,6 @@ def get_date_of_review(review_element):
     review_date_formatted = datetime.datetime.strptime(date_raw_string, "%B %d, %Y").strftime("%d-%m-%Y")
     return review_date_formatted
 
-class AuthorStats(Enum):
-    CONTRIBUTIONS = "Contributions"
-    CITIES_VISITED = "Cities visited"
-    HELPFUL_VOTES = "Helpful votes"
-    PHOTOS = "Photos"
-
 def get_stats_as_dict_from_list(list_of_stats):
     stats_dict = \
         {
@@ -116,17 +99,6 @@ def get_stats_as_dict_from_list(list_of_stats):
                 stats_dict[stat_attribute.name.lower()] = stat_value
     return stats_dict
 
-class AuthorDistribution(Enum):
-    REVIEW_5 = "review_value_5"
-    REVIEW_4 = "review_value_4"
-    REVIEW_3 = "review_value_3"
-    REVIEW_2 = "review_value_2"
-    REVIEW_1 = "review_value_1"
-
-    @classmethod
-    def list(cls):
-        return list(map(lambda c: c.value, cls))
-
 def get_distr_as_dict_from_list(list_of_distr):
     distr_dict = {}
     for i in range(5):
@@ -139,10 +111,6 @@ def get_distr_as_dict_from_list(list_of_distr):
         distr_dict[distr_key] = distr_value
 
     return distr_dict
-
-class AuthorInfo:
-    AUTHOR_LEVEL = "author_level"
-    AUTHOR_MEMBER_SINCE = "author_member_since"
 
 def main():
 
@@ -296,20 +264,20 @@ def main():
 
                 all_reviews_data += \
                     [{
-                        JsonFormat.AUTHOR_DATA:
+                        AllReviews.AUTHOR_DATA:
                             {
-                                 AuthorInfo.AUTHOR_LEVEL:author_level,
-                                 AuthorInfo.AUTHOR_MEMBER_SINCE:author_member_since,
-                                 JsonFormat.AUTHOR_STATS:author_stats_dict,
-                                 JsonFormat.AUTHOR_DISTRIBUTION:author_distr_dict
+                                 AuthorData.AUTHOR_LEVEL:author_level,
+                                 AuthorData.AUTHOR_MEMBER_SINCE:author_member_since,
+                                 AuthorData.AUTHOR_STATS:author_stats_dict,
+                                 AuthorData.AUTHOR_DISTRIBUTION:author_distr_dict
                              }
                         ,
-                        JsonFormat.REVIEW_DATA:
+                        AllReviews.REVIEW_DATA:
                             {
-                                 JsonFormat.DATE:date_of_review,
-                                 JsonFormat.RATING:rating_of_review,
-                                 JsonFormat.CONTENT:content_of_review,
-                                 JsonFormat.REVIEW_LIKES:likes
+                                 ReviewData.DATE:date_of_review,
+                                 ReviewData.RATING:rating_of_review,
+                                 ReviewData.CONTENT:content_of_review,
+                                 ReviewData.LIKES:likes
                              }
                     }]
 
@@ -317,9 +285,9 @@ def main():
             has_next_page = go_next_page(main_page_element)
             page_count += 1
 
-        restaurant_info_json = {JsonFormat.RESTAURANT_NAME:str(restaurant),
-                                JsonFormat.OVERALL_RATING:overall_rating,
-                                JsonFormat.ALL_REVIEWS:all_reviews_data}
+        restaurant_info_json = {RestaurantInfo.RESTAURANT_NAME:str(restaurant),
+                                RestaurantInfo.OVERALL_RATING:overall_rating,
+                                RestaurantInfo.ALL_REVIEWS:all_reviews_data}
 
         jsonString = json.dumps(restaurant_info_json)
         with open("../../../resources/review_data/tripadvisor_review_data_{}.json".format(restaurant.name), "w+") as json_file:
