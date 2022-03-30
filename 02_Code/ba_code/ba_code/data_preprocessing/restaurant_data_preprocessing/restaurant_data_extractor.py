@@ -42,10 +42,5 @@ class RestaurantDataExtractor:
         return df.filter(items=['d', 'turnover'])
 
 
-# TODO: show this Marco
-"""
-restaurantDataExtractor = RestaurantDataExtractor()
-restaurant_data = restaurantDataExtractor.get_restaurant_data()
-"""
 
 
