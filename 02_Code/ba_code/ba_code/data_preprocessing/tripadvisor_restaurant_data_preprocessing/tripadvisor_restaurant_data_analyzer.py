@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 
 # TODO: not clean, code duplication (interface or superclass)
-class ReviewDataAnalyzer:
+class TripadvisorRestaurantDataAnalyzer:
 
     def __init__(self):
         self.__reviewDataExtractor = ReviewDataExtractor()
@@ -37,5 +37,5 @@ class ReviewDataAnalyzer:
         plt.show()
 
 
-restaurantDataAnalyzer = ReviewDataAnalyzer()
+restaurantDataAnalyzer = TripadvisorRestaurantDataAnalyzer()
 restaurantDataAnalyzer.plot_rating_per_month_all_restaurants()

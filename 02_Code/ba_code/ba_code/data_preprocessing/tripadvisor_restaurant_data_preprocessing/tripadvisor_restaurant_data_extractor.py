@@ -3,7 +3,7 @@ import pandas as pd
 from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.review_uri import ReviewUri
 
 
-class TripAdvisorRestaurantDataExtractor:
+class TripadvisorRestaurantDataExtractor:
 
     def __init__(self):
         self.__tripadvisor_restaurant_data = None
@@ -94,8 +94,8 @@ class TripAdvisorRestaurantDataExtractor:
 
 """
 # Opening JSON file
-tripAdvisorRestaurantDataExtractor = TripAdvisorRestaurantDataExtractor()
+tripadvisorRestaurantDataExtractor = TripadvisorRestaurantDataExtractor()
 f = open(ReviewUri.BUTCHER_BADENERSTRASSE.value)
-tripAdvisorRestaurantDataExtractor.load_restaurant_data(f)
+tripadvisorRestaurantDataExtractor.load_restaurant_data(f)
 """
 
