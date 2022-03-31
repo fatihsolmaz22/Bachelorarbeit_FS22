@@ -2,7 +2,7 @@ import json
 import pandas as pd
 import numpy as np
 from datetime import datetime
-from ba_code.data_preprocessing.review_data_preprocessing.review_uri import ReviewUri
+from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.review_uri import ReviewUri
 
 # TODO: update equations after the review data were analysed
 def get_mlr_equations_dataframe():
