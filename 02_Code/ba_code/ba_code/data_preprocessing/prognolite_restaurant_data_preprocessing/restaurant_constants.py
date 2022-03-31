@@ -1,8 +1,8 @@
 from enum import Enum
 import os
-from ba_code.path import RESTAURANT_DATA_PATH
+from ba_code.path import PROGNOLITE_RESTAURANT_DATA_PATH
 
-path = RESTAURANT_DATA_PATH
+path = PROGNOLITE_RESTAURANT_DATA_PATH
 
 
 class RestaurantUri(Enum):

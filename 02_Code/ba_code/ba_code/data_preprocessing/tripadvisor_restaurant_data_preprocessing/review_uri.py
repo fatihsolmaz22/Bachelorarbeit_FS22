@@ -1,8 +1,8 @@
 from enum import Enum
 import os
-from ba_code.path import REVIEW_DATA_PATH
+from ba_code.path import TRIPADVISOR_RESTAURANT_DATA_PATH
 
-path = REVIEW_DATA_PATH
+path = TRIPADVISOR_RESTAURANT_DATA_PATH
 
 
 class ReviewUri(Enum):

@@ -1,6 +1,7 @@
-from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.tripadvisor_restaurant_data_extractor import \
-    TripadvisorRestaurantDataExtractor
-from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.review_uri import ReviewUri
+from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing\
+            .tripadvisor_restaurant_data_extractor import TripadvisorRestaurantDataExtractor
+from ba_code.utils.file_util import FileUtil
+from ba_code.path import TRIPADVISOR_RESTAURANT_DATA_PATH
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -13,18 +14,13 @@ class TripadvisorRestaurantDataAnalyzer:
         self.__initialize()
 
     def __initialize(self):
-        # TODO: implement fileUtil later.. FileUtil.getFiles...
-        restaurant_files = np.array([1, 2, 3, 4, 5])
+        restaurant_files = FileUtil.get_files_in_dir(TRIPADVISOR_RESTAURANT_DATA_PATH)
 
-        i = 0
         for restaurant_file in restaurant_files:
             tripadvisor_restaurant_data_extractor = TripadvisorRestaurantDataExtractor()
-            # TODO: replace later open(ReviewUri.BUTCHER_BADENERSTRASSE.value) with open(restaurant_file)
-            tripadvisor_restaurant_data_extractor.load_restaurant_data(open(ReviewUri.BUTCHER_BADENERSTRASSE.value))
+            tripadvisor_restaurant_data_extractor.load_restaurant_data(open(restaurant_file))
             restaurant_name = tripadvisor_restaurant_data_extractor.get_restaurant_name()
-            # TODO: remove i = i + 1 later
-            i = i + 1
-            self.__tripadvisor_restaurant_data[restaurant_name + str(i)] = tripadvisor_restaurant_data_extractor
+            self.__tripadvisor_restaurant_data[restaurant_name] = tripadvisor_restaurant_data_extractor
 
     def plot_overall_rating_vs_overall_rating_computed(self):
         overall_ratings = []

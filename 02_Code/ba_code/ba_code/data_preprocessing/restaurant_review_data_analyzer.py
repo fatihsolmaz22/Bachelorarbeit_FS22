@@ -4,7 +4,7 @@ from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.review
 from ba_code.data_preprocessing.prognolite_restaurant_data_preprocessing.restaurant_constants import RestaurantUri
 from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.review_uri import ReviewUri
 
-
+# TODO: this file is deprecated
 class RestaurantReviewDataAnalyzer:
 
     def __init__(self):

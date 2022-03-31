@@ -3,6 +3,7 @@ from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.review
 import json
 
 
+# TODO: this file is deprecated
 class ReviewDataExtractor:
 
     def __init__(self):
