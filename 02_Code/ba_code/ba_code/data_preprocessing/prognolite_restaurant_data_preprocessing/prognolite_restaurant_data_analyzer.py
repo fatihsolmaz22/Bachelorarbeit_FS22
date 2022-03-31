@@ -3,7 +3,6 @@ from ba_code.data_preprocessing.prognolite_restaurant_data_preprocessing.restaur
 import matplotlib.pyplot as plt
 
 
-# TODO: not clean, code duplication (interface or superclass)
 class PrognoliteRestaurantDataAnalyzer:
 
     def __init__(self):

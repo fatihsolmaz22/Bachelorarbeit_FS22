@@ -2,7 +2,6 @@ import pandas as pd
 from ba_code.data_preprocessing.prognolite_restaurant_data_preprocessing.restaurant_constants import RestaurantUri
 
 
-# TODO: not clean, code duplication (interface or superclass)
 class PrognoliteRestaurantDataExtractor:
 
     def __init__(self):
