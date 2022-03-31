@@ -1,6 +1,6 @@
 import json
 import pandas as pd
-from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.review_uri import ReviewUri
+from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.tripadvisor_restaurant_data_uri import TripadvisorRestaurantDataUri
 
 
 class TripadvisorRestaurantDataExtractor:

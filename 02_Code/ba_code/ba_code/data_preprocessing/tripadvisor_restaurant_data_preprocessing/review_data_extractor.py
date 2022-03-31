@@ -1,5 +1,5 @@
 import pandas as pd
-from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.review_uri import ReviewUri
+from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.tripadvisor_restaurant_data_uri import TripadvisorRestaurantDataUri
 import json
 
 
@@ -11,7 +11,7 @@ class ReviewDataExtractor:
         self.__load_review_data()
 
     def __load_review_data(self):
-        for review_uri in ReviewUri:
+        for review_uri in TripadvisorRestaurantDataUri:
             review_data = json.load(open(review_uri.value))
             df = pd.DataFrame(review_data['all_reviews'])
             df['date'] = pd.to_datetime(df['date'], format='%d-%m-%Y')

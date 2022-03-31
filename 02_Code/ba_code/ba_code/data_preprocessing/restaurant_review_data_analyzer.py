@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from ba_code.data_preprocessing.prognolite_restaurant_data_preprocessing.prognolite_restaurant_data_extractor import PrognoliteRestaurantDataExtractor
 from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.review_data_extractor import ReviewDataExtractor
 from ba_code.data_preprocessing.prognolite_restaurant_data_preprocessing.restaurant_constants import RestaurantUri
-from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.review_uri import ReviewUri
+from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.tripadvisor_restaurant_data_uri import TripadvisorRestaurantDataUri
 
 # TODO: this file is deprecated
 class RestaurantReviewDataAnalyzer:
@@ -38,4 +38,4 @@ class RestaurantReviewDataAnalyzer:
 
 restaurantReviewDataAnalyzer = RestaurantReviewDataAnalyzer()
 restaurantReviewDataAnalyzer.plot_restaurant_rating_and_turnover(RestaurantUri.NOOCH_BADENERSTRASSE,
-                                                                 ReviewUri.NOOCH_BADENERSTRASSE)
+                                                                 TripadvisorRestaurantDataUri.NOOCH_BADENERSTRASSE)
