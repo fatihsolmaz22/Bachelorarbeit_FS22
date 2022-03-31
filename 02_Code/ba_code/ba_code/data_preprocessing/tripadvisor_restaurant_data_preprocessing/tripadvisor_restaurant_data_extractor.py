@@ -9,13 +9,13 @@ class TripadvisorRestaurantDataExtractor:
         self.__tripadvisor_restaurant_data = None
 
     def load_restaurant_data(self, file):
-        tripadvisor_restaurant_data = json.load(file)
+        tripadvisor_restaurant_data_json = json.load(file)
 
-        restaurant_name = tripadvisor_restaurant_data['restaurant_name']
-        overall_rating = tripadvisor_restaurant_data['overall_rating']
+        restaurant_name = tripadvisor_restaurant_data_json['restaurant_name']
+        overall_rating = tripadvisor_restaurant_data_json['overall_rating']
 
         # extract author and review data
-        all_reviews = tripadvisor_restaurant_data['all_reviews']
+        all_reviews = tripadvisor_restaurant_data_json['all_reviews']
         [author_base_infos, author_distribution, author_stats, review_data] = \
             self.__extract_author_and_review_data(all_reviews)
 
@@ -88,7 +88,7 @@ class TripadvisorRestaurantDataExtractor:
     def get_overall_rating(self):
         return self.__tripadvisor_restaurant_data['overall_rating']
 
-    def get_computed_overall_rating(self):
+    def get_overall_rating_computed(self):
         review_data = self.__tripadvisor_restaurant_data['df_review_data']
         return review_data['rating'].mean()
 
