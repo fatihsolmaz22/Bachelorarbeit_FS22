@@ -1,5 +1,5 @@
 import pandas as pd
-from ba_code.data_preprocessing.prognolite_restaurant_data_preprocessing.restaurant_constants import RestaurantUri
+from ba_code.data_preprocessing.prognolite_restaurant_data_preprocessing.prognolite_restaurant_constants import PrognoliteRestaurantDataUri
 
 
 class PrognoliteRestaurantDataExtractor:
@@ -9,7 +9,7 @@ class PrognoliteRestaurantDataExtractor:
         self.__initialize_dataframes()
 
     def __initialize_dataframes(self):
-        df = pd.read_csv(RestaurantUri.RESTAURANT_DATA.value).drop_duplicates()
+        df = pd.read_csv(PrognoliteRestaurantDataUri.ALL_RESTAURANT_DATA.value).drop_duplicates()
         df['d'] = pd.to_datetime(df['d'])
         restaurant_names = df.drop_duplicates(subset=['tenant'])['tenant'].to_list()
         restaurant_names = [restaurant_name.strip() for restaurant_name in restaurant_names]

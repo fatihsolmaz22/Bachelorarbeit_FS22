@@ -1,5 +1,5 @@
 from prognolite_restaurant_data_extractor import PrognoliteRestaurantDataExtractor
-from ba_code.data_preprocessing.prognolite_restaurant_data_preprocessing.restaurant_constants import Restaurant
+from ba_code.data_preprocessing.prognolite_restaurant_data_preprocessing.prognolite_restaurant_constants import Restaurant
 import matplotlib.pyplot as plt
 
 
