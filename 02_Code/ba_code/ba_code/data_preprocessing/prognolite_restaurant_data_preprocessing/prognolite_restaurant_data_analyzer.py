@@ -1,13 +1,13 @@
-from restaurant_data_extractor import RestaurantDataExtractor
+from prognolite_restaurant_data_extractor import PrognoliteRestaurantDataExtractor
 from ba_code.data_preprocessing.prognolite_restaurant_data_preprocessing.restaurant_constants import Restaurant
 import matplotlib.pyplot as plt
 
 
 # TODO: not clean, code duplication (interface or superclass)
-class RestaurantDataAnalyzer:
+class PrognoliteRestaurantDataAnalyzer:
 
     def __init__(self):
-        self.__restaurantDataExtractor = RestaurantDataExtractor()
+        self.__restaurantDataExtractor = PrognoliteRestaurantDataExtractor()
 
     def plot_turnover_per_month_all_restaurants(self):
         for restaurant in Restaurant:
@@ -37,5 +37,5 @@ class RestaurantDataAnalyzer:
         plt.show()
 
 
-restaurantDataAnalyzer = RestaurantDataAnalyzer()
+restaurantDataAnalyzer = PrognoliteRestaurantDataAnalyzer()
 restaurantDataAnalyzer.plot_turnover_per_month_all_restaurants()
