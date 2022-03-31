@@ -3,7 +3,7 @@ from ba_code.data_preprocessing.review_data_preprocessing.review_uri import Revi
 import json
 
 
-class ReviewDataExtractor:
+class ReviewDataExtractorOld:
 
     def __init__(self):
         self.__review_data = dict()
