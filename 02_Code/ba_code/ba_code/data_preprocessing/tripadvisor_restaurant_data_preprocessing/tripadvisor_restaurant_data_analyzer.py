@@ -1,35 +1,57 @@
-from review_data_extractor import ReviewDataExtractor
+from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.tripadvisor_restaurant_data_extractor import \
+    TripadvisorRestaurantDataExtractor
 from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.review_uri import ReviewUri
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 
 
-# TODO: not clean, code duplication (interface or superclass)
 class TripadvisorRestaurantDataAnalyzer:
 
     def __init__(self):
-        self.__reviewDataExtractor = ReviewDataExtractor()
+        self.__tripadvisor_restaurant_data = dict()
+        self.__initialize()
 
-    def plot_rating_per_month_all_restaurants(self):
-        for review_uri in ReviewUri:
-            self.plot_average_rating_per_year(review_uri)
+    def __initialize(self):
+        # TODO: implement fileUtil later.. FileUtil.getFiles...
+        restaurant_files = np.array([1, 2, 3, 4, 5])
 
-    def plot_average_rating_per_year(self, review_uri):
-        df_overall_rating_per_year = self.__reviewDataExtractor \
-            .get_overall_yearly_rating_for_restaurant_dataframe(review_uri)
+        i = 0
+        for restaurant_file in restaurant_files:
+            tripadvisor_restaurant_data_extractor = TripadvisorRestaurantDataExtractor()
+            # TODO: replace later open(ReviewUri.BUTCHER_BADENERSTRASSE.value) with open(restaurant_file)
+            tripadvisor_restaurant_data_extractor.load_restaurant_data(open(ReviewUri.BUTCHER_BADENERSTRASSE.value))
+            restaurant_name = tripadvisor_restaurant_data_extractor.get_restaurant_name()
+            # TODO: remove i = i + 1 later
+            i = i + 1
+            self.__tripadvisor_restaurant_data[restaurant_name + str(i)] = tripadvisor_restaurant_data_extractor
 
-        x = 'date'
-        y = 'overall_rating_per_year'
-        title = "Average rating per year"
-        x_label = "year"
-        y_label = "overall rating"
+    def plot_overall_rating_vs_overall_rating_computed(self):
+        overall_ratings = []
+        overall_ratings_computed = []
 
-        self.__plot_dataframe(df_overall_rating_per_year, x, y,
-                              title, x_label, y_label, review_uri)
+        for tripadvisor_restaurant_data_extractor in self.__tripadvisor_restaurant_data.values():
+            overall_ratings.append(tripadvisor_restaurant_data_extractor.get_overall_rating())
+            overall_ratings_computed.append(tripadvisor_restaurant_data_extractor.get_overall_rating_computed())
 
-    def __plot_dataframe(self, df, x, y, title, x_label, y_label, review_uri):
+        df = pd.DataFrame({
+            'restaurant_id': np.arange(len(self.__tripadvisor_restaurant_data)),
+            'overall_ratings': overall_ratings,
+            'overall_ratings_computed': overall_ratings_computed
+        })
+
+        x = 'restaurant_id'
+        y = ['overall_ratings', 'overall_ratings_computed']
+        title = 'Overall rating vs overall rating computed'
+        x_label = 'restaurant id'
+        y_label = 'overall rating'
+
+        self.__plot_dataframe(df, x, y, title, x_label, y_label)
+
+    def __plot_dataframe(self, df, x, y, title, x_label, y_label):
         plt.figure()
         df.plot(x=x, y=y, marker='o')
-        plt.title(title + ": " + self.__reviewDataExtractor.get_restaurant_name(review_uri))
+        plt.title(title)
         plt.xlabel(x_label)
         plt.ylabel(y_label)
         plt.legend(loc="upper left")
@@ -38,4 +60,4 @@ class TripadvisorRestaurantDataAnalyzer:
 
 
 restaurantDataAnalyzer = TripadvisorRestaurantDataAnalyzer()
-restaurantDataAnalyzer.plot_rating_per_month_all_restaurants()
+restaurantDataAnalyzer.plot_overall_rating_vs_overall_rating_computed()
