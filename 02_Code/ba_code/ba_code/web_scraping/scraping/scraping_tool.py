@@ -4,6 +4,9 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 import time
 
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 from ba_code.web_scraping.scraping.scraping_constants import XPathTemplates
 
 class ScrapingTool:
@@ -13,7 +16,7 @@ class ScrapingTool:
         s = Service(ChromeDriverManager().install())
         driver = webdriver.Chrome(service=s)
         driver.get(url)
-        time.sleep(5)
+        time.sleep(15)
         return driver
 
     @staticmethod
@@ -41,7 +44,17 @@ class ScrapingTool:
         return html_elements if not get_first_element else html_elements[0]
 
     @staticmethod
-    def click_element_on_page(html_element, html_tag, attribute_name, attribute_value):
+    def click_element_on_page(main_page_element, search_in_element, html_tag, attribute_name, attribute_value):
         css_selector = ScrapingTool.__get_css_selector(html_tag, attribute_name, attribute_value)
-        html_element.find_element(by=By.XPATH, value=css_selector).click()
+        # wait = WebDriverWait(search_in_element, 10)
+        # element_to_click = wait.until(EC.element_to_be_clickable((By.XPATH, css_selector)))
+        # is_not_clickable = True
+        # while is_not_clickable:
+        #     try:
+        element_to_click = search_in_element.find_element(by=By.XPATH, value=css_selector)#.click()
+        main_page_element.execute_script("arguments[0].click();", element_to_click)
+        is_not_clickable = False
         time.sleep(2)
+            # except Exception:
+            #     time.sleep(2)
+            #     pass

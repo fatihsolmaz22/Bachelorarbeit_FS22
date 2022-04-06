@@ -13,13 +13,13 @@ def main():
     main_page_element = ScrapingTool.get_main_page_element(url)
 
     # TODO: click on "agree to terms"
-    ScrapingTool.click_element_on_page(html_element=main_page_element,
+    ScrapingTool.click_element_on_page(search_in_element=main_page_element,
                                        html_tag=HtmlTags.BUTTON_TAG,
                                        attribute_name=HtmlAttributes.CLASS,
                                        attribute_value=HtmlAttributeValues.AGREE_TO_TERMS)
 
     # TODO: click on all reviews
-    ScrapingTool.click_element_on_page(html_element=main_page_element,
+    ScrapingTool.click_element_on_page(search_in_element=main_page_element,
                                        html_tag=HtmlTags.BUTTON_TAG,
                                        attribute_name=HtmlAttributes.CLASS,
                                        attribute_value=HtmlAttributeValues.OPEN_REVIEWS)

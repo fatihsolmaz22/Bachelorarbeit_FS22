@@ -16,10 +16,10 @@ class AuthorData:
     AUTHOR_DISTRIBUTION = "author_distribution"
 
 class AuthorStats(Enum):
-    CONTRIBUTIONS = "Contributions"
-    CITIES_VISITED = "Cities visited"
-    HELPFUL_VOTES = "Helpful votes"
-    PHOTOS = "Photos"
+    CONTRIBUTIONS = "contributions"
+    CITIES_VISITED = "cities_visited"
+    HELPFUL_VOTES = "helpful_votes"
+    PHOTOS = "photos"
 
 class AuthorDistribution(Enum):
     REVIEW_5 = "review_value_5"

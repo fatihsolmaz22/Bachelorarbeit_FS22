@@ -8,20 +8,25 @@ from ba_code.web_scraping.tripadvisor_review.tripadvisor_constants import Restau
 from ba_code.web_scraping.scraping.scraping_constants import HtmlTags, HtmlAttributes, XPathStringFunctions
 from ba_code.web_scraping.tripadvisor_review.tripadvisor_json_format import RestaurantInfo, AllReviews, AuthorData
 from ba_code.web_scraping.tripadvisor_review.tripadvisor_json_format import AuthorStats, AuthorDistribution, ReviewData
+from selenium.webdriver.common.by import By
 
 
 def click_on_all_languages(main_page_element):
-    ScrapingTool.click_element_on_page(html_element=main_page_element,
-                                       html_tag=HtmlTags.INPUT_TAG,
-                                       attribute_name=HtmlAttributes.ID,
-                                       attribute_value=HtmlAttributeValues.ALL_LANGUAGES)
+    ScrapingTool.click_element_on_page(
+        main_page_element=main_page_element,
+        search_in_element=main_page_element,
+        html_tag=HtmlTags.INPUT_TAG,
+        attribute_name=HtmlAttributes.ID,
+        attribute_value=HtmlAttributeValues.ALL_LANGUAGES)
 
 def click_on_more_button(main_page_element):
     try:
-        ScrapingTool.click_element_on_page(html_element=main_page_element,
-                                       html_tag=HtmlTags.SPAN_TAG,
-                                       attribute_name=HtmlAttributes.CLASS,
-                                       attribute_value=HtmlAttributeValues.MORE_BUTTON)
+        ScrapingTool.click_element_on_page(
+            main_page_element=main_page_element,
+            search_in_element=main_page_element,
+            html_tag=HtmlTags.SPAN_TAG,
+            attribute_name=HtmlAttributes.CLASS,
+            attribute_value=HtmlAttributeValues.MORE_BUTTON)
     except NoSuchElementException:
         pass
 
@@ -32,10 +37,12 @@ def expand_information_on_page(main_page_element):
 def go_next_page(main_page_element):
     has_next_page = True
     try:
-        ScrapingTool.click_element_on_page(html_element=main_page_element,
-                                           html_tag=HtmlTags.A_TAG,
-                                           attribute_name=HtmlAttributes.CLASS,
-                                           attribute_value=HtmlAttributeValues.NEXT_PAGE)
+        ScrapingTool.click_element_on_page(
+            main_page_element=main_page_element,
+            search_in_element=main_page_element,
+            html_tag=HtmlTags.A_TAG,
+            attribute_name=HtmlAttributes.CLASS,
+            attribute_value=HtmlAttributeValues.NEXT_PAGE)
     except NoSuchElementException:
         has_next_page = False
     return has_next_page
@@ -87,16 +94,16 @@ def get_date_of_review(review_element):
 def get_stats_as_dict_from_list(list_of_stats):
     stats_dict = \
         {
-            AuthorStats.CONTRIBUTIONS.name.lower():0,
-            AuthorStats.CITIES_VISITED.name.lower():0,
-            AuthorStats.HELPFUL_VOTES.name.lower():0,
-            AuthorStats.PHOTOS.name.lower():0
+            AuthorStats.CONTRIBUTIONS.value:1,
+            AuthorStats.CITIES_VISITED.value:0,
+            AuthorStats.HELPFUL_VOTES.value:0,
+            AuthorStats.PHOTOS.value:0
         }
     for stat in list_of_stats:
         for stat_attribute in AuthorStats:
-            if stat_attribute.value in stat:
+            if stat_attribute.value.replace("_", " ").capitalize() in stat:
                 stat_value = int(stat.replace(",", "").split(" ")[0])
-                stats_dict[stat_attribute.name.lower()] = stat_value
+                stats_dict[stat_attribute.value] = stat_value
     return stats_dict
 
 def get_distr_as_dict_from_list(list_of_distr):
@@ -112,12 +119,13 @@ def get_distr_as_dict_from_list(list_of_distr):
 
     return distr_dict
 
+from ba_code.web_scraping.tripadvisor_review.tripadvisor_scraper_rest_list import get_list_of_rest
 def main():
-
-    for restaurant in RestaurantURLs:
+    list_of_rest = get_list_of_rest()
+    for restaurant in list_of_rest: #RestaurantURLs:
         all_reviews_data = []
 
-        main_page_element = ScrapingTool.get_main_page_element(restaurant.value)
+        main_page_element = ScrapingTool.get_main_page_element(restaurant)#.value)
 
         # TODO: get overall rating of restaurant
         overall_rating = get_overall_rating_of_restaurant(main_page_element)
@@ -127,6 +135,7 @@ def main():
         page_count = 1
         while has_next_page:
             print("\n\n\n-----------------PAGE {}--------------------".format(page_count))
+
             expand_information_on_page(main_page_element)
 
             all_reviews = get_all_reviews_on_page(main_page_element)
@@ -135,12 +144,16 @@ def main():
                 print("----------------------------")
 
                 # TODO: click on profile of author
-                ScrapingTool.click_element_on_page(
-                    html_element=review_element,
-                    html_tag=HtmlTags.DIV_TAG,
-                    attribute_name=HtmlAttributes.CLASS,
-                    attribute_value=HtmlAttributeValues.AUTHOR_PROFILE
-                )
+                try:
+                    ScrapingTool.click_element_on_page(
+                        main_page_element=main_page_element,
+                        search_in_element=review_element,
+                        html_tag=HtmlTags.DIV_TAG,
+                        attribute_name=HtmlAttributes.CLASS,
+                        attribute_value=HtmlAttributeValues.AUTHOR_PROFILE
+                    )
+                except Exception:
+                    continue
 
                 # TODO: get author container
                 author_container = ScrapingTool.get_html_elements_by_css_selector(
@@ -167,13 +180,17 @@ def main():
                 print("Author Level:", author_level)
 
                 # TODO: get "member since" info
-                author_member_since = int(ScrapingTool.get_html_elements_by_css_selector(
+                author_description = ScrapingTool.get_html_elements_by_css_selector(
                     html_element=author_container,
                     html_tag=HtmlTags.UL,
                     attribute_name=HtmlAttributes.CLASS,
                     attribute_value=HtmlAttributeValues.AUTHOR_MEMBER_SINCE,
                     get_first_element=True
-                ).text.split("\n")[0].split(" ")[-1])
+                )
+
+                author_member_since_raw = author_description.find_element(by=By.XPATH, value=".//li").text
+
+                author_member_since = int(author_member_since_raw.split(" ")[-1])
 
                 print("Author member since:", author_member_since)
 
@@ -225,7 +242,8 @@ def main():
                 # TODO: close author profile ui
 
                 ScrapingTool.click_element_on_page(
-                    html_element=author_container,
+                    main_page_element=main_page_element,
+                    search_in_element=author_container,
                     html_tag=HtmlTags.DIV_TAG,
                     attribute_name=HtmlAttributes.CLASS,
                     attribute_value=HtmlAttributeValues.AUTHOR_PROFILE_CLOSE
@@ -285,12 +303,12 @@ def main():
             has_next_page = go_next_page(main_page_element)
             page_count += 1
 
-        restaurant_info_json = {RestaurantInfo.RESTAURANT_NAME:str(restaurant),
+        restaurant_info_json = {RestaurantInfo.RESTAURANT_NAME:restaurant.split("Reviews-")[1].replace(".html", ""),
                                 RestaurantInfo.OVERALL_RATING:overall_rating,
                                 RestaurantInfo.ALL_REVIEWS:all_reviews_data}
 
         jsonString = json.dumps(restaurant_info_json)
-        with open("../../../resources/review_data/tripadvisor_review_data_{}.json".format(restaurant.name), "w+") as json_file:
+        with open("../../../resources/review_data/tripadvisor_review_data_{}.json".format(restaurant.split("Reviews-")[1].replace(".html", "")), "w+") as json_file: # was restaurant.name
             json_file.write(jsonString)
 
 if __name__ == "__main__":
