@@ -1,11 +1,11 @@
 from enum import Enum
 import os
-from ba_code.path import REVIEW_DATA_PATH
+from ba_code.path import TRIPADVISOR_RESTAURANT_DATA_PATH
 
-path = REVIEW_DATA_PATH
+path = TRIPADVISOR_RESTAURANT_DATA_PATH
 
 
-class ReviewUri(Enum):
+class TripadvisorRestaurantDataUri(Enum):
     BUTCHER_BADENERSTRASSE = os.path.join(path, 'tripadvisor_review_data_BUTCHER_BADENERSTRASSE.json')
     #BUTCHER_NIEDERDORF = os.path.join(path, 'tripadvisor_review_data_BUTCHER_NIEDERDORF.json')
     #BUTCHER_ZURICHWEST = os.path.join(path, 'tripadvisor_review_data_BUTCHER_ZURICHWEST.json')

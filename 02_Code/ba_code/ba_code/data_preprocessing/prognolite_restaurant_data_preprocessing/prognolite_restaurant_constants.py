@@ -1,12 +1,12 @@
 from enum import Enum
 import os
-from ba_code.path import RESTAURANT_DATA_PATH
+from ba_code.path import PROGNOLITE_RESTAURANT_DATA_PATH
 
-path = RESTAURANT_DATA_PATH
+path = PROGNOLITE_RESTAURANT_DATA_PATH
 
 
-class RestaurantUri(Enum):
-    RESTAURANT_DATA = os.path.join(path, 'fwg_composition_data_IDP.csv')
+class PrognoliteRestaurantDataUri(Enum):
+    ALL_RESTAURANT_DATA = os.path.join(path, 'fwg_composition_data_IDP.csv')
 
 # TODO: not so clean, automate this
 class Restaurant(Enum):

@@ -118,6 +118,7 @@ dmypy.json
 
 # Restaurant data
 restaurant_data
+prognolite_restaurant_data
 
 # Poetry
 poetry.lock

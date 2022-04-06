@@ -1,16 +1,15 @@
 import pandas as pd
-from ba_code.data_preprocessing.restaurant_data_preprocessing.restaurant_constants import RestaurantUri
+from ba_code.data_preprocessing.prognolite_restaurant_data_preprocessing.prognolite_restaurant_constants import PrognoliteRestaurantDataUri
 
 
-# TODO: not clean, code duplication (interface or superclass)
-class RestaurantDataExtractor:
+class PrognoliteRestaurantDataExtractor:
 
     def __init__(self):
         self.__restaurant_data = dict()
         self.__initialize_dataframes()
 
     def __initialize_dataframes(self):
-        df = pd.read_csv(RestaurantUri.RESTAURANT_DATA.value).drop_duplicates()
+        df = pd.read_csv(PrognoliteRestaurantDataUri.ALL_RESTAURANT_DATA.value).drop_duplicates()
         df['d'] = pd.to_datetime(df['d'])
         restaurant_names = df.drop_duplicates(subset=['tenant'])['tenant'].to_list()
         restaurant_names = [restaurant_name.strip() for restaurant_name in restaurant_names]
@@ -42,10 +41,5 @@ class RestaurantDataExtractor:
         return df.filter(items=['d', 'turnover'])
 
 
-# TODO: show this Marco
-"""
-restaurantDataExtractor = RestaurantDataExtractor()
-restaurant_data = restaurantDataExtractor.get_restaurant_data()
-"""
 
 
