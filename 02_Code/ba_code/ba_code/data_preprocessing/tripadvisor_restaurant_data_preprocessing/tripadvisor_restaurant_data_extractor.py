@@ -1,5 +1,6 @@
 import json
 import pandas as pd
+import numpy as np
 from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.tripadvisor_restaurant_data_uri import TripadvisorRestaurantDataUri
 
 
@@ -90,7 +91,8 @@ class TripadvisorRestaurantDataExtractor:
 
     def get_overall_rating_computed(self):
         review_data = self.__tripadvisor_restaurant_data['df_review_data']
-        return review_data['rating'].mean()
+        overall_rating_computed = review_data['rating'].mean()
+        return np.round(overall_rating_computed * 2) / 2
 
 """
 # Opening JSON file
