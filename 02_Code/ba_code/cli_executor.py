@@ -1,5 +1,5 @@
 import typer
-from ba_code.web_scraping.tripadvisor_review import extractor
+from ba_code.web_scraping.tripadvisor_review import tripadvisor_scraper
 
 app = typer.Typer()
 
@@ -9,7 +9,7 @@ def extract_reviews():
     """
             \tThis command extracts online reviews from Tripadvisor
     """
-    extractor.main()
+    tripadvisor_scraper.main()
 
 
 @app.command()
