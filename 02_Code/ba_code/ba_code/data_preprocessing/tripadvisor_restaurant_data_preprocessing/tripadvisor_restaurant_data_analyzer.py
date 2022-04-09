@@ -1,5 +1,5 @@
-from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing\
-            .tripadvisor_restaurant_data_extractor import TripadvisorRestaurantDataExtractor
+from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing \
+    .tripadvisor_restaurant_data_extractor import TripadvisorRestaurantDataExtractor
 from ba_code.utils.file_util import FileUtil
 from ba_code.path import TRIPADVISOR_RESTAURANT_DATA_PATH
 import matplotlib.pyplot as plt
