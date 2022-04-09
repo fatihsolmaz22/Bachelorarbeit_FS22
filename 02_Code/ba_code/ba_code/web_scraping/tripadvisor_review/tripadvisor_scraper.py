@@ -123,13 +123,14 @@ from ba_code.web_scraping.tripadvisor_review.tripadvisor_scraper_rest_list impor
 def main():
     list_of_rest = get_list_of_rest()
     for restaurant in list_of_rest: #RestaurantURLs:
-        print("Restaurant link:", restaurant)
         all_reviews_data = []
 
         main_page_element = ScrapingTool.get_main_page_element(restaurant)#.value)
 
         # TODO: get overall rating of restaurant
         overall_rating = get_overall_rating_of_restaurant(main_page_element)
+
+        print("Restaurant link:", restaurant)
         print(overall_rating)
 
         has_next_page = True
