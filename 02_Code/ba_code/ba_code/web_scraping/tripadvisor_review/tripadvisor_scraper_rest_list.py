@@ -33,9 +33,10 @@ def get_list_of_rest():
     list_of_links = []
 
     i = 1
+    limit = i+30
     while has_next_page:
         print("\n\n\n-----------------PAGE {}--------------------".format(page_count))
-        while True:
+        while i % limit != 0:
             print(i)
             try:
                 rest_element = ScrapingTool.get_html_elements_by_css_selector(
@@ -54,19 +55,20 @@ def get_list_of_rest():
                         get_first_element=True,
                     ).get_attribute("href")
                 list_of_links += [rest_link]
-            except Exception:
+            except Exception as e:
                 pass
 
             i += 1
 
-            if i % 31 == 0:
-                break
+        limit = i+30
 
-        break
-
-        print(len(list_of_links))
+        print("amount of links gathered:", len(list_of_links))
         # TODO: here it goes to the next page of the restaurant review website
         has_next_page = go_next_page(main_page_element)
         page_count += 1
+
+        if page_count == 5:
+            print(list_of_links)
+            break
 
     return list_of_links
