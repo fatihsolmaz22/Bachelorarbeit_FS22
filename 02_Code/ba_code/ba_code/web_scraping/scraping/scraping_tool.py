@@ -4,6 +4,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 import time
 
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -14,7 +15,10 @@ class ScrapingTool:
     @staticmethod
     def get_main_page_element(url):
         s = Service(ChromeDriverManager().install())
-        driver = webdriver.Chrome(service=s)
+        chrome_options = Options()
+        chrome_options.add_argument("--no-sandbox") # linux only
+        chrome_options.add_argument("--headless")
+        driver = webdriver.Chrome(service=s, options=chrome_options)
         driver.get(url)
         time.sleep(15)
         return driver
