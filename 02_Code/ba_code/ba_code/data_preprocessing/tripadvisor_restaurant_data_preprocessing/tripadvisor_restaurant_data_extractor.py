@@ -91,9 +91,11 @@ class TripadvisorRestaurantDataExtractor:
 
     def get_overall_rating_computed(self):
         review_data = self.__tripadvisor_restaurant_data['df_review_data']
-        overall_rating_computed = review_data['rating'].mean()
-        return overall_rating_computed
-        #return np.round(overall_rating_computed * 2) / 2
+        return review_data['rating'].mean()
+
+    def get_overall_rating_computed_and_rounded(self):
+        overall_rating_computed = self.get_overall_rating_computed()
+        return np.round(overall_rating_computed * 2) / 2
 
 """
 # Opening JSON file

@@ -5,6 +5,7 @@ from ba_code.path import TRIPADVISOR_RESTAURANT_DATA_PATH
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import seaborn as sns
 
 
 class TripadvisorRestaurantDataAnalyzer:
@@ -30,20 +31,40 @@ class TripadvisorRestaurantDataAnalyzer:
             overall_ratings.append(tripadvisor_restaurant_data_extractor.get_overall_rating())
             overall_ratings_computed.append(tripadvisor_restaurant_data_extractor.get_overall_rating_computed())
 
+        # TODO: remove this commented out code if __plot_dataframe will not be used
+        """
         df = pd.DataFrame({
             'restaurant_id': np.arange(len(self.__tripadvisor_restaurant_data)),
             'overall_ratings': overall_ratings,
             'overall_ratings_computed': overall_ratings_computed
         })
-
+        
         x = 'restaurant_id'
         y = ['overall_ratings', 'overall_ratings_computed']
         title = 'Overall rating vs overall rating computed'
         x_label = 'restaurant id'
         y_label = 'overall rating'
+        
+        #self.__plot_dataframe(df, x, y, title, x_label, y_label)
+        """
 
-        self.__plot_dataframe(df, x, y, title, x_label, y_label)
+        df = pd.DataFrame({
+            'overall_ratings': overall_ratings,
+            'overall_ratings_computed': overall_ratings_computed
+        })
 
+        x = 'overall_ratings_computed'
+        y = 'overall_ratings'
+        
+        self.__scatterplot_dataframe(df, x, y)
+
+    def __scatterplot_dataframe(self, df, x, y):
+        plt.figure()
+        sns.set_style("darkgrid")
+        sns.scatterplot(data=df, x=x, y=y)
+        plt.show()
+
+    # TODO: This method may not be used in the future, remove it later
     def __plot_dataframe(self, df, x, y, title, x_label, y_label):
         plt.figure()
         df.plot(x=x, y=y, marker='o')
