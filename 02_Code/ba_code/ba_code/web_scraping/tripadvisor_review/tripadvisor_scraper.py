@@ -95,10 +95,10 @@ def get_date_of_review(review_element):
 def get_stats_as_dict_from_list(list_of_stats):
     stats_dict = \
         {
-            AuthorStats.CONTRIBUTIONS.value:1,
-            AuthorStats.CITIES_VISITED.value:0,
-            AuthorStats.HELPFUL_VOTES.value:0,
-            AuthorStats.PHOTOS.value:0
+            AuthorStats.CONTRIBUTIONS.value:None,
+            AuthorStats.CITIES_VISITED.value:None,
+            AuthorStats.HELPFUL_VOTES.value:None,
+            AuthorStats.PHOTOS.value:None
         }
     for stat in list_of_stats:
         for stat_attribute in AuthorStats:
@@ -110,7 +110,7 @@ def get_stats_as_dict_from_list(list_of_stats):
 def get_distr_as_dict_from_list(list_of_distr):
     distr_dict = {}
     for i in range(5):
-        distr_value = 0
+        distr_value = None
         try:
             distr_value = list_of_distr[i]
         except Exception:
@@ -147,8 +147,13 @@ def main():
             for review_element in all_reviews:
                 print("----------------------------")
 
-                # TODO: click on profile of author
+                author_level = None
+                author_member_since = None
+                author_stats_dict = None
+                author_distr_dict = None
+
                 try:
+                    # TODO: click on profile of author
                     ScrapingTool.click_element_on_page(
                         main_page_element=main_page_element,
                         search_in_element=review_element,
@@ -156,104 +161,104 @@ def main():
                         attribute_name=HtmlAttributes.CLASS,
                         attribute_value=HtmlAttributeValues.AUTHOR_PROFILE
                     )
-                except Exception:
-                    continue
 
-                # TODO: get author container
-                author_container = ScrapingTool.get_html_elements_by_css_selector(
-                    html_element=main_page_element,
-                    html_tag=HtmlTags.SPAN_TAG,
-                    attribute_name=HtmlAttributes.CLASS,
-                    attribute_value=HtmlAttributeValues.AUTHOR_CONTAINER,
-                    get_first_element=True
-                )
-
-                # TODO: get author level
-                author_level = 0
-                try:
-                    author_level = int(ScrapingTool.get_html_elements_by_css_selector(
-                        html_element=author_container,
-                        html_tag=HtmlTags.DIV_TAG,
-                        attribute_name=HtmlAttributes.CLASS,
-                        attribute_value=HtmlAttributeValues.AUTHOR_LEVEL,
-                        get_first_element=True
-                    ).text.split(" ")[1])
-                except IndexError:
-                    pass
-
-                print("Author Level:", author_level)
-
-                # TODO: get "member since" info
-                author_description = ScrapingTool.get_html_elements_by_css_selector(
-                    html_element=author_container,
-                    html_tag=HtmlTags.UL,
-                    attribute_name=HtmlAttributes.CLASS,
-                    attribute_value=HtmlAttributeValues.AUTHOR_MEMBER_SINCE,
-                    get_first_element=True
-                )
-
-                author_member_since_raw = author_description.find_element(by=By.XPATH, value=".//li").text
-
-                author_member_since = int(author_member_since_raw.split(" ")[-1])
-
-                print("Author member since:", author_member_since)
-
-                # TODO: get author stats container
-                author_stats_container = ScrapingTool.get_html_elements_by_css_selector(
-                    html_element=author_container,
-                    html_tag=HtmlTags.UL,
-                    attribute_name=HtmlAttributes.CLASS,
-                    attribute_value=HtmlAttributeValues.AUTHOR_STATS_CONTAINER,
-                    get_first_element=True
-                )
-
-                # TODO: get dict of stats of author
-                author_stats_element_list = ScrapingTool.get_html_elements_by_css_selector(
-                    html_element=author_stats_container,
-                    html_tag=HtmlTags.SPAN_TAG,
-                    attribute_name=HtmlAttributes.CLASS,
-                    attribute_value=HtmlAttributeValues.AUTHOR_STATS_LIST
-                )
-
-                author_stats_list = [element.text for element in author_stats_element_list]
-                author_stats_dict = get_stats_as_dict_from_list(author_stats_list)
-                print(author_stats_dict)
-
-                # TODO get review distribution as dict of author
-                author_distr_list = []
-                try:
-                    author_distr_container = ScrapingTool.get_html_elements_by_css_selector(
-                        html_element=author_container,
-                        html_tag=HtmlTags.DIV_TAG,
-                        attribute_name=HtmlAttributes.CLASS,
-                        attribute_value=HtmlAttributeValues.AUTHOR_DISTRIBUTION_CONTAINER,
-                        get_first_element=True
-                    )
-
-                    author_distr_element_list = ScrapingTool.get_html_elements_by_css_selector(
-                        html_element=author_distr_container,
+                    # TODO: get author container
+                    author_container = ScrapingTool.get_html_elements_by_css_selector(
+                        html_element=main_page_element,
                         html_tag=HtmlTags.SPAN_TAG,
                         attribute_name=HtmlAttributes.CLASS,
-                        attribute_value=HtmlAttributeValues.AUTHOR_DISTRIBUTION_LIST
+                        attribute_value=HtmlAttributeValues.AUTHOR_CONTAINER,
+                        get_first_element=True
                     )
 
-                    author_distr_list = [int(element.text) for element in author_distr_element_list]
+                    # TODO: get author level
+                    author_level = 0
+                    try:
+                        author_level = int(ScrapingTool.get_html_elements_by_css_selector(
+                            html_element=author_container,
+                            html_tag=HtmlTags.DIV_TAG,
+                            attribute_name=HtmlAttributes.CLASS,
+                            attribute_value=HtmlAttributeValues.AUTHOR_LEVEL,
+                            get_first_element=True
+                        ).text.split(" ")[1])
+                    except Exception:
+                        pass
+
+                    print("Author Level:", author_level)
+
+                    # TODO: get "member since" info
+                    author_description = ScrapingTool.get_html_elements_by_css_selector(
+                        html_element=author_container,
+                        html_tag=HtmlTags.UL,
+                        attribute_name=HtmlAttributes.CLASS,
+                        attribute_value=HtmlAttributeValues.AUTHOR_MEMBER_SINCE,
+                        get_first_element=True
+                    )
+
+                    author_member_since_raw = author_description.find_element(by=By.XPATH, value=".//li").text
+
+                    author_member_since = int(author_member_since_raw.split(" ")[-1])
+
+                    print("Author member since:", author_member_since)
+
+                    # TODO: get author stats container
+                    author_stats_container = ScrapingTool.get_html_elements_by_css_selector(
+                        html_element=author_container,
+                        html_tag=HtmlTags.UL,
+                        attribute_name=HtmlAttributes.CLASS,
+                        attribute_value=HtmlAttributeValues.AUTHOR_STATS_CONTAINER,
+                        get_first_element=True
+                    )
+
+                    # TODO: get dict of stats of author
+                    author_stats_element_list = ScrapingTool.get_html_elements_by_css_selector(
+                        html_element=author_stats_container,
+                        html_tag=HtmlTags.SPAN_TAG,
+                        attribute_name=HtmlAttributes.CLASS,
+                        attribute_value=HtmlAttributeValues.AUTHOR_STATS_LIST
+                    )
+
+                    author_stats_list = [element.text for element in author_stats_element_list]
+                    author_stats_dict = get_stats_as_dict_from_list(author_stats_list)
+                    print(author_stats_dict)
+
+                    # TODO get review distribution as dict of author
+                    author_distr_list = []
+                    try:
+                        author_distr_container = ScrapingTool.get_html_elements_by_css_selector(
+                            html_element=author_container,
+                            html_tag=HtmlTags.DIV_TAG,
+                            attribute_name=HtmlAttributes.CLASS,
+                            attribute_value=HtmlAttributeValues.AUTHOR_DISTRIBUTION_CONTAINER,
+                            get_first_element=True
+                        )
+
+                        author_distr_element_list = ScrapingTool.get_html_elements_by_css_selector(
+                            html_element=author_distr_container,
+                            html_tag=HtmlTags.SPAN_TAG,
+                            attribute_name=HtmlAttributes.CLASS,
+                            attribute_value=HtmlAttributeValues.AUTHOR_DISTRIBUTION_LIST
+                        )
+
+                        author_distr_list = [int(element.text) for element in author_distr_element_list]
+                    except Exception:
+                        pass
+                    author_distr_dict = get_distr_as_dict_from_list(author_distr_list)
+                    print(author_distr_dict)
+
+                    # TODO: close author profile ui
+
+                    ScrapingTool.click_element_on_page(
+                        main_page_element=main_page_element,
+                        search_in_element=author_container,
+                        html_tag=HtmlTags.DIV_TAG,
+                        attribute_name=HtmlAttributes.CLASS,
+                        attribute_value=HtmlAttributeValues.AUTHOR_PROFILE_CLOSE
+                    )
+
+                    print("----------------------------")
                 except Exception:
                     pass
-                author_distr_dict = get_distr_as_dict_from_list(author_distr_list)
-                print(author_distr_dict)
-
-                # TODO: close author profile ui
-
-                ScrapingTool.click_element_on_page(
-                    main_page_element=main_page_element,
-                    search_in_element=author_container,
-                    html_tag=HtmlTags.DIV_TAG,
-                    attribute_name=HtmlAttributes.CLASS,
-                    attribute_value=HtmlAttributeValues.AUTHOR_PROFILE_CLOSE
-                )
-
-                print("----------------------------")
 
                 # TODO: review date (Format: 29-09-2015)
                 date_of_review = get_date_of_review(review_element)
