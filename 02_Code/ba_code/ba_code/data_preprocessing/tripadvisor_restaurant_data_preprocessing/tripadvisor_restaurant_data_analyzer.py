@@ -55,8 +55,21 @@ class TripadvisorRestaurantDataAnalyzer:
 
         x = 'overall_ratings_computed'
         y = 'overall_ratings'
-        
+
         self.__scatterplot_dataframe(df, x, y)
+
+    def get_restaurant_data_extractors_where_overall_rating_not_equal_computed_one(self):
+        tripadvisor_restaurant_data_extractors = []
+
+        for tripadvisor_restaurant_data_extractor in self.__tripadvisor_restaurant_data.values():
+            if (tripadvisor_restaurant_data_extractor.get_overall_rating() != tripadvisor_restaurant_data_extractor
+                    .get_overall_rating_computed_and_rounded()):
+                tripadvisor_restaurant_data_extractors.append(tripadvisor_restaurant_data_extractor)
+
+        return tripadvisor_restaurant_data_extractors
+
+    def get_tripadvisor_restaurant_data(self):
+        return self.__tripadvisor_restaurant_data
 
     def __scatterplot_dataframe(self, df, x, y):
         plt.figure()
@@ -78,3 +91,12 @@ class TripadvisorRestaurantDataAnalyzer:
 
 restaurantDataAnalyzer = TripadvisorRestaurantDataAnalyzer()
 restaurantDataAnalyzer.plot_overall_rating_vs_overall_rating_computed()
+tripadvisor_restaurant_data = restaurantDataAnalyzer.get_tripadvisor_restaurant_data()
+
+# TODO: check if there are duplicates
+for tripadvisor_restaurant_data_extractor in tripadvisor_restaurant_data.values():
+    df_review_data = tripadvisor_restaurant_data_extractor.get_review_data_dataframe()
+    df_duplicated = df_review_data[df_review_data.duplicated()]
+    print("Restaurant name: ", tripadvisor_restaurant_data_extractor.get_restaurant_name())
+    print("Duplicate reviews:\n", df_duplicated)
+    print()
