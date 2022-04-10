@@ -6,7 +6,9 @@ path = TRIPADVISOR_RESTAURANT_DATA_PATH
 
 
 class TripadvisorRestaurantDataUri(Enum):
-    BUTCHER_BADENERSTRASSE = os.path.join(path, 'tripadvisor_review_data_BUTCHER_BADENERSTRASSE.json')
+    #BUTCHER_BADENERSTRASSE = os.path.join(path, 'tripadvisor_review_data_BUTCHER_BADENERSTRASSE.json')
+    DIFFERENTE_HOTEL_KRONE = os.path.join(path, 'tripadvisor_review_data_Differente_Hotel_Krone_Unterstrass-Zurich.json')
+    KHUJUG_ZURICH = os.path.join(path, 'tripadvisor_review_data_Restaurant_Khujug-Zurich.json')
     #BUTCHER_NIEDERDORF = os.path.join(path, 'tripadvisor_review_data_BUTCHER_NIEDERDORF.json')
     #BUTCHER_ZURICHWEST = os.path.join(path, 'tripadvisor_review_data_BUTCHER_ZURICHWEST.json')
     #MISS_MIU = os.path.join(path, 'tripadvisor_review_data_MISS_MIU.json')
