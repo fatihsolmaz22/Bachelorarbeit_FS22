@@ -9,6 +9,7 @@ from ba_code.web_scraping.scraping.scraping_constants import HtmlTags, HtmlAttri
 from ba_code.web_scraping.tripadvisor_review.tripadvisor_json_format import RestaurantInfo, AllReviews, AuthorData
 from ba_code.web_scraping.tripadvisor_review.tripadvisor_json_format import AuthorStats, AuthorDistribution, ReviewData
 from selenium.webdriver.common.by import By
+from ba_code.path import TRIPADVISOR_RESTAURANT_DATA_PATH
 
 
 def click_on_all_languages(main_page_element):
@@ -122,6 +123,7 @@ def get_distr_as_dict_from_list(list_of_distr):
 from ba_code.web_scraping.tripadvisor_review.tripadvisor_scraper_rest_list import get_list_of_rest
 def main():
     list_of_rest = get_list_of_rest()
+    list_of_rest = ["https://www.tripadvisor.com/Restaurant_Review-g188113-d3255164-Reviews-Restaurant_Krone-Zurich.html"]
     for restaurant in list_of_rest: #RestaurantURLs:
         all_reviews_data = []
 
@@ -310,7 +312,9 @@ def main():
                                 RestaurantInfo.ALL_REVIEWS:all_reviews_data}
 
         jsonString = json.dumps(restaurant_info_json)
-        with open("../../../resources/review_data/tripadvisor_review_data_{}.json".format(restaurant.split("Reviews-")[1].replace(".html", "")), "w+") as json_file: # was restaurant.name
+        with open("{}/tripadvisor_review_data_{}.json".format(
+                TRIPADVISOR_RESTAURANT_DATA_PATH,
+                restaurant.split("Reviews-")[1].replace(".html", "")), "w+") as json_file: # was restaurant.name
             json_file.write(jsonString)
 
 if __name__ == "__main__":
