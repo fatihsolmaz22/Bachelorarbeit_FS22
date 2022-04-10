@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.tripadvisor_restaurant_data_uri import TripadvisorRestaurantDataUri
 
-
+# TODO: remove duplicates in review and check if the numbers are correct
 class TripadvisorRestaurantDataExtractor:
 
     def __init__(self):
@@ -97,10 +97,6 @@ class TripadvisorRestaurantDataExtractor:
         overall_rating_computed = self.get_overall_rating_computed()
         return np.round(overall_rating_computed * 2) / 2
 
-"""
-# Opening JSON file
-tripadvisorRestaurantDataExtractor = TripadvisorRestaurantDataExtractor()
-f = open(ReviewUri.BUTCHER_BADENERSTRASSE.value)
-tripadvisorRestaurantDataExtractor.load_restaurant_data(f)
-"""
+    def get_review_data_dataframe(self):
+        return self.__tripadvisor_restaurant_data['df_review_data']
 
