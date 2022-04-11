@@ -272,7 +272,8 @@ def main():
                     html_tag=HtmlTags.DIV_TAG,
                     attribute_name=HtmlAttributes.CLASS,
                     attribute_value=HtmlAttributeValues.REVIEW_TITLE,
-                    get_first_element=True
+                    get_first_element=True,
+                    string_function_value=XPathStringFunctions.CONTAINS_STRING
                 ).text.replace("\n", "")
                 print(review_title)
 
