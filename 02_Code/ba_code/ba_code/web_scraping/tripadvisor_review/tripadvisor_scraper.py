@@ -2,6 +2,13 @@ import json
 import datetime
 import time
 from enum import Enum
+
+
+import os, sys
+dir_path = os.path.dirname(os.path.realpath(__file__))
+parent_dir_path = os.path.abspath(os.path.join(dir_path, os.pardir))
+sys.path.insert(0, parent_dir_path)
+
 from selenium.common.exceptions import NoSuchElementException
 from ba_code.web_scraping.scraping.scraping_tool import ScrapingTool
 from ba_code.web_scraping.tripadvisor_review.tripadvisor_constants import RestaurantURLs, HtmlAttributeValues
