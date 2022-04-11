@@ -121,10 +121,26 @@ class TripadvisorRestaurantDataExtractor:
     def get_author_distribution_dataframe(self):
         return self.__tripadvisor_restaurant_data['author_data']['df_author_distribution']
 
-
-"""tripadvisor_restaurant_data_extractor = TripadvisorRestaurantDataExtractor()
+"""
+tripadvisor_restaurant_data_extractor = TripadvisorRestaurantDataExtractor()
 tripadvisor_restaurant_data_extractor.load_restaurant_data(
     open(TripadvisorRestaurantDataUri.DIFFERENTE_HOTEL_KRONE.value))
+
+
+df_review_data = tripadvisor_restaurant_data_extractor.get_review_data_dataframe()
+#df_review_data.iloc[1000:1013]
+#df_review_data.iloc[1004]
+#df_review_data.iloc[1012]
+
+contents = df_review_data.content.to_list()
+
+contains_more = []
+for content in contents:
+    contains_more.append("...More" in content)
+
+contains_more = any(contains_more)
+
+
 
 df_review_data = tripadvisor_restaurant_data_extractor.get_review_data_dataframe()
 df_author_base_infos = tripadvisor_restaurant_data_extractor.get_author_base_infos_dataframe()
