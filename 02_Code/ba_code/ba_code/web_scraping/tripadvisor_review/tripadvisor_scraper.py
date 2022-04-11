@@ -126,8 +126,7 @@ def get_distr_as_dict_from_list(list_of_distr):
 
 from ba_code.web_scraping.tripadvisor_review.tripadvisor_scraper_rest_list import get_list_of_rest
 def main():
-    # list_of_rest = get_list_of_rest()
-    list_of_rest = ["https://www.tripadvisor.com/Restaurant_Review-g188113-d3255164-Reviews-Restaurant_Krone-Zurich.html"]
+    list_of_rest = get_list_of_rest()
     for restaurant in list_of_rest: #RestaurantURLs:
         all_reviews_data = []
 
