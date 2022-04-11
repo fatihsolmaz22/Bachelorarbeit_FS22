@@ -1,0 +1,30 @@
+[
+  {
+    "restaurant_name": "Zeughauskeller",
+    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5156632572410836831!2y15622472877203166342!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1sSjZUYuHXHIzd7_UPwLG_oAw!7e81"
+  },
+  {
+    "restaurant_name": "Tadka",
+    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&authuser=0&pb=!1m2!1y5156632651619039837!2y2110953129580296388!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1sy0VUYpW1BoyF9u8P3tWxsAw!7e81"
+  },
+  {
+    "restaurant_name": "Rooftop",
+    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5156632595744849937!2y15726919961204203724!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1sekRUYuB3lIyVB4yQnpAO!7e81"
+  },
+  {
+    "restaurant_name": "La Soupière",
+    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5156632605433095225!2y16725791340820443176!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1st0pUYu6FCceA9u8PjNe6wAg!7e81"
+  },
+  {
+    "restaurant_name": "Stadtkäserei",
+    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5156633779566080277!2y14107257448283912083!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1sSUtUYqW8AcWD9u8Piu6wwAo!7e81"
+  },
+  {
+    "restaurant_name": "Glogge Egge",
+    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5156632596931062843!2y14744792858625359836!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1s50tUYrvWAbyP9u8P99K82AM!7e81"
+  },
+  {
+    "restaurant_name": "Conrad",
+    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5156632596783872149!2y1451157984500050573!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1sekxUYsbsBKng7_UP3aGL-As!7e81"
+  }
+]

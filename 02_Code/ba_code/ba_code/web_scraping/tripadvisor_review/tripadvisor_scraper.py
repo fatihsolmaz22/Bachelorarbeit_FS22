@@ -151,8 +151,14 @@ def main():
 
                 author_level = None
                 author_member_since = None
-                author_stats_dict = None
-                author_distr_dict = None
+                author_stats_dict = \
+                            {
+                                AuthorStats.CONTRIBUTIONS.value:None,
+                                AuthorStats.CITIES_VISITED.value:None,
+                                AuthorStats.HELPFUL_VOTES.value:None,
+                                AuthorStats.PHOTOS.value:None
+                            }
+                author_distr_dict = get_distr_as_dict_from_list([])
 
                 try:
                     # TODO: click on profile of author
@@ -321,7 +327,7 @@ def main():
                                  ReviewData.LIKES:likes
                              }
                     }]
-            
+
             # TODO: here it goes to the next page of the restaurant review website
             has_next_page = go_next_page(main_page_element)
             page_count += 1

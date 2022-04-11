@@ -1,5 +1,10 @@
 from enum import Enum
 
+class RestListJsonFormat:
+    RESTAURANT_NAME = "restaurant_name"
+    REVIEWS_LINK_TEMPLATE = "reviews_link_template"
+    REVIEWS_COUNT = "reviews_count"
+
 class RestaurantURLs(Enum):
     # TODO: add google review links
 
