@@ -22,7 +22,7 @@ def click_on_all_languages(main_page_element):
 
 def click_on_more_button(main_page_element):
     i = 0
-    while i != 2:
+    while i != 3:
         try:
             ScrapingTool.click_element_on_page(
                 main_page_element=main_page_element,
@@ -31,7 +31,7 @@ def click_on_more_button(main_page_element):
                 attribute_name=HtmlAttributes.CLASS,
                 attribute_value=HtmlAttributeValues.MORE_BUTTON)
         except NoSuchElementException:
-            if i == 0:
+            if i < 2:
                 time.sleep(5)
         i = i+1
 
