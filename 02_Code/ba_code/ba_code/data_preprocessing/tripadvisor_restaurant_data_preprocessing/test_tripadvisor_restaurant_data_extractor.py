@@ -4,11 +4,8 @@ from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.tripad
     TripadvisorRestaurantDataExtractor
 
 
-def print_infos_of_tripadvisor_restaurant_data(file):
-    tripadvisor_restaurant_data_extractor = TripadvisorRestaurantDataExtractor()
-    tripadvisor_restaurant_data_extractor.load_restaurant_data(file)
-
-    df_review_data = tripadvisor_restaurant_data_extractor.get_review_data_dataframe()
+def print_infos_of_tripadvisor_restaurant_data(restaurant_data_extractor):
+    df_review_data = restaurant_data_extractor.get_review_data_dataframe()
     contents = df_review_data.content.to_list()
 
     contains_more = []
@@ -17,13 +14,13 @@ def print_infos_of_tripadvisor_restaurant_data(file):
 
     contains_more = any(contains_more)
 
-    df_review_data = tripadvisor_restaurant_data_extractor.get_review_data_dataframe()
-    df_author_base_infos = tripadvisor_restaurant_data_extractor.get_author_base_infos_dataframe()
-    df_author_stats = tripadvisor_restaurant_data_extractor.get_author_stats_dataframe()
-    df_author_distribution = tripadvisor_restaurant_data_extractor.get_author_distribution_dataframe()
+    df_review_data = restaurant_data_extractor.get_review_data_dataframe()
+    df_author_base_infos = restaurant_data_extractor.get_author_base_infos_dataframe()
+    df_author_stats = restaurant_data_extractor.get_author_stats_dataframe()
+    df_author_distribution = restaurant_data_extractor.get_author_distribution_dataframe()
     any_duplicates = any(df_review_data.duplicated().to_list())
 
-    print("Restaurant name:", tripadvisor_restaurant_data_extractor.get_restaurant_name())
+    print("Restaurant name:", restaurant_data_extractor.get_restaurant_name())
     print("Review contains any duplicate:", any_duplicates)
     print("Review contains ...More:", contains_more)
     print("Number of entries in df_review_data", len(df_review_data.index))
@@ -32,4 +29,7 @@ def print_infos_of_tripadvisor_restaurant_data(file):
     print("Number of entries in df_author_distribution", len(df_author_distribution))
 
 
-print_infos_of_tripadvisor_restaurant_data(open(TripadvisorRestaurantDataUri.DIFFERENTE_HOTEL_KRONE.value))
+tripadvisor_restaurant_data_extractor = TripadvisorRestaurantDataExtractor()
+tripadvisor_restaurant_data_extractor.load_restaurant_data(open(TripadvisorRestaurantDataUri.LA_FONTE_ZURICH.value))
+
+print_infos_of_tripadvisor_restaurant_data(tripadvisor_restaurant_data_extractor)

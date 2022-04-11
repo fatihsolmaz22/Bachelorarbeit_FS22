@@ -89,5 +89,5 @@ class TripadvisorRestaurantDataAnalyzer:
         plt.show()
 
 
-restaurantDataAnalyzer = TripadvisorRestaurantDataAnalyzer()
-restaurantDataAnalyzer.plot_overall_rating_vs_overall_rating_computed()
+tripadvisorRestaurantDataAnalyzer = TripadvisorRestaurantDataAnalyzer()
+tripadvisorRestaurantDataAnalyzer.plot_overall_rating_vs_overall_rating_computed()
