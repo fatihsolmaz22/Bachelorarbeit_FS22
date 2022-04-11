@@ -322,6 +322,8 @@ def main():
                              }
                     }]
 
+            break
+            
             # TODO: here it goes to the next page of the restaurant review website
             has_next_page = go_next_page(main_page_element)
             page_count += 1
