@@ -1,9 +1,10 @@
 import json
 import pandas as pd
 import numpy as np
-from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.tripadvisor_restaurant_data_uri import TripadvisorRestaurantDataUri
+from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.tripadvisor_restaurant_data_uri import \
+    TripadvisorRestaurantDataUri
 
-# TODO: remove duplicates in review and check if the numbers are correct
+
 class TripadvisorRestaurantDataExtractor:
 
     def __init__(self):
@@ -20,46 +21,26 @@ class TripadvisorRestaurantDataExtractor:
         [author_base_infos, author_distribution, author_stats, review_data] = \
             self.__extract_author_and_review_data(all_reviews)
 
-        # create dataframes
-        [df_author_base_infos, df_author_distribution, df_author_stats] = \
+        # create author dataframes
+        dfs_author_data = \
             self.__create_author_data_dataframes(author_base_infos, author_distribution, author_stats)
 
         # df_review_data
         df_review_data = self.__create_review_data_dataframe(review_data)
 
+        # remove duplicates in dataframes
+        [df_review_data, dfs_author_data] = self.__remove_duplicates_in_dataframes(df_review_data, dfs_author_data)
+
         self.__tripadvisor_restaurant_data = {
             'restaurant_name': restaurant_name,
             'overall_rating': overall_rating,
             'author_data': {
-                'df_author_base_infos': df_author_base_infos,
-                'df_author_stats': df_author_stats,
-                'df_author_distribution': df_author_distribution,
+                'df_author_base_infos': dfs_author_data[0],
+                'df_author_stats': dfs_author_data[1],
+                'df_author_distribution': dfs_author_data[2],
             },
             'df_review_data': df_review_data,
         }
-
-    def __create_author_data_dataframes(self, author_base_infos, author_distribution, author_stats):
-        author_index_name = 'author_id'
-        # df_author_base_infos, TODO: Fatih maybe you should extract the exact date
-        df_author_base_infos = pd.DataFrame(author_base_infos)
-        df_author_base_infos['author_member_since'] = pd.to_datetime(df_author_base_infos['author_member_since'],
-                                                                     format='%Y')
-        df_author_base_infos.index.name = author_index_name
-        # df_author_stats
-        df_author_stats = pd.DataFrame(author_stats)
-        df_author_stats.index.name = author_index_name
-        # df_author_distribution
-        df_author_distribution = pd.DataFrame(author_distribution)
-        df_author_distribution.index.name = author_index_name
-
-        return [df_author_base_infos, df_author_distribution, df_author_stats]
-
-    def __create_review_data_dataframe(self, review_data):
-        df_review_data = pd.DataFrame(review_data)
-        df_review_data['date'] = pd.to_datetime(df_review_data['date'], format='%d-%m-%Y')
-        df_review_data.index.name = 'review_id'
-
-        return df_review_data
 
     def __extract_author_and_review_data(self, all_reviews):
         author_base_infos = []
@@ -79,6 +60,37 @@ class TripadvisorRestaurantDataExtractor:
             review_data.append(review['review_data'])
 
         return [author_base_infos, author_stats, author_distributions, review_data]
+
+    def __create_author_data_dataframes(self, author_base_infos, author_distribution, author_stats):
+        # df_author_base_infos, TODO: Fatih maybe you should extract the exact date
+        df_author_base_infos = pd.DataFrame(author_base_infos)
+        df_author_base_infos['author_member_since'] = pd.to_datetime(df_author_base_infos['author_member_since'],
+                                                                     format='%Y')
+        # df_author_stats
+        df_author_stats = pd.DataFrame(author_stats)
+        # df_author_distribution
+        df_author_distribution = pd.DataFrame(author_distribution)
+
+        return [df_author_base_infos, df_author_distribution, df_author_stats]
+
+    def __create_review_data_dataframe(self, review_data):
+        df_review_data = pd.DataFrame(review_data)
+        df_review_data['date'] = pd.to_datetime(df_review_data['date'], format='%d-%m-%Y')
+
+        return df_review_data
+
+    def __remove_duplicates_in_dataframes(self, df_review_data, dfs_author_data):
+        no_duplicates = [not duplicate for duplicate in df_review_data.duplicated().to_list()]
+        df_review_data = df_review_data[no_duplicates].reset_index(drop=True)
+        df_review_data.index.name = 'review_id'
+
+        dfs_author_data_without_duplicates = []
+        for df_author_data in dfs_author_data:
+            df_author_data = df_author_data[no_duplicates].reset_index(drop=True)
+            df_author_data.index.name = 'author_id'
+            dfs_author_data_without_duplicates.append(df_author_data)
+
+        return [df_review_data, dfs_author_data_without_duplicates]
 
     def get_tripadvisor_restaurant_data(self):
         return self.__tripadvisor_restaurant_data
@@ -100,3 +112,29 @@ class TripadvisorRestaurantDataExtractor:
     def get_review_data_dataframe(self):
         return self.__tripadvisor_restaurant_data['df_review_data']
 
+    def get_author_base_infos_dataframe(self):
+        return self.__tripadvisor_restaurant_data['author_data']['df_author_base_infos']
+
+    def get_author_stats_dataframe(self):
+        return self.__tripadvisor_restaurant_data['author_data']['df_author_stats']
+
+    def get_author_distribution_dataframe(self):
+        return self.__tripadvisor_restaurant_data['author_data']['df_author_distribution']
+
+
+"""tripadvisor_restaurant_data_extractor = TripadvisorRestaurantDataExtractor()
+tripadvisor_restaurant_data_extractor.load_restaurant_data(
+    open(TripadvisorRestaurantDataUri.DIFFERENTE_HOTEL_KRONE.value))
+
+df_review_data = tripadvisor_restaurant_data_extractor.get_review_data_dataframe()
+df_author_base_infos = tripadvisor_restaurant_data_extractor.get_author_base_infos_dataframe()
+df_author_stats = tripadvisor_restaurant_data_extractor.get_author_stats_dataframe()
+df_author_distribution = tripadvisor_restaurant_data_extractor.get_author_distribution_dataframe()
+any_duplicates = any(df_review_data.duplicated().to_list())
+
+print("Restaurant name:", tripadvisor_restaurant_data_extractor.get_restaurant_name())
+print("Any duplicate in reviews:", any_duplicates)
+print("Number of entries in df_review_data", len(df_review_data.index))
+print("Number of entries in df_author_base_infos", len(df_author_base_infos))
+print("Number of entries in df_author_stats", len(df_author_stats))
+print("Number of entries in df_author_distribution", len(df_author_distribution))"""
