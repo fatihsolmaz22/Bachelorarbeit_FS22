@@ -8,7 +8,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-from .ba_code.web_scraping.scraping.scraping_constants import XPathTemplates
+from ba_code.web_scraping.scraping.scraping_constants import XPathTemplates
 
 class ScrapingTool:
 
