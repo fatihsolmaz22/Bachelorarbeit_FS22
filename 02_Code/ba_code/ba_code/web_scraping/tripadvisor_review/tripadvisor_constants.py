@@ -15,6 +15,7 @@ class RestaurantURLs(Enum):
 class HtmlAttributeValues:
     OVERALL_RATING = "fdsdx"
     ALL_REVIEWS = "review-container"
+    REVIEW_TITLE = "quote"
     REVIEW_CONTENT = "partial_entry"
     RATING_PARTIAL_MATCHER = "ui_bubble_rating bubble_"
     REVIEW_DATE = "ratingDate"

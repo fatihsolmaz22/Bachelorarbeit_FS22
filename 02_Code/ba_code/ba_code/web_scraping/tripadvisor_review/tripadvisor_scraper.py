@@ -21,15 +21,19 @@ def click_on_all_languages(main_page_element):
         attribute_value=HtmlAttributeValues.ALL_LANGUAGES)
 
 def click_on_more_button(main_page_element):
-    try:
-        ScrapingTool.click_element_on_page(
-            main_page_element=main_page_element,
-            search_in_element=main_page_element,
-            html_tag=HtmlTags.SPAN_TAG,
-            attribute_name=HtmlAttributes.CLASS,
-            attribute_value=HtmlAttributeValues.MORE_BUTTON)
-    except NoSuchElementException:
-        pass
+    i = 0
+    while i != 2:
+        try:
+            ScrapingTool.click_element_on_page(
+                main_page_element=main_page_element,
+                search_in_element=main_page_element,
+                html_tag=HtmlTags.SPAN_TAG,
+                attribute_name=HtmlAttributes.CLASS,
+                attribute_value=HtmlAttributeValues.MORE_BUTTON)
+        except NoSuchElementException:
+            if i == 0:
+                time.sleep(5)
+        i = i+1
 
 def expand_information_on_page(main_page_element):
     click_on_all_languages(main_page_element)
@@ -264,6 +268,16 @@ def main():
                 date_of_review = get_date_of_review(review_element)
                 print(date_of_review)
 
+                # TODO: review title
+                review_title = ScrapingTool.get_html_elements_by_css_selector(
+                    html_element=review_element,
+                    html_tag=HtmlTags.DIV_TAG,
+                    attribute_name=HtmlAttributes.CLASS,
+                    attribute_value=HtmlAttributeValues.REVIEW_TITLE,
+                    get_first_element=True
+                ).text.replace("\n", "")
+                print(review_title)
+
                 # TODO: rating
                 rating_of_review = get_rating_of_review(review_element)
                 print(rating_of_review)
@@ -302,6 +316,7 @@ def main():
                         AllReviews.REVIEW_DATA:
                             {
                                  ReviewData.DATE:date_of_review,
+                                 ReviewData.TITLE:review_title,
                                  ReviewData.RATING:rating_of_review,
                                  ReviewData.CONTENT:content_of_review,
                                  ReviewData.LIKES:likes
