@@ -33,6 +33,7 @@ class AuthorDistribution(Enum):
         return list(map(lambda c: c.value, cls))
 
 class ReviewData:
+    TITLE = "title"
     RATING = "rating"
     DATE = "date"
     CONTENT = "content"
