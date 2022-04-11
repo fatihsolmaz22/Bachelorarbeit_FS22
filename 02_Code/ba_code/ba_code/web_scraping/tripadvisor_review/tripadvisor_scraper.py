@@ -3,7 +3,7 @@ import datetime
 import time
 from enum import Enum
 from selenium.common.exceptions import NoSuchElementException
-from ba_code.web_scraping.scraping.scraping_tool import ScrapingTool
+from .ba_code.web_scraping.scraping.scraping_tool import ScrapingTool
 from ba_code.web_scraping.tripadvisor_review.tripadvisor_constants import RestaurantURLs, HtmlAttributeValues
 from ba_code.web_scraping.scraping.scraping_constants import HtmlTags, HtmlAttributes, XPathStringFunctions
 from ba_code.web_scraping.tripadvisor_review.tripadvisor_json_format import RestaurantInfo, AllReviews, AuthorData
