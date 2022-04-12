@@ -4,6 +4,7 @@ from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.tripad
 
 def print_infos_of_tripadvisor_restaurant_data_of_all_restaurants(tripadvisor_restaurant_data_analyzer):
     tripadvisor_restaurant_data = tripadvisor_restaurant_data_analyzer.get_tripadvisor_restaurant_data_extractors()
+
     for tripadvisor_restaurant_data_extractor in tripadvisor_restaurant_data.values():
         df_review_data = tripadvisor_restaurant_data_extractor.get_review_data_dataframe()
         df_author_base_infos = tripadvisor_restaurant_data_extractor.get_author_base_infos_dataframe()
@@ -19,7 +20,7 @@ def print_infos_of_tripadvisor_restaurant_data_of_all_restaurants(tripadvisor_re
 
         any_contains_more = any(contains_more)
 
-        print("#########################################")
+        print("\n#########################################")
         print("Restaurant name:", tripadvisor_restaurant_data_extractor.get_restaurant_name())
         print("Any duplicate in reviews:", any_duplicates)
         print("Review contains ...More:", any_contains_more)
@@ -29,5 +30,17 @@ def print_infos_of_tripadvisor_restaurant_data_of_all_restaurants(tripadvisor_re
         print("Number of entries in df_author_distribution", len(df_author_distribution))
 
 
+def print_author_level_infos(tripadvisor_restaurant_data_analyzer):
+    tripadvisor_restaurant_data = tripadvisor_restaurant_data_analyzer.get_tripadvisor_restaurant_data_extractors()
+
+    for tripadvisor_restaurant_data_extractor in tripadvisor_restaurant_data.values():
+        df_author_level_with_rating = tripadvisor_restaurant_data_extractor.get_author_level_with_rating_dataframe()
+        print('\n########################')
+        print(tripadvisor_restaurant_data_extractor.get_restaurant_name())
+        print("author_level contains nan:", df_author_level_with_rating['author_level'].isnull().values.any())
+        print("Number of nans in author_level:", df_author_level_with_rating['author_level'].isnull().sum())
+
+
 tripadvisorRestaurantDataAnalyzer = TripadvisorRestaurantDataAnalyzer()
 print_infos_of_tripadvisor_restaurant_data_of_all_restaurants(tripadvisorRestaurantDataAnalyzer)
+print_author_level_infos(tripadvisorRestaurantDataAnalyzer)
