@@ -2,6 +2,9 @@ import json
 import pandas as pd
 import numpy as np
 
+from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.tripadvisor_restaurant_data_uri import \
+    TripadvisorRestaurantDataUri
+
 
 class TripadvisorRestaurantDataExtractor:
 
@@ -128,3 +131,53 @@ class TripadvisorRestaurantDataExtractor:
         df_incremental_overall_rating.index.name = df_review_data.index.name
 
         return df_incremental_overall_rating
+
+    def get_monthly_incremental_overall_rating_dataframe(self):
+        df_review_data = self.get_review_data_dataframe()
+
+        [dates, monthly_incremental_number_of_ratings] = self.__get_dates_and_monthly_incremental_number_of_ratings(
+            df_review_data)
+
+        monthly_incremental_sum_of_ratings = self.__get_monthly_incremental_sum_of_ratings(df_review_data)
+
+        df_monthly_incremental_overall_rating = pd.DataFrame({
+            'date': dates,
+            'monthly_incremental_overall_rating': np.divide(monthly_incremental_sum_of_ratings,
+                                                            monthly_incremental_number_of_ratings)
+        })
+        df_monthly_incremental_overall_rating.index.name = df_review_data.index.name
+
+        return df_monthly_incremental_overall_rating
+
+    def __get_dates_and_monthly_incremental_number_of_ratings(self, df_review_data):
+        df_number_of_ratings_per_month = df_review_data \
+            .groupby(pd.Grouper(key='date', axis=0, freq='m')).count()['rating'] \
+            .to_frame().rename(columns={"rating": "number_of_ratings_over_months"}).reset_index() \
+            .sort_values(by='date', ascending=False)
+
+        df_date_number_of_ratings = df_number_of_ratings_per_month[
+            df_number_of_ratings_per_month['number_of_ratings_over_months'] != 0]
+
+        dates = df_date_number_of_ratings['date'].to_list()
+        monthly_incremental_number_of_ratings = df_date_number_of_ratings['number_of_ratings_over_months'] \
+            .expanding().sum().to_list()
+
+        return [dates, monthly_incremental_number_of_ratings]
+
+    def __get_monthly_incremental_sum_of_ratings(self, df_review_data):
+        df_sum_of_ratings_per_month = df_review_data \
+            .groupby(pd.Grouper(key='date', axis=0, freq='m')).sum()['rating'] \
+            .to_frame().rename(columns={"rating": "sum_of_ratings_per_months"}).reset_index() \
+            .sort_values(by='date', ascending=False)
+
+        df_date_sum_of_ratings = df_sum_of_ratings_per_month[
+            df_sum_of_ratings_per_month['sum_of_ratings_per_months'] != 0]
+
+        monthly_incremental_sum_of_ratings = df_date_sum_of_ratings['sum_of_ratings_per_months'] \
+            .expanding().sum().to_list()
+
+        return monthly_incremental_sum_of_ratings
+
+
+tripadvisorRestaurantDataExtractor = TripadvisorRestaurantDataExtractor()
+tripadvisorRestaurantDataExtractor.load_restaurant_data(open(TripadvisorRestaurantDataUri.KHUJUG_ZURICH.value))
