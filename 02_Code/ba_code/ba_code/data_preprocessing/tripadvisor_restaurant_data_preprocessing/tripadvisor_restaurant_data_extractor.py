@@ -155,12 +155,12 @@ class TripadvisorRestaurantDataExtractor:
             .to_frame().rename(columns={"rating": "number_of_ratings_over_months"}).reset_index() \
             .sort_values(by='date', ascending=False)
 
-        df_date_number_of_ratings = df_number_of_ratings_per_month[
+        df_number_of_ratings_per_month_greater_zero = df_number_of_ratings_per_month[
             df_number_of_ratings_per_month['number_of_ratings_over_months'] != 0]
 
-        dates = df_date_number_of_ratings['date'].to_list()
-        monthly_incremental_number_of_ratings = df_date_number_of_ratings['number_of_ratings_over_months'] \
-            .expanding().sum().to_list()
+        dates = df_number_of_ratings_per_month_greater_zero['date'].to_list()
+        monthly_incremental_number_of_ratings = \
+            df_number_of_ratings_per_month_greater_zero['number_of_ratings_over_months'].expanding().sum().to_list()
 
         return [dates, monthly_incremental_number_of_ratings]
 
@@ -170,10 +170,10 @@ class TripadvisorRestaurantDataExtractor:
             .to_frame().rename(columns={"rating": "sum_of_ratings_per_months"}).reset_index() \
             .sort_values(by='date', ascending=False)
 
-        df_date_sum_of_ratings = df_sum_of_ratings_per_month[
+        df_sum_of_ratings_per_month_greater_zero = df_sum_of_ratings_per_month[
             df_sum_of_ratings_per_month['sum_of_ratings_per_months'] != 0]
 
-        monthly_incremental_sum_of_ratings = df_date_sum_of_ratings['sum_of_ratings_per_months'] \
+        monthly_incremental_sum_of_ratings = df_sum_of_ratings_per_month_greater_zero['sum_of_ratings_per_months'] \
             .expanding().sum().to_list()
 
         return monthly_incremental_sum_of_ratings
