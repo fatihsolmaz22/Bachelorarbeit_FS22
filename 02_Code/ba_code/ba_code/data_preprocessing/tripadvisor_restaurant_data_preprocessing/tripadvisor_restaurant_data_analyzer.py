@@ -6,6 +6,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
+from matplotlib.font_manager import FontProperties
+
+fontP = FontProperties()
+fontP.set_size('x-small')
 
 
 class TripadvisorRestaurantDataAnalyzer:
@@ -65,14 +69,14 @@ class TripadvisorRestaurantDataAnalyzer:
 
         plt.figure()
         df_incremental_overall_rating.plot(x=x, y=y).invert_xaxis()
-        plt.axhline(y=overall_rating - 0.25, color='r', linestyle='dashed')
-        plt.axhline(y=overall_rating, color='g', linestyle='dashed')
-        plt.axhline(y=overall_rating + 0.25, color='r', linestyle='dashed')
+        plt.axhline(y=overall_rating - 0.25, color='r', linestyle='dashed', label='lower_bound')
+        plt.axhline(y=overall_rating, color='g', linestyle='dashed', label='overall_rating')
+        plt.axhline(y=overall_rating + 0.25, color='r', linestyle='dashed', label='upper_bound')
         plt.ylim([y_min - 0.05, y_max + 0.05])
         plt.title(title)
         plt.xlabel(x_label)
         plt.ylabel(y_label)
-        plt.legend(loc="upper left")
+        plt.legend(loc='upper right', prop=fontP)
         plt.grid()
         plt.show()
 
