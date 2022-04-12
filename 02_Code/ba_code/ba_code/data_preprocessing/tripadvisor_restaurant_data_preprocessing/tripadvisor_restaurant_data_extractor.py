@@ -178,6 +178,18 @@ class TripadvisorRestaurantDataExtractor:
 
         return monthly_incremental_sum_of_ratings
 
+    def get_author_level_with_rating_dataframe(self):
+        df_author_base_infos = self.get_author_base_infos_dataframe()
+        df_review_data = self.get_review_data_dataframe()
+
+        df_author_level_with_rating = pd.DataFrame({
+            'author_level': df_author_base_infos['author_level'].to_numpy(),
+            'rating': df_review_data['rating'].to_numpy()
+        })
+        df_author_level_with_rating.index.name = df_author_base_infos.index.name
+
+        return df_author_level_with_rating
+
 
 tripadvisorRestaurantDataExtractor = TripadvisorRestaurantDataExtractor()
-tripadvisorRestaurantDataExtractor.load_restaurant_data(open(TripadvisorRestaurantDataUri.KHUJUG_ZURICH.value))
+tripadvisorRestaurantDataExtractor.load_restaurant_data(open(TripadvisorRestaurantDataUri.WEISSES_ROSSLI.value))
