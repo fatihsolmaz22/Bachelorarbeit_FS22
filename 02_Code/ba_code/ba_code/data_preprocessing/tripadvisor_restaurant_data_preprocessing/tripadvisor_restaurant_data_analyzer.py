@@ -80,6 +80,42 @@ class TripadvisorRestaurantDataAnalyzer:
         plt.grid()
         plt.show()
 
+    def boxplot_of_rating_by_author_level_for_all_restaurants(self):
+        for restaurant_name in self.__tripadvisor_restaurant_data_extractors.keys():
+            self.boxplot_of_rating_by_author_level_for_restaurant(restaurant_name)
+
+    def boxplot_of_rating_by_author_level_for_restaurant(self, restaurant_name):
+        tripadvisor_restaurant_data_extractor = self.__tripadvisor_restaurant_data_extractors[restaurant_name]
+        df_author_level_with_rating = tripadvisor_restaurant_data_extractor.get_author_level_with_rating_dataframe()
+
+        overall_rating = tripadvisor_restaurant_data_extractor.get_overall_rating()
+        overall_rating_computed = tripadvisor_restaurant_data_extractor.get_overall_rating_computed()
+
+        if df_author_level_with_rating['author_level'].isnull().values.any():
+            df_author_level_with_rating = df_author_level_with_rating[
+                ~df_author_level_with_rating['author_level'].isnull()]
+
+        plt.figure()
+        sns.boxplot(data=df_author_level_with_rating,
+                    x="author_level",
+                    y="rating",
+                    width=0.5)
+
+        sns.stripplot(data=df_author_level_with_rating,
+                      x="author_level",
+                      y="rating",
+                      jitter=True,
+                      marker='o',
+                      alpha=0.5,
+                      color='black')
+
+        plt.axhline(y=overall_rating, color='g', linestyle='dashed', label='overall_rating')
+        plt.axhline(y=overall_rating_computed, color='r', linestyle='dashed', label='overall_rating_computed')
+
+        plt.title("Boxplot of rating by author level for " + restaurant_name)
+        plt.legend(loc='lower right', prop=fontP)
+        plt.show()
+
     def get_restaurant_data_extractors_where_overall_rating_not_equal_computed_one(self):
         tripadvisor_restaurant_data_extractors = []
 
