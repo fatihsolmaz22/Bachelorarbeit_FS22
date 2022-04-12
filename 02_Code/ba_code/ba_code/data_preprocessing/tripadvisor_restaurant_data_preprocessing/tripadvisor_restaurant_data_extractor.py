@@ -152,28 +152,28 @@ class TripadvisorRestaurantDataExtractor:
     def __get_dates_and_monthly_incremental_number_of_ratings(self, df_review_data):
         df_number_of_ratings_per_month = df_review_data \
             .groupby(pd.Grouper(key='date', axis=0, freq='m')).count()['rating'] \
-            .to_frame().rename(columns={"rating": "number_of_ratings_over_months"}).reset_index() \
+            .to_frame().rename(columns={"rating": "number_of_ratings_per_month"}).reset_index() \
             .sort_values(by='date', ascending=False)
 
         df_number_of_ratings_per_month_greater_zero = df_number_of_ratings_per_month[
-            df_number_of_ratings_per_month['number_of_ratings_over_months'] != 0]
+            df_number_of_ratings_per_month['number_of_ratings_per_month'] != 0]
 
         dates = df_number_of_ratings_per_month_greater_zero['date'].to_list()
         monthly_incremental_number_of_ratings = \
-            df_number_of_ratings_per_month_greater_zero['number_of_ratings_over_months'].expanding().sum().to_list()
+            df_number_of_ratings_per_month_greater_zero['number_of_ratings_per_month'].expanding().sum().to_list()
 
         return [dates, monthly_incremental_number_of_ratings]
 
     def __get_monthly_incremental_sum_of_ratings(self, df_review_data):
         df_sum_of_ratings_per_month = df_review_data \
             .groupby(pd.Grouper(key='date', axis=0, freq='m')).sum()['rating'] \
-            .to_frame().rename(columns={"rating": "sum_of_ratings_per_months"}).reset_index() \
+            .to_frame().rename(columns={"rating": "sum_of_ratings_per_month"}).reset_index() \
             .sort_values(by='date', ascending=False)
 
         df_sum_of_ratings_per_month_greater_zero = df_sum_of_ratings_per_month[
-            df_sum_of_ratings_per_month['sum_of_ratings_per_months'] != 0]
+            df_sum_of_ratings_per_month['sum_of_ratings_per_month'] != 0]
 
-        monthly_incremental_sum_of_ratings = df_sum_of_ratings_per_month_greater_zero['sum_of_ratings_per_months'] \
+        monthly_incremental_sum_of_ratings = df_sum_of_ratings_per_month_greater_zero['sum_of_ratings_per_month'] \
             .expanding().sum().to_list()
 
         return monthly_incremental_sum_of_ratings
