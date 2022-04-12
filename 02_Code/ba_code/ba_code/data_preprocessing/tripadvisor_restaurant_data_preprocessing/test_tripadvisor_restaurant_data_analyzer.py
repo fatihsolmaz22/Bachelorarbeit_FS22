@@ -3,7 +3,7 @@ from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.tripad
 
 
 def print_infos_of_tripadvisor_restaurant_data_of_all_restaurants(tripadvisor_restaurant_data_analyzer):
-    tripadvisor_restaurant_data = tripadvisor_restaurant_data_analyzer.get_tripadvisor_restaurant_data()
+    tripadvisor_restaurant_data = tripadvisor_restaurant_data_analyzer.get_tripadvisor_restaurant_data_extractors()
     for tripadvisor_restaurant_data_extractor in tripadvisor_restaurant_data.values():
         df_review_data = tripadvisor_restaurant_data_extractor.get_review_data_dataframe()
         df_author_base_infos = tripadvisor_restaurant_data_extractor.get_author_base_infos_dataframe()
