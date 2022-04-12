@@ -36,7 +36,7 @@ def click_on_more_button(main_page_element):
 
 def expand_information_on_page(main_page_element):
     click_on_all_languages(main_page_element)
-    click_on_more_button(main_page_element)
+    # click_on_more_button(main_page_element)
 
 def go_next_page(main_page_element):
     has_next_page = True
