@@ -35,7 +35,8 @@ class TripadvisorRestaurantDataAnalyzer:
         for tripadvisor_restaurant_data_extractor in self.__tripadvisor_restaurant_data_extractors.values():
             overall_ratings.append(tripadvisor_restaurant_data_extractor.get_overall_rating())
             overall_ratings_computed.append(tripadvisor_restaurant_data_extractor.get_overall_rating_computed())
-            overall_ratings_computed_and_rounded.append(tripadvisor_restaurant_data_extractor.get_overall_rating_computed_and_rounded())
+            overall_ratings_computed_and_rounded.append(tripadvisor_restaurant_data_extractor
+                                                        .get_overall_rating_computed_and_rounded())
 
         df = pd.DataFrame({
             'restaurant_name': self.get_restaurant_names(),
@@ -50,6 +51,18 @@ class TripadvisorRestaurantDataAnalyzer:
 
         self.__scatterplot_dataframe(df, x1, y)
         self.__scatterplot_dataframe(df, x2, y)
+
+    def __scatterplot_dataframe(self, df, x, y):
+        vertical_line_positions = np.arange(1.25, 5, 0.5)
+        min_overall_rating_computed = df[x].to_numpy().min()
+        vertical_line_positions = vertical_line_positions[vertical_line_positions > min_overall_rating_computed]
+
+        plt.figure()
+        sns.set_style("darkgrid")
+        sns.scatterplot(data=df, x=x, y=y)
+        for vertical_line_position in vertical_line_positions:
+            plt.axvline(x=vertical_line_position, color='r', linestyle='dashed', label='overall_rating')
+        plt.show()
 
     def plot_incremental_overall_rating_for_all_restaurants(self):
         for restaurant_name in self.__tripadvisor_restaurant_data_extractors.keys():
@@ -136,12 +149,6 @@ class TripadvisorRestaurantDataAnalyzer:
 
     def get_restaurant_names(self):
         return self.__tripadvisor_restaurant_data_extractors.keys()
-
-    def __scatterplot_dataframe(self, df, x, y):
-        plt.figure()
-        sns.set_style("darkgrid")
-        sns.scatterplot(data=df, x=x, y=y)
-        plt.show()
 
 
 tripadvisorRestaurantDataAnalyzer = TripadvisorRestaurantDataAnalyzer()
