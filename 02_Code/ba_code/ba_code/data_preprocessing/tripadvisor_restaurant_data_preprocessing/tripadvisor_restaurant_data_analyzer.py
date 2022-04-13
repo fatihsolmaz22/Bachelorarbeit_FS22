@@ -51,11 +51,11 @@ class TripadvisorRestaurantDataAnalyzer:
         self.__scatterplot_dataframe(df, x1, y)
         self.__scatterplot_dataframe(df, x2, y)
 
-    def plot_accumulated_average_rating_for_all_restaurants(self):
+    def plot_incremental_overall_rating_for_all_restaurants(self):
         for restaurant_name in self.__tripadvisor_restaurant_data_extractors.keys():
-            self.plot_accumulated_average_rating_for_restaurant(restaurant_name)
+            self.plot_incremental_overall_rating_for_restaurant(restaurant_name)
 
-    def plot_accumulated_average_rating_for_restaurant(self, restaurant_name):
+    def plot_incremental_overall_rating_for_restaurant(self, restaurant_name):
         tripadvisor_restaurant_data_extractor = self.__tripadvisor_restaurant_data_extractors[restaurant_name]
 
         df_incremental_overall_rating = tripadvisor_restaurant_data_extractor.get_incremental_overall_rating_dataframe()
