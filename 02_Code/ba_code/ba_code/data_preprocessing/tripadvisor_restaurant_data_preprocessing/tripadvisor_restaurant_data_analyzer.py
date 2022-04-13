@@ -131,6 +131,10 @@ class TripadvisorRestaurantDataAnalyzer:
 
         return tripadvisor_restaurant_data_extractors
 
+    def inspection_of_freshness_based_average_rating(self):
+        # TODO: Fatih
+        pass
+
     def get_tripadvisor_restaurant_data_extractors(self):
         return self.__tripadvisor_restaurant_data_extractors
 
