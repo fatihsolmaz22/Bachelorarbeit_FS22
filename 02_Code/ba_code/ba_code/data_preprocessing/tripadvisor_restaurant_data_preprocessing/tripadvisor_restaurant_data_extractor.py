@@ -126,7 +126,8 @@ class TripadvisorRestaurantDataExtractor:
         df_review_data = self.get_review_data_dataframe()
         df_incremental_overall_rating = pd.DataFrame({
             'date': df_review_data['date'].to_list(),
-            'bygone_days': df_review_data['date'].apply(lambda x: np.abs(x-df_review_data.iloc[0]['date'])),
+            'bygone_year': df_review_data['date']
+                .apply(lambda date: np.abs(date - df_review_data.iloc[0]['date']) / np.timedelta64(1, 'Y')),
             'incremental_overall_rating': df_review_data['rating'].expanding().mean().to_list()
         })
         df_incremental_overall_rating.index.name = df_review_data.index.name

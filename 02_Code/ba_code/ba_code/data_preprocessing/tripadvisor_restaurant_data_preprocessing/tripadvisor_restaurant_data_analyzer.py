@@ -73,10 +73,10 @@ class TripadvisorRestaurantDataAnalyzer:
 
         df_incremental_overall_rating = tripadvisor_restaurant_data_extractor.get_incremental_overall_rating_dataframe()
 
-        x = 'date'
+        x = 'bygone_year'
         y = ['incremental_overall_rating']
         title = 'Incremental overall rating for ' + restaurant_name
-        x_label = 'date'
+        x_label = 'bygone years'
         y_label = 'overall rating'
 
         y_min = df_incremental_overall_rating[y].to_numpy().min()
@@ -86,7 +86,7 @@ class TripadvisorRestaurantDataAnalyzer:
         y_min = overall_rating if overall_rating < y_min else y_min
 
         plt.figure()
-        df_incremental_overall_rating.plot(x=x, y=y).invert_xaxis()
+        df_incremental_overall_rating.plot(x=x, y=y)
         plt.axhline(y=overall_rating - 0.25, color='r', linestyle='dashed', label='lower_bound')
         plt.axhline(y=overall_rating, color='g', linestyle='dashed', label='overall_rating')
         plt.axhline(y=overall_rating + 0.25, color='r', linestyle='dashed', label='upper_bound')
