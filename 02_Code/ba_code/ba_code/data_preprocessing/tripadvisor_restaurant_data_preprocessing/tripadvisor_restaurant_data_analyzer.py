@@ -62,7 +62,7 @@ class TripadvisorRestaurantDataAnalyzer:
 
         x = 'date'
         y = ['incremental_overall_rating']
-        title = 'Accumulated average rating for ' + restaurant_name
+        title = 'Incremental overall rating for ' + restaurant_name
         x_label = 'date'
         y_label = 'overall rating'
 
