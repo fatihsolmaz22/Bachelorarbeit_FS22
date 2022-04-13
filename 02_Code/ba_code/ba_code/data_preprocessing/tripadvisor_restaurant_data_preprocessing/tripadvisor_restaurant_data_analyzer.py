@@ -27,24 +27,29 @@ class TripadvisorRestaurantDataAnalyzer:
             restaurant_name = tripadvisor_restaurant_data_extractor.get_restaurant_name()
             self.__tripadvisor_restaurant_data_extractors[restaurant_name] = tripadvisor_restaurant_data_extractor
 
-    def plot_overall_rating_vs_overall_rating_computed(self):
+    def scatterplot_overall_rating_vs_overall_rating_computed(self):
         overall_ratings = []
         overall_ratings_computed = []
+        overall_ratings_computed_and_rounded = []
 
         for tripadvisor_restaurant_data_extractor in self.__tripadvisor_restaurant_data_extractors.values():
             overall_ratings.append(tripadvisor_restaurant_data_extractor.get_overall_rating())
             overall_ratings_computed.append(tripadvisor_restaurant_data_extractor.get_overall_rating_computed())
+            overall_ratings_computed_and_rounded.append(tripadvisor_restaurant_data_extractor.get_overall_rating_computed_and_rounded())
 
         df = pd.DataFrame({
             'restaurant_name': self.get_restaurant_names(),
             'overall_rating': overall_ratings,
-            'overall_rating_computed': overall_ratings_computed
+            'overall_rating_computed': overall_ratings_computed,
+            'overall_rating_computed_and_rounded': overall_ratings_computed_and_rounded
         })
 
-        x = 'overall_rating_computed'
+        x1 = 'overall_rating_computed'
+        x2 = 'overall_rating_computed_and_rounded'
         y = 'overall_rating'
 
-        self.__scatterplot_dataframe(df, x, y)
+        self.__scatterplot_dataframe(df, x1, y)
+        self.__scatterplot_dataframe(df, x2, y)
 
     def plot_accumulated_average_rating_for_all_restaurants(self):
         for restaurant_name in self.__tripadvisor_restaurant_data_extractors.keys():
@@ -116,7 +121,7 @@ class TripadvisorRestaurantDataAnalyzer:
         plt.legend(loc='lower right', prop=fontP)
         plt.show()
 
-    def get_restaurant_data_extractors_where_overall_rating_not_equal_computed_one(self):
+    def get_restaurant_data_extractors_where_overall_rating_not_equal_computed_and_rounded_one(self):
         tripadvisor_restaurant_data_extractors = []
 
         for tripadvisor_restaurant_data_extractor in self.__tripadvisor_restaurant_data_extractors.values():
