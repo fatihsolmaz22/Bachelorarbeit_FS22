@@ -39,7 +39,6 @@ class TripadvisorRestaurantDataAnalyzer:
                                                         .get_overall_rating_computed_and_rounded())
 
         df = pd.DataFrame({
-            'restaurant_name': self.get_restaurant_names(),
             'overall_rating': overall_ratings,
             'overall_rating_computed': overall_ratings_computed,
             'overall_rating_computed_and_rounded': overall_ratings_computed_and_rounded
@@ -96,6 +95,37 @@ class TripadvisorRestaurantDataAnalyzer:
         plt.ylabel(y_label)
         plt.legend(loc='upper right', prop=fontP)
         plt.grid()
+        plt.show()
+
+    def boxplot_overall_rating_computed_by_overall_rating(self):
+        overall_ratings = []
+        overall_ratings_computed = []
+
+        for tripadvisor_restaurant_data_extractor in self.__tripadvisor_restaurant_data_extractors.values():
+            overall_ratings.append(tripadvisor_restaurant_data_extractor.get_overall_rating())
+            overall_ratings_computed.append(tripadvisor_restaurant_data_extractor.get_overall_rating_computed())
+
+        df = pd.DataFrame({
+            'overall_rating': overall_ratings,
+            'overall_rating_computed': overall_ratings_computed,
+        })
+
+        plt.figure()
+        sns.boxplot(data=df,
+                    x='overall_rating',
+                    y="overall_rating_computed",
+                    width=0.5)
+
+        sns.stripplot(data=df,
+                      x='overall_rating',
+                      y="overall_rating_computed",
+                      jitter=True,
+                      marker='o',
+                      alpha=0.5,
+                      color='black')
+
+        plt.title("Boxplot of overall_rating_computed by overall_rating")
+        plt.legend(loc='lower right', prop=fontP)
         plt.show()
 
     def boxplot_of_rating_by_author_level_for_all_restaurants(self):
