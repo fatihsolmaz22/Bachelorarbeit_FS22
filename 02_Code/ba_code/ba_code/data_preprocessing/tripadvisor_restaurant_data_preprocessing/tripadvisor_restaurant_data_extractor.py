@@ -134,51 +134,82 @@ class TripadvisorRestaurantDataExtractor:
 
         return df_incremental_overall_rating
 
-    def get_monthly_incremental_overall_rating_dataframe(self):
+    def get_overall_rating_development_since_beginning_dataframe(self, time_period='m'):
         df_review_data = self.get_review_data_dataframe()
 
-        [dates, monthly_incremental_number_of_ratings] = self.__get_dates_and_monthly_incremental_number_of_ratings(
-            df_review_data)
+        # I use ...time_period which is a "placeholder" for: per_day, per_month, per_quarter or per_year
+        # 'd' --> day, 'm' --> month, 'Q' --> quarter, 'Y' --> year
+        if time_period == 'Q':
+            # get number of ratings per quarter dataframe
+            df_number_of_ratings_per_time_period = df_review_data \
+                .sort_values(by='date', ascending=True) \
+                .groupby(df_review_data['date'].dt.to_period(time_period))['rating'].agg('count') \
+                .to_frame().rename(columns={"rating": "number_of_ratings_per_time_period"}).reset_index()
 
-        monthly_incremental_sum_of_ratings = self.__get_monthly_incremental_sum_of_ratings(df_review_data)
+            # get sum of ratings per quarter dataframe
+            df_sum_of_ratings_per_time_period = df_review_data \
+                .sort_values(by='date', ascending=True) \
+                .groupby(df_review_data['date'].dt.to_period(time_period))['rating'].agg('sum') \
+                .to_frame().rename(columns={"rating": "sum_of_ratings_per_time_period"}).reset_index()
 
-        df_monthly_incremental_overall_rating = pd.DataFrame({
-            'date': dates,
-            'monthly_incremental_overall_rating': np.divide(monthly_incremental_sum_of_ratings,
-                                                            monthly_incremental_number_of_ratings)
+        elif time_period == 'd' or time_period == 'm' or time_period == 'Y':
+            # get number of ratings per day, month or year dataframe
+            df_number_of_ratings_per_time_period = df_review_data \
+                .sort_values(by='date', ascending=True) \
+                .groupby(pd.Grouper(key='date', axis=0, freq=time_period)).count()['rating'] \
+                .to_frame().rename(columns={"rating": "number_of_ratings_per_time_period"}).reset_index()
+
+            # get sum of ratings per day, month or year dataframe
+            df_sum_of_ratings_per_time_period = df_review_data \
+                .sort_values(by='date', ascending=True) \
+                .groupby(pd.Grouper(key='date', axis=0, freq=time_period)).sum()['rating'] \
+                .to_frame().rename(columns={"rating": "sum_of_ratings_per_time_period"}).reset_index()
+        else:
+            print("Invalid time period, enter one of the following time periods:")
+            print("'d': Day")
+            print("'m': Month")
+            print("'Q': Quarter")
+            print("'Y': Year")
+            return
+
+        # preparing data(frames) to compute overall_rating_development
+        df_where_number_of_ratings_greater_zero_per_time_period = df_number_of_ratings_per_time_period[
+            df_number_of_ratings_per_time_period['number_of_ratings_per_time_period'] != 0]
+
+        dates = df_number_of_ratings_per_time_period['date'].to_list()
+        dates_where_number_of_ratings_greater_zero = \
+            df_where_number_of_ratings_greater_zero_per_time_period['date'].to_list()
+
+        number_of_ratings_development = df_where_number_of_ratings_greater_zero_per_time_period[
+            'number_of_ratings_per_time_period'].expanding().sum().to_list()
+
+        df_where_sum_of_ratings_per_time_period_greater_zero = df_sum_of_ratings_per_time_period[
+            df_sum_of_ratings_per_time_period['sum_of_ratings_per_time_period'] != 0]
+
+        sum_of_ratings_development = df_where_sum_of_ratings_per_time_period_greater_zero[
+            'sum_of_ratings_per_time_period'].expanding().sum().to_list()
+
+        overall_rating_development = np.divide(sum_of_ratings_development,
+                                               number_of_ratings_development)
+
+        # initialising dictionary: The values for all dates are NaN
+        date_overall_rating_development_dict = {date: np.nan for date in dates}
+
+        # overriding some of the NaN values in dictionary with overall_rating_development
+        for date, overall_rating in zip(dates_where_number_of_ratings_greater_zero, overall_rating_development):
+            date_overall_rating_development_dict[date] = overall_rating
+
+        df_overall_rating_development_since_beginning = pd.DataFrame({
+            'date': date_overall_rating_development_dict.keys(),
+            'overall_rating_development': date_overall_rating_development_dict.values()
         })
-        df_monthly_incremental_overall_rating.index.name = df_review_data.index.name
 
-        return df_monthly_incremental_overall_rating
+        # replacing NaNs with preceding overall_rating_development value in dataframe
+        df_overall_rating_development_since_beginning['overall_rating_development'].fillna(method='ffill', inplace=True)
 
-    def __get_dates_and_monthly_incremental_number_of_ratings(self, df_review_data):
-        df_number_of_ratings_per_month = df_review_data \
-            .groupby(pd.Grouper(key='date', axis=0, freq='m')).count()['rating'] \
-            .to_frame().rename(columns={"rating": "number_of_ratings_per_month"}).reset_index() \
-            .sort_values(by='date', ascending=False)
+        df_overall_rating_development_since_beginning.index.name = df_review_data.index.name
 
-        df_number_of_ratings_per_month_greater_zero = df_number_of_ratings_per_month[
-            df_number_of_ratings_per_month['number_of_ratings_per_month'] != 0]
-
-        dates = df_number_of_ratings_per_month_greater_zero['date'].to_list()
-        monthly_incremental_number_of_ratings = \
-            df_number_of_ratings_per_month_greater_zero['number_of_ratings_per_month'].expanding().sum().to_list()
-
-        return [dates, monthly_incremental_number_of_ratings]
-
-    def __get_monthly_incremental_sum_of_ratings(self, df_review_data):
-        df_sum_of_ratings_per_month = df_review_data \
-            .groupby(pd.Grouper(key='date', axis=0, freq='m')).sum()['rating'] \
-            .to_frame().rename(columns={"rating": "sum_of_ratings_per_month"}).reset_index() \
-            .sort_values(by='date', ascending=False)
-
-        df_sum_of_ratings_per_month_greater_zero = df_sum_of_ratings_per_month[
-            df_sum_of_ratings_per_month['sum_of_ratings_per_month'] != 0]
-
-        monthly_incremental_sum_of_ratings = df_sum_of_ratings_per_month_greater_zero['sum_of_ratings_per_month'] \
-            .expanding().sum().to_list()
-
-        return monthly_incremental_sum_of_ratings
+        return df_overall_rating_development_since_beginning
 
     def get_author_level_with_rating_dataframe(self):
         df_author_base_infos = self.get_author_base_infos_dataframe()
