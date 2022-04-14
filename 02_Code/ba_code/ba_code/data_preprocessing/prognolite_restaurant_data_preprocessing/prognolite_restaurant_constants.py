@@ -8,7 +8,7 @@ class PrognoliteRestaurantDataUri(Enum):
 
 
 # Restaurants with revenue data are listed below. Not listed are some restaurants where no revenue data exists.
-# I got these informations by calling PrognoliteRestaurantDataExtractor().get_restaurant_data() which lists
+# I got these informations by calling PrognoliteRestaurantDataExtractor().get_restaurant_data_dataframe() which lists
 # all revenue data for all restaurants.
 class Restaurant(Enum):
     BUTCHER_USTER = "fwg-butcher-uster"
