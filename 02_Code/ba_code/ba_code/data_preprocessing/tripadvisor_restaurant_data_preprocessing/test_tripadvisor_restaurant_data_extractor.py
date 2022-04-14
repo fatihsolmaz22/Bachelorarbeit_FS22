@@ -2,6 +2,7 @@ from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.tripad
     TripadvisorRestaurantDataUri
 from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.tripadvisor_restaurant_data_extractor import \
     TripadvisorRestaurantDataExtractor
+import pandas as pd
 
 
 def print_infos_of_tripadvisor_restaurant_data(restaurant_data_extractor):
@@ -29,7 +30,23 @@ def print_infos_of_tripadvisor_restaurant_data(restaurant_data_extractor):
     print("Number of entries in df_author_distribution", len(df_author_distribution))
 
 
+def print_overall_rating_history(restaurant_data_extractor):
+    df_review_data_1 = restaurant_data_extractor.get_review_data_dataframe()
+
+    overall_rating_history_over_time = df_review_data_1 \
+        .sort_values(by='date', ascending=True)['rating'] \
+        .expanding().mean().to_list()
+
+    df_overall_rating_history_over_time_deprecated = pd.DataFrame({
+        'date': df_review_data_1['date'].to_list(),
+        'rating_history': overall_rating_history_over_time
+    })
+
+    print(df_overall_rating_history_over_time_deprecated.head)
+
+
 tripadvisor_restaurant_data_extractor = TripadvisorRestaurantDataExtractor()
-tripadvisor_restaurant_data_extractor.load_restaurant_data(open(TripadvisorRestaurantDataUri.LA_FONTE_ZURICH.value))
+tripadvisor_restaurant_data_extractor.load_restaurant_data(open(TripadvisorRestaurantDataUri.WEISSES_ROSSLI.value))
 
 print_infos_of_tripadvisor_restaurant_data(tripadvisor_restaurant_data_extractor)
+print_overall_rating_history(tripadvisor_restaurant_data_extractor)
