@@ -134,7 +134,7 @@ def main():
         # TODO: get overall rating of restaurant
         overall_rating = get_overall_rating_of_restaurant(main_page_element)
 
-        print("\n\nRestaurant link:", restaurant)
+        print("\n\nRestaurant link:", restaurant.value)
         print(overall_rating)
 
         has_next_page = True
