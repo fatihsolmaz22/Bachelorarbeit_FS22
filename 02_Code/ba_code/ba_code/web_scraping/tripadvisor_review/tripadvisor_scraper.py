@@ -339,7 +339,7 @@ def main():
         jsonString = json.dumps(restaurant_info_json)
         with open("{}/tripadvisor_review_data_{}.json".format(
                 TRIPADVISOR_RESTAURANT_DATA_PATH,
-                restaurant.split("Reviews-")[1].replace(".html", "")), "w+") as json_file: # was restaurant.name
+                restaurant.name), "w+") as json_file: # was restaurant.split("Reviews-")[1].replace(".html", "")), "w+")
             json_file.write(jsonString)
 
 if __name__ == "__main__":
