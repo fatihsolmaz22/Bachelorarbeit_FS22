@@ -15,7 +15,7 @@ class PrognoliteRestaurantDataAnalyzer:
 
     def plot_turnover_per_time_period(self, restaurant, time_period='m'):
         df_turnover_per_month = self.__restaurantDataExtractor \
-            .get_turnover_per_time_period(restaurant, time_period)
+            .get_turnover_per_time_period_dataframe(restaurant, time_period)
 
         if df_turnover_per_month.empty:
             return

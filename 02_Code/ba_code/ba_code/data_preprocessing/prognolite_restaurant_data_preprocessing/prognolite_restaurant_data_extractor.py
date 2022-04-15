@@ -45,7 +45,7 @@ class PrognoliteRestaurantDataExtractor:
 
         return df_turnover_development_since_beginning
 
-    def get_turnover_per_time_period(self, restaurant, time_period='m'):
+    def get_turnover_per_time_period_dataframe(self, restaurant, time_period='m'):
         df_date_turnover = self.__get_date_turnover_dataframe(restaurant)
 
         df_date_turnover_per_time_period = None
