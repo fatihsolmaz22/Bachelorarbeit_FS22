@@ -225,4 +225,4 @@ class TripadvisorRestaurantDataExtractor:
 
 
 tripadvisorRestaurantDataExtractor = TripadvisorRestaurantDataExtractor()
-tripadvisorRestaurantDataExtractor.load_restaurant_data(open(TripadvisorRestaurantDataUri.WEISSES_ROSSLI.value))
+tripadvisorRestaurantDataExtractor.load_restaurant_data(open(TripadvisorRestaurantDataUri.BUTCHER_USTER.value))
