@@ -122,7 +122,7 @@ class TripadvisorRestaurantDataExtractor:
     def get_author_distribution_dataframe(self):
         return self.__tripadvisor_restaurant_data['author_data']['df_author_distribution']
 
-    def get_incremental_overall_rating_dataframe(self):
+    def get_incremental_overall_rating_over_years_dataframe(self):
         df_review_data = self.get_review_data_dataframe()
         df_incremental_overall_rating = pd.DataFrame({
             'date': df_review_data['date'].to_list(),

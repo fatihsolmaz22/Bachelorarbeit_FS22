@@ -70,7 +70,7 @@ class TripadvisorRestaurantDataAnalyzer:
     def plot_incremental_overall_rating_for_restaurant(self, restaurant_name):
         tripadvisor_restaurant_data_extractor = self.__tripadvisor_restaurant_data_extractors[restaurant_name]
 
-        df_incremental_overall_rating = tripadvisor_restaurant_data_extractor.get_incremental_overall_rating_dataframe()
+        df_incremental_overall_rating = tripadvisor_restaurant_data_extractor.get_incremental_overall_rating_over_years_dataframe()
 
         x = 'bygone_year'
         y = ['incremental_overall_rating']
