@@ -165,11 +165,7 @@ class TripadvisorRestaurantDataExtractor:
                 .groupby(pd.Grouper(key='date', axis=0, freq=time_period)).sum()['rating'] \
                 .to_frame().rename(columns={"rating": "sum_of_ratings_per_time_period"}).reset_index()
         else:
-            print("Invalid time period, enter one of the following time periods:")
-            print("'d': Day")
-            print("'m': Month")
-            print("'Q': Quarter")
-            print("'Y': Year")
+            self.__print_invalid_time_period_message()
             return
 
         # preparing data(frames) to compute overall_rating_development
@@ -210,6 +206,13 @@ class TripadvisorRestaurantDataExtractor:
         df_overall_rating_development_since_beginning.index.name = df_review_data.index.name
 
         return df_overall_rating_development_since_beginning
+
+    def __print_invalid_time_period_message(self):
+        print("Invalid time period, enter one of the following time periods:")
+        print("'d': Day")
+        print("'m': Month")
+        print("'Q': Quarter")
+        print("'Y': Year")
 
     def get_author_level_with_rating_dataframe(self):
         df_author_base_infos = self.get_author_base_infos_dataframe()
