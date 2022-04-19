@@ -70,7 +70,8 @@ class TripadvisorRestaurantDataAnalyzer:
     def plot_incremental_overall_rating_for_restaurant(self, restaurant_name):
         tripadvisor_restaurant_data_extractor = self.__tripadvisor_restaurant_data_extractors[restaurant_name]
 
-        df_incremental_overall_rating = tripadvisor_restaurant_data_extractor.get_incremental_overall_rating_over_years_dataframe()
+        df_incremental_overall_rating = \
+            tripadvisor_restaurant_data_extractor.get_incremental_overall_rating_over_years_dataframe()
 
         x = 'bygone_year'
         y = ['incremental_overall_rating']
@@ -90,6 +91,31 @@ class TripadvisorRestaurantDataAnalyzer:
         plt.axhline(y=overall_rating, color='g', linestyle='dashed', label='overall_rating')
         plt.axhline(y=overall_rating + 0.25, color='r', linestyle='dashed', label='upper_bound')
         plt.ylim([y_min - 0.05, y_max + 0.05])
+        plt.title(title)
+        plt.xlabel(x_label)
+        plt.ylabel(y_label)
+        plt.legend(loc='upper right', prop=fontP)
+        plt.grid()
+        plt.show()
+
+    def plot_average_rating_per_time_period_for_all_restaurants(self, time_period='m'):
+        for restaurant_name in self.__tripadvisor_restaurant_data_extractors.keys():
+            self.plot_average_rating_per_time_period(restaurant_name, time_period)
+
+    def plot_average_rating_per_time_period(self, restaurant_name, time_period='m'):
+        tripadvisor_restaurant_data_extractor = self.__tripadvisor_restaurant_data_extractors[restaurant_name]
+
+        df_overall_rating_per_time_period = \
+            tripadvisor_restaurant_data_extractor.get_overall_rating_per_time_period(time_period)
+
+        title = "Average rating per time period: " + restaurant_name
+        x = 'date'
+        y = 'average_rating_per_time_period'
+        x_label = 'date'
+        y_label = 'rating'
+
+        plt.figure()
+        df_overall_rating_per_time_period.plot(x=x, y=y)
         plt.title(title)
         plt.xlabel(x_label)
         plt.ylabel(y_label)
