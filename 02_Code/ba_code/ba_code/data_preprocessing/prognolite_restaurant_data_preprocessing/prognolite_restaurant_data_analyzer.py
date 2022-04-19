@@ -71,3 +71,4 @@ class PrognoliteRestaurantDataAnalyzer:
 
 
 prognoliteRestaurantDataAnalyzer = PrognoliteRestaurantDataAnalyzer()
+# prognoliteRestaurantDataAnalyzer.plot_turnover_per_time_period(Restaurant.BUTCHER_USTER, 'Q')

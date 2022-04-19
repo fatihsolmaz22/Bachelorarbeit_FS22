@@ -7,6 +7,8 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from matplotlib.font_manager import FontProperties
+from ba_code.data_preprocessing.prognolite_restaurant_data_preprocessing.prognolite_restaurant_constants import \
+    Restaurant
 
 fontP = FontProperties()
 fontP.set_size('x-small')
@@ -111,7 +113,7 @@ class TripadvisorRestaurantDataAnalyzer:
         title = "Average rating per time period: " + restaurant_name
         x = 'date'
         y = 'average_rating_per_time_period'
-        x_label = 'date'
+        x_label = self.__get_x_label(time_period)
         y_label = 'rating'
 
         plt.figure()
@@ -210,5 +212,18 @@ class TripadvisorRestaurantDataAnalyzer:
     def get_restaurant_names(self):
         return self.__tripadvisor_restaurant_data_extractors.keys()
 
+    def __get_x_label(self, time_period):
+        x_label = ''
+        if time_period == 'd':
+            x_label = 'day'
+        elif time_period == 'm':
+            x_label = 'month'
+        elif time_period == 'Q':
+            x_label = 'quarter year'
+        elif time_period == 'Y':
+            x_label = 'year'
+        return x_label
+
 
 tripadvisorRestaurantDataAnalyzer = TripadvisorRestaurantDataAnalyzer()
+# tripadvisorRestaurantDataAnalyzer.plot_average_rating_per_time_period('BUTCHER_USTER', 'Q')
