@@ -105,8 +105,8 @@ class TripadvisorRestaurantDataAnalyzer:
     def plot_average_rating_per_time_period(self, restaurant_name, time_period='m'):
         tripadvisor_restaurant_data_extractor = self.__tripadvisor_restaurant_data_extractors[restaurant_name]
 
-        df_overall_rating_per_time_period = \
-            tripadvisor_restaurant_data_extractor.get_overall_rating_per_time_period(time_period)
+        df_average_rating_per_time_period = \
+            tripadvisor_restaurant_data_extractor.get_average_rating_per_time_period_dataframe(time_period)
 
         title = "Average rating per time period: " + restaurant_name
         x = 'date'
@@ -115,7 +115,7 @@ class TripadvisorRestaurantDataAnalyzer:
         y_label = 'rating'
 
         plt.figure()
-        df_overall_rating_per_time_period.plot(x=x, y=y)
+        df_average_rating_per_time_period.plot(x=x, y=y)
         plt.title(title)
         plt.xlabel(x_label)
         plt.ylabel(y_label)

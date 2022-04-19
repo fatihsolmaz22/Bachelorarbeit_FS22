@@ -207,7 +207,7 @@ class TripadvisorRestaurantDataExtractor:
 
         return df_overall_rating_development_since_beginning
 
-    def get_overall_rating_per_time_period(self, time_period='m'):
+    def get_average_rating_per_time_period_dataframe(self, time_period='m'):
         df_review_data = self.get_review_data_dataframe()
 
         df_average_rating_per_time_period = df_review_data \
