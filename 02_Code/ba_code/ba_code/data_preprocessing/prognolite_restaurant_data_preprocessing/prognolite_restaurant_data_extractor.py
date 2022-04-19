@@ -51,11 +51,12 @@ class PrognoliteRestaurantDataExtractor:
         df_date_turnover_per_time_period = None
         if time_period == 'd' or time_period == 'm' or time_period == 'Y':
             df_date_turnover_per_time_period = \
-                df_date_turnover.groupby(pd.Grouper(key='d', axis=0, freq=time_period)).sum().reset_index()
+                df_date_turnover.groupby(pd.Grouper(key='d', axis=0, freq=time_period)).sum() \
+                    .rename(columns={"turnover": "turnover_per_time_period"}).reset_index()
         elif time_period == 'Q':
             df_date_turnover_per_time_period = \
                 df_date_turnover.groupby(df_date_turnover['d'].dt.to_period(time_period))['turnover'].agg(
-                    'sum').reset_index()
+                    'sum').reset_index().rename(columns={"turnover": "turnover_per_time_period"})
         else:
             self.__print_invalid_time_period_message()
             return

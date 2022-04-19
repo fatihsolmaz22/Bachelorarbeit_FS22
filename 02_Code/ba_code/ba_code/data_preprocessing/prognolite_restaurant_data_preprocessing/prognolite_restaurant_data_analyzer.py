@@ -22,7 +22,7 @@ class PrognoliteRestaurantDataAnalyzer:
 
         title = "Turnover per month"
         x = 'd'
-        y = 'turnover'
+        y = 'turnover_per_time_period'
         x_label = self.__get_x_label(time_period)
         y_label = "turnover in CHF"
         self.__plot_dataframe(df_turnover_per_month, x, y,
