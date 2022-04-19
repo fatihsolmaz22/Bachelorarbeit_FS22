@@ -61,24 +61,24 @@ class PrognoliteTripadvisorRestaurantDataAnalyzer:
         # plot turnover development for a restaurant
         color = 'red'
         fig, ax1 = plt.subplots()
-        ax1.set_xlabel('date')
+        ax1.set_xlabel(x2)
         ax1.set_ylabel('turnover in CHF', color=color)
         ax1.tick_params(axis='y', labelcolor=color)
-        ax1.legend('a')
-        df_turnover_development_since_beginning.plot(x=x1, y=y1, ax=ax1, color=color, marker='o', label='turnover_development')
+        ax1.plot(df_turnover_development_since_beginning[x1], df_turnover_development_since_beginning[y1], color=color, marker='o')
 
         # plot overall rating development for a restaurant in the same plot
         color = 'blue'
         ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
         ax2.set_ylabel('overall rating', color=color)
         ax2.tick_params(axis='y', labelcolor=color)
-        ax2.legend('b')
-        df_overall_rating_development_since_beginning.plot(x=x2, y=y2, ax=ax2, color=color, marker='o', label='overall_rating_development')
+        ax2.plot(df_overall_rating_development_since_beginning[x2], df_overall_rating_development_since_beginning[y2], color=color, marker='o')
 
         # fig.tight_layout()  # otherwise the right y-label is slightly clipped
         plt.title(title + ":\n" + restaurant.value)
         plt.xlim([x_min, x_max])
-        plt.grid()
+        labels=['turnover_development','overall_rating_development']
+        fig.legend(labels, bbox_to_anchor=(1,1), bbox_transform=ax1.transAxes)
+        #plt.savefig('haha.png',dpi=600)
         plt.show()
 
     def plot_average_rating_vs_turnover_per_time_period_for_all_restaurants(self, time_period='m'):
