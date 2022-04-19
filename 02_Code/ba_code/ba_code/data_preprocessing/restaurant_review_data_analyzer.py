@@ -64,6 +64,7 @@ class PrognoliteTripadvisorRestaurantDataAnalyzer:
         ax1.set_xlabel('date')
         ax1.set_ylabel('turnover in CHF', color=color)
         ax1.tick_params(axis='y', labelcolor=color)
+        ax1.legend('a')
         df_turnover_development_since_beginning.plot(x=x1, y=y1, ax=ax1, color=color, marker='o', label='turnover_development')
 
         # plot overall rating development for a restaurant in the same plot
@@ -71,12 +72,12 @@ class PrognoliteTripadvisorRestaurantDataAnalyzer:
         ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
         ax2.set_ylabel('overall rating', color=color)
         ax2.tick_params(axis='y', labelcolor=color)
+        ax2.legend('b')
         df_overall_rating_development_since_beginning.plot(x=x2, y=y2, ax=ax2, color=color, marker='o', label='overall_rating_development')
 
         # fig.tight_layout()  # otherwise the right y-label is slightly clipped
-        plt.title(title + ": " + restaurant.value)
+        plt.title(title + ":\n" + restaurant.value)
         plt.xlim([x_min, x_max])
-        plt.legend(loc="upper left")
         plt.grid()
         plt.show()
 
@@ -128,11 +129,13 @@ class PrognoliteTripadvisorRestaurantDataAnalyzer:
         ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
         ax2.set_ylabel('overall rating', color=color)
         ax2.tick_params(axis='y', labelcolor=color)
-        df_average_rating_per_time_period.plot(x=x2, y=y2, ax=ax2, color=color, marker='o', label='average_rating_per_time_period')
+        df_average_rating_per_time_period.plot(x=x2, y=y2, ax=ax2, color=color, marker='o',
+                                               label='average_rating_per_time_period')
 
         # fig.tight_layout()  # otherwise the right y-label is slightly clipped
-        plt.title(title + ": " + restaurant.value)
+        plt.title(title + ":\n" + restaurant.value)
         plt.xlim([x_min, x_max])
+        plt.xlabel(x2)
         plt.legend(loc="upper left")
         plt.grid()
         plt.show()
@@ -151,7 +154,7 @@ class PrognoliteTripadvisorRestaurantDataAnalyzer:
 
 
 prognoliteTripadvisorRestaurantDataAnalyzer = PrognoliteTripadvisorRestaurantDataAnalyzer()
-#prognoliteTripadvisorRestaurantDataAnalyzer.plot_development_of_overall_rating_and_turnover_since_beginning_for_all_restaurants('Q')
-#prognoliteTripadvisorRestaurantDataAnalyzer.plot_average_rating_vs_turnover_per_time_period_for_all_restaurants('Q')
-#prognoliteTripadvisorRestaurantDataAnalyzer.plot_development_of_overall_rating_and_turnover_since_beginning(Restaurant.BUTCHER_USTER,'Q')
-#prognoliteTripadvisorRestaurantDataAnalyzer.plot_average_rating_vs_turnover_per_time_period(Restaurant.BUTCHER_USTER,'Q')
+# prognoliteTripadvisorRestaurantDataAnalyzer.plot_development_of_overall_rating_and_turnover_since_beginning_for_all_restaurants('Q')
+# prognoliteTripadvisorRestaurantDataAnalyzer.plot_average_rating_vs_turnover_per_time_period_for_all_restaurants('Q')
+# prognoliteTripadvisorRestaurantDataAnalyzer.plot_development_of_overall_rating_and_turnover_since_beginning(Restaurant.BUTCHER_USTER,'Q')
+# prognoliteTripadvisorRestaurantDataAnalyzer.plot_average_rating_vs_turnover_per_time_period(Restaurant.BUTCHER_USTER,'Q')
