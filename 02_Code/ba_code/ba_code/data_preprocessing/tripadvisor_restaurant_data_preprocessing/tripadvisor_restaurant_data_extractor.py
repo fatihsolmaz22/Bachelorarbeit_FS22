@@ -239,6 +239,3 @@ class TripadvisorRestaurantDataExtractor:
 
 tripadvisorRestaurantDataExtractor = TripadvisorRestaurantDataExtractor()
 tripadvisorRestaurantDataExtractor.load_restaurant_data(open(TripadvisorRestaurantDataUri.BUTCHER_USTER.value))
-
-
-

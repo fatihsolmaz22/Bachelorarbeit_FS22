@@ -14,10 +14,10 @@ class PrognoliteRestaurantDataAnalyzer:
             self.plot_turnover_per_time_period(restaurant, time_period)
 
     def plot_turnover_per_time_period(self, restaurant, time_period='m'):
-        df_turnover_per_month = self.__restaurantDataExtractor \
+        df_turnover_per_time_period = self.__restaurantDataExtractor \
             .get_turnover_per_time_period_dataframe(restaurant, time_period)
 
-        if df_turnover_per_month.empty:
+        if df_turnover_per_time_period.empty:
             return
 
         title = "Turnover per month"
@@ -25,7 +25,7 @@ class PrognoliteRestaurantDataAnalyzer:
         y = 'turnover_per_time_period'
         x_label = self.__get_x_label(time_period)
         y_label = "turnover in CHF"
-        self.__plot_dataframe(df_turnover_per_month, x, y,
+        self.__plot_dataframe(df_turnover_per_time_period, x, y,
                               title, x_label, y_label, restaurant)
 
     def plot_turnover_development_since_beginning_for_all_restaurants(self, time_period='m'):
@@ -71,4 +71,5 @@ class PrognoliteRestaurantDataAnalyzer:
 
 
 prognoliteRestaurantDataAnalyzer = PrognoliteRestaurantDataAnalyzer()
+# prognoliteRestaurantDataAnalyzer.plot_turnover_development_since_beginning(Restaurant.BUTCHER_USTER, 'Q')
 # prognoliteRestaurantDataAnalyzer.plot_turnover_per_time_period(Restaurant.BUTCHER_USTER, 'Q')
