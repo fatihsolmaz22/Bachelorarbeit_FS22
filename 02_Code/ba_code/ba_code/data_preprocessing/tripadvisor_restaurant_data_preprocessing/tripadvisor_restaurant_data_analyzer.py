@@ -116,8 +116,29 @@ class TripadvisorRestaurantDataAnalyzer:
         x_label = self.__get_x_label(time_period)
         y_label = 'rating'
 
+        self.__plot_dataframe(df_average_rating_per_time_period, x, y, title, x_label, y_label)
+
+    def plot_overall_rating_development_since_beginning_for_all_restaurants(self, time_period='m'):
+        for restaurant_name in self.__tripadvisor_restaurant_data_extractors.keys():
+            self.plot_overall_rating_development_since_beginning(restaurant_name, time_period)
+
+    def plot_overall_rating_development_since_beginning(self, restaurant_name, time_period='m'):
+        tripadvisor_restaurant_data_extractor = self.__tripadvisor_restaurant_data_extractors[restaurant_name]
+
+        df_overall_rating_development_since_beginning = \
+            tripadvisor_restaurant_data_extractor.get_overall_rating_development_since_beginning_dataframe(time_period)
+
+        title = "Overall rating development since beginning: " + restaurant_name
+        x = 'date'
+        y = 'overall_rating_development'
+        x_label = self.__get_x_label(time_period)
+        y_label = 'rating'
+
+        self.__plot_dataframe(df_overall_rating_development_since_beginning, x, y, title, x_label, y_label)
+
+    def __plot_dataframe(self, df, x, y, title, x_label, y_label):
         plt.figure()
-        df_average_rating_per_time_period.plot(x=x, y=y)
+        df.plot(x=x, y=y, marker='o')
         plt.title(title)
         plt.xlabel(x_label)
         plt.ylabel(y_label)
@@ -226,4 +247,5 @@ class TripadvisorRestaurantDataAnalyzer:
 
 
 tripadvisorRestaurantDataAnalyzer = TripadvisorRestaurantDataAnalyzer()
+# tripadvisorRestaurantDataAnalyzer.plot_overall_rating_development_since_beginning('BUTCHER_USTER', 'Q')
 # tripadvisorRestaurantDataAnalyzer.plot_average_rating_per_time_period('BUTCHER_USTER', 'Q')
