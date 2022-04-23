@@ -111,10 +111,10 @@ class TripadvisorRestaurantDataAnalyzer:
         df_average_rating_per_time_period = \
             tripadvisor_restaurant_data_extractor.get_average_rating_per_time_period_dataframe(time_period)
 
-        title = "Average rating per time period: " + restaurant_name
+        title = "Average rating per " + self.__get_value_of_time_period(time_period) + ":\n" + restaurant_name
         x = 'date'
         y = 'average_rating_per_time_period'
-        x_label = self.__get_x_label(time_period)
+        x_label = self.__get_value_of_time_period(time_period)
         y_label = 'rating'
 
         self.__plot_dataframe(df_average_rating_per_time_period, x, y, title, x_label, y_label)
@@ -129,10 +129,10 @@ class TripadvisorRestaurantDataAnalyzer:
         df_overall_rating_development_since_beginning = \
             tripadvisor_restaurant_data_extractor.get_overall_rating_development_since_beginning_dataframe(time_period)
 
-        title = "Overall rating development since beginning: " + restaurant_name
+        title = "Overall rating development since beginning:\n" + restaurant_name
         x = 'date'
         y = 'overall_rating_development'
-        x_label = self.__get_x_label(time_period)
+        x_label = self.__get_value_of_time_period(time_period)
         y_label = 'rating'
 
         self.__plot_dataframe(df_overall_rating_development_since_beginning, x, y, title, x_label, y_label)
@@ -233,17 +233,17 @@ class TripadvisorRestaurantDataAnalyzer:
     def get_restaurant_names(self):
         return self.__tripadvisor_restaurant_data_extractors.keys()
 
-    def __get_x_label(self, time_period):
-        x_label = ''
+    def __get_value_of_time_period(self, time_period):
+        time_period_value = ''
         if time_period == 'd':
-            x_label = 'day'
+            time_period_value = 'day'
         elif time_period == 'm':
-            x_label = 'month'
+            time_period_value = 'month'
         elif time_period == 'Q':
-            x_label = 'quarter year'
+            time_period_value = 'quarter year'
         elif time_period == 'Y':
-            x_label = 'year'
-        return x_label
+            time_period_value = 'year'
+        return time_period_value
 
 
 tripadvisorRestaurantDataAnalyzer = TripadvisorRestaurantDataAnalyzer()
