@@ -92,11 +92,12 @@ class TripadvisorRestaurantDataAnalyzer:
         plt.axhline(y=overall_rating - 0.25, color='r', linestyle='dashed', label='lower_bound')
         plt.axhline(y=overall_rating, color='g', linestyle='dashed', label='overall_rating')
         plt.axhline(y=overall_rating + 0.25, color='r', linestyle='dashed', label='upper_bound')
-        plt.ylim([y_min - 0.05, y_max + 0.05])
+        plt.ylim([1, 5])
+        #plt.ylim([y_min - 0.05, y_max + 0.05])
         plt.title(title)
         plt.xlabel(x_label)
         plt.ylabel(y_label)
-        plt.legend(loc='upper right', prop=fontP)
+        plt.legend(loc='lower right', prop=fontP)
         plt.grid()
         plt.show()
 
@@ -139,6 +140,9 @@ class TripadvisorRestaurantDataAnalyzer:
     def __plot_dataframe(self, df, x, y, title, x_label, y_label):
         plt.figure()
         df.plot(x=x, y=y, marker='o')
+        ymin = df[y].to_numpy().min()
+        ymin = ymin if ymin < 1 else 1
+        plt.ylim([ymin, 5])
         plt.title(title)
         plt.xlabel(x_label)
         plt.ylabel(y_label)
