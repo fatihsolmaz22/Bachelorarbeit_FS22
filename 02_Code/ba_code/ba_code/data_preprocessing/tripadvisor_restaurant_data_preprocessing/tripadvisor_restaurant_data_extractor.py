@@ -139,20 +139,7 @@ class TripadvisorRestaurantDataExtractor:
 
         # I use ...time_period which is a "placeholder" for: per_day, per_month, per_quarter or per_year
         # 'd' --> day, 'm' --> month, 'Q' --> quarter, 'Y' --> year
-        if time_period == 'Q':
-            # get number of ratings per quarter dataframe
-            df_number_of_ratings_per_time_period = df_review_data \
-                .sort_values(by='date', ascending=True) \
-                .groupby(df_review_data['date'].dt.to_period(time_period))['rating'].agg('count') \
-                .to_frame().rename(columns={"rating": "number_of_ratings_per_time_period"}).reset_index()
-
-            # get sum of ratings per quarter dataframe
-            df_sum_of_ratings_per_time_period = df_review_data \
-                .sort_values(by='date', ascending=True) \
-                .groupby(df_review_data['date'].dt.to_period(time_period))['rating'].agg('sum') \
-                .to_frame().rename(columns={"rating": "sum_of_ratings_per_time_period"}).reset_index()
-
-        elif time_period == 'd' or time_period == 'm' or time_period == 'Y':
+        if time_period == 'd' or time_period == 'm' or time_period == 'Q' or time_period == 'Y':
             # get number of ratings per day, month or year dataframe
             df_number_of_ratings_per_time_period = df_review_data \
                 .sort_values(by='date', ascending=True) \
