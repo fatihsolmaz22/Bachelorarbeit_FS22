@@ -27,6 +27,7 @@ class PrognoliteRestaurantDataExtractor:
     def get_restaurant_data_dataframe(self, restaurant):
         return self.__restaurant_data[restaurant.value]
 
+    # TODO: remove this method later, this is not what Martin asked for
     def get_turnover_development_since_beginning_dataframe(self, restaurant, time_period='m'):
         df_date_turnover = self.__get_date_turnover_dataframe(restaurant)
 
@@ -49,14 +50,10 @@ class PrognoliteRestaurantDataExtractor:
         df_date_turnover = self.__get_date_turnover_dataframe(restaurant)
 
         df_date_turnover_per_time_period = None
-        if time_period == 'd' or time_period == 'm' or time_period == 'Y':
+        if time_period == 'd' or time_period == 'm' or time_period == 'Q' or time_period == 'Y':
             df_date_turnover_per_time_period = \
                 df_date_turnover.groupby(pd.Grouper(key='d', axis=0, freq=time_period)).sum() \
                     .rename(columns={"turnover": "turnover_per_time_period"}).reset_index()
-        elif time_period == 'Q':
-            df_date_turnover_per_time_period = \
-                df_date_turnover.groupby(df_date_turnover['d'].dt.to_period(time_period))['turnover'].agg(
-                    'sum').reset_index().rename(columns={"turnover": "turnover_per_time_period"})
         else:
             self.__print_invalid_time_period_message()
             return
