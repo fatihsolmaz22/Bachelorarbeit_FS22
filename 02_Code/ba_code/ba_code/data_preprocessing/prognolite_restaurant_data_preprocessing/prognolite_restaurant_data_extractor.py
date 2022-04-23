@@ -16,7 +16,9 @@ class PrognoliteRestaurantDataExtractor:
         restaurant_names = [restaurant_name.strip() for restaurant_name in restaurant_names]
 
         for restaurant_name in restaurant_names:
-            self.__restaurant_data[restaurant_name] = df[df['tenant'] == restaurant_name].reset_index(drop=True)
+            df_restaurant_data = df[df['tenant'] == restaurant_name].reset_index(drop=True)
+            df_restaurant_data = df_restaurant_data[df_restaurant_data['turnover'].notnull()]
+            self.__restaurant_data[restaurant_name] = df_restaurant_data
 
     def get_restaurant_data(self):
         return self.__restaurant_data
