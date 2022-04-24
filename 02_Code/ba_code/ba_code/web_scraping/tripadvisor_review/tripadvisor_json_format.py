@@ -4,6 +4,7 @@ class RestaurantInfo:
     RESTAURANT_NAME = "restaurant_name"
     OVERALL_RATING = "overall_rating"
     ALL_REVIEWS = "all_reviews"
+    REVIEWS_COUNT = "reviews_count"
 
 class AllReviews:
     AUTHOR_DATA = "author_data"
