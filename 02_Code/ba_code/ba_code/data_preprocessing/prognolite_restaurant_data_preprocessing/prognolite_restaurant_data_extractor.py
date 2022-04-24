@@ -80,6 +80,12 @@ class PrognoliteRestaurantDataExtractor:
             df_average_turnover_per_time_period = df_turnover_per_day_where_turnover_not_equal_zero \
                 .groupby(pd.Grouper(key='d', axis=0, freq=time_period)).mean() \
                 .rename(columns={"turnover_per_day": "average_turnover_per_time_period"}).reset_index()
+
+            # remove nan in average_turnover_per_time_period column
+            df_average_turnover_per_time_period = \
+                df_average_turnover_per_time_period[
+                    df_average_turnover_per_time_period['average_turnover_per_time_period'].notnull()
+                ].reset_index(drop=True)
         else:
             print("Invalid time period, enter one of the following time periods:")
             print("'m': Month")
