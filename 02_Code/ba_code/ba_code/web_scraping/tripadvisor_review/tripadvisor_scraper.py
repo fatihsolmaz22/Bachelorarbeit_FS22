@@ -137,6 +137,16 @@ def main():
         print("\n\nRestaurant link:", restaurant)#.value)
         print(overall_rating)
 
+        # TODO: get review count of restaurant
+        reviews_count = int(ScrapingTool.get_html_elements_by_css_selector(
+            html_element=main_page_element,
+            html_tag=HtmlTags.SPAN_TAG,
+            attribute_name=HtmlAttributes.CLASS,
+            attribute_value=HtmlAttributeValues.REVIEWS_COUNT,
+            get_first_element=True
+        ).text.replace("(", "").replace(")", "").replace(",", ""))
+        print("Reviews count:", reviews_count)
+
         has_next_page = True
         page_count = 1
         while has_next_page:
@@ -338,7 +348,8 @@ def main():
 
         restaurant_info_json = {RestaurantInfo.RESTAURANT_NAME:restaurant.split("Reviews-")[1].replace(".html", ""), # restaurant.name
                                 RestaurantInfo.OVERALL_RATING:overall_rating,
-                                RestaurantInfo.ALL_REVIEWS:all_reviews_data}
+                                RestaurantInfo.ALL_REVIEWS:all_reviews_data,
+                                RestaurantInfo.REVIEWS_COUNT:reviews_count}
 
         jsonString = json.dumps(restaurant_info_json)
         with open("{}/tripadvisor_review_data_{}.json".format(
