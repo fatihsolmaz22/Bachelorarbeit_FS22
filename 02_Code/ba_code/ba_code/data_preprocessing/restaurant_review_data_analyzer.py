@@ -38,7 +38,7 @@ class PrognoliteTripadvisorRestaurantDataAnalyzer:
             self.__tripadvisor_restaurant_data_extractors[tripadvisor_restaurant_data_uri] \
                 .get_overall_rating_development_since_beginning_dataframe(time_period)
 
-        title = "Development of overall rating and average turnover\n over " \
+        title = "Development of overall rating vs average turnover\n over " \
                 + self.__get_time_period_value(time_period) + "s: " + restaurant.value
         x1 = 'd'
         y1 = 'average_turnover_per_time_period'
@@ -89,7 +89,8 @@ class PrognoliteTripadvisorRestaurantDataAnalyzer:
             self.__tripadvisor_restaurant_data_extractors[tripadvisor_restaurant_data_uri] \
                 .get_average_rating_per_time_period_dataframe(time_period)
 
-        title = "Average rating vs turnover per " + self.__get_time_period_value(time_period)
+        title = "Average rating vs average turnover per " + self.__get_time_period_value(time_period) \
+                + ":\n" + restaurant.value
         x1 = 'd'
         y1 = 'average_turnover_per_time_period'
         x2 = 'date'
