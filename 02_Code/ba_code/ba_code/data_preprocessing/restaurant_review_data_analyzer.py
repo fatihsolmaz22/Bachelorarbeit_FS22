@@ -24,71 +24,65 @@ class PrognoliteTripadvisorRestaurantDataAnalyzer:
             self.__tripadvisor_restaurant_data_extractors[tripadvisor_restaurant_data_uri] = \
                 tripadvisor_restaurant_data_extractor
 
-    def plot_development_of_overall_rating_and_turnover_since_beginning_for_all_restaurants(self, time_period='m'):
+    def plot_development_of_overall_rating_and_average_turnover_per_time_period_for_all_restaurants(self,
+                                                                                                    time_period='m'):
         for restaurant in self.__restaurants:
-            self.plot_development_of_overall_rating_and_turnover_since_beginning(restaurant, time_period)
+            self.plot_development_of_overall_rating_and_average_turnover_per_time_period(restaurant, time_period)
 
-    # TODO: something isn't right with this method, look into this. (debug) The plot doesn't work sometimes + refactor
-    def plot_development_of_overall_rating_and_turnover_since_beginning(self, restaurant, time_period='m'):
-        df_turnover_development_since_beginning = self.__prognoliteRestaurantDataExtractor \
-            .get_turnover_development_since_beginning_dataframe(restaurant, time_period)
+    def plot_development_of_overall_rating_and_average_turnover_per_time_period(self, restaurant, time_period='m'):
+        df_average_turnover_per_time_period = self.__prognoliteRestaurantDataExtractor \
+            .get_average_turnover_per_time_period_dataframe(restaurant, time_period)
 
         tripadvisor_restaurant_data_uri = self.__restaurants[restaurant]
         df_overall_rating_development_since_beginning = \
             self.__tripadvisor_restaurant_data_extractors[tripadvisor_restaurant_data_uri] \
                 .get_overall_rating_development_since_beginning_dataframe(time_period)
 
-        title = "Turnover and overall rating development over " + self.__get_time_period_value(time_period)
+        title = "Development of overall rating and average turnover\n over " \
+                + self.__get_time_period_value(time_period) + "s: " + restaurant.value
         x1 = 'd'
-        y1 = 'turnover'
+        y1 = 'average_turnover_per_time_period'
         x2 = 'date'
         y2 = 'overall_rating_development'
 
-        # find x_min and x_max limits
-        if time_period != 'Q':
-            x_min_date_turnover = df_turnover_development_since_beginning[x1].to_numpy().min().tz_localize(None)
-            x_max_date_turnover = df_turnover_development_since_beginning[x1].to_numpy().max().tz_localize(None)
-        else:
-            x_min_date_turnover = df_turnover_development_since_beginning[x1].to_numpy().min()
-            x_max_date_turnover = df_turnover_development_since_beginning[x1].to_numpy().max()
-
-        x_min_date_overall_rating = df_overall_rating_development_since_beginning[x2].to_numpy().min()
-        x_min = x_min_date_turnover if x_min_date_turnover < x_min_date_overall_rating else x_min_date_overall_rating
-
-        x_max_date_overall_rating = df_overall_rating_development_since_beginning[x2].to_numpy().max()
-        x_max = x_max_date_turnover if x_max_date_turnover > x_max_date_overall_rating else x_max_date_overall_rating
-
-        # plot turnover development for a restaurant
+        # plot average turnover per time period
         color = 'red'
         fig, ax1 = plt.subplots()
         ax1.set_xlabel(x2)
         ax1.set_ylabel('turnover in CHF', color=color)
+        #ax1.set_ylim(bottom=0, top=df_average_turnover_per_time_period[y1].to_numpy().max())
         ax1.tick_params(axis='y', labelcolor=color)
-        ax1.plot(df_turnover_development_since_beginning[x1], df_turnover_development_since_beginning[y1], color=color, marker='o')
+        ax1.plot(df_average_turnover_per_time_period[x1],
+                 df_average_turnover_per_time_period[y1],
+                 color=color,
+                 marker='o')
 
         # plot overall rating development for a restaurant in the same plot
         color = 'blue'
         ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
         ax2.set_ylabel('overall rating', color=color)
+        ax2.set_ylim(1, 5)
         ax2.tick_params(axis='y', labelcolor=color)
-        ax2.plot(df_overall_rating_development_since_beginning[x2], df_overall_rating_development_since_beginning[y2], color=color, marker='o')
+        ax2.plot(df_overall_rating_development_since_beginning[x2],
+                 df_overall_rating_development_since_beginning[y2],
+                 color=color,
+                 marker='o')
 
         # fig.tight_layout()  # otherwise the right y-label is slightly clipped
-        plt.title(title + ":\n" + restaurant.value)
-        plt.xlim([x_min, x_max])
-        labels=['turnover_development','overall_rating_development']
-        fig.legend(labels, bbox_to_anchor=(1,1), bbox_transform=ax1.transAxes)
-        #plt.savefig('haha.png',dpi=600)
+        plt.title(title)
+        plt.setp(ax1.get_xticklabels(), rotation=30, horizontalalignment='right')
+        labels = ['average_turnover_per_' + self.__get_time_period_value(time_period), 'overall_rating_development']
+        fig.legend(labels, bbox_to_anchor=(1, 1), bbox_transform=ax1.transAxes)
+        # plt.savefig('haha.png',dpi=600)
         plt.show()
 
-    def plot_average_rating_vs_turnover_per_time_period_for_all_restaurants(self, time_period='m'):
+    def plot_average_rating_vs_average_turnover_per_time_period_for_all_restaurants(self, time_period='m'):
         for restaurant in self.__restaurants:
-            self.plot_average_rating_vs_turnover_per_time_period(restaurant, time_period)
+            self.plot_average_rating_vs_average_turnover_per_time_period(restaurant, time_period)
 
-    # TODO: something isn't right with this method, look into this. (debug) The plot doesn't work sometimes + refactor
-    def plot_average_rating_vs_turnover_per_time_period(self, restaurant, time_period='m'):
-        df_turnover_per_time_period = self.__prognoliteRestaurantDataExtractor \
-            .get_turnover_per_time_period_dataframe(restaurant, time_period)
+    def plot_average_rating_vs_average_turnover_per_time_period(self, restaurant, time_period='m'):
+        df_average_turnover_per_time_period = self.__prognoliteRestaurantDataExtractor \
+            .get_average_turnover_per_time_period_dataframe(restaurant, time_period)
 
         tripadvisor_restaurant_data_uri = self.__restaurants[restaurant]
         df_average_rating_per_time_period = \
@@ -97,47 +91,40 @@ class PrognoliteTripadvisorRestaurantDataAnalyzer:
 
         title = "Average rating vs turnover per " + self.__get_time_period_value(time_period)
         x1 = 'd'
-        y1 = 'turnover_per_time_period'
+        y1 = 'average_turnover_per_time_period'
         x2 = 'date'
         y2 = 'average_rating_per_time_period'
 
-        # find x_min and x_max limits
-        if time_period != 'Q':
-            x_min_date_turnover = df_turnover_per_time_period[x1].to_numpy().min().tz_localize(None)
-            x_max_date_turnover = df_turnover_per_time_period[x1].to_numpy().max().tz_localize(None)
-            x_min_date_average_rating = df_average_rating_per_time_period[x2].to_numpy().min()
-            x_max_date_average_rating = df_average_rating_per_time_period[x2].to_numpy().max()
-        else:
-            x_min_date_turnover = df_turnover_per_time_period[x1].to_numpy().min()
-            x_max_date_turnover = df_turnover_per_time_period[x1].to_numpy().max()
-            x_min_date_average_rating = df_average_rating_per_time_period[x2].dt.to_period('Q').to_numpy().min()
-            x_max_date_average_rating = df_average_rating_per_time_period[x2].dt.to_period('Q').to_numpy().max()
-
-        x_min = x_min_date_turnover if x_min_date_turnover < x_min_date_average_rating else x_min_date_average_rating
-        x_max = x_max_date_turnover if x_max_date_turnover > x_max_date_average_rating else x_max_date_average_rating
-
-        # plot turnover development for a restaurant
+        # plot average turnover per time period
         color = 'red'
         fig, ax1 = plt.subplots()
-        ax1.set_xlabel('date')
+        ax1.set_xlabel(x2)
         ax1.set_ylabel('turnover in CHF', color=color)
+        # ax1.set_ylim(bottom=0, top=df_average_turnover_per_time_period[y1].to_numpy().max())
         ax1.tick_params(axis='y', labelcolor=color)
-        df_turnover_per_time_period.plot(x=x1, y=y1, ax=ax1, color=color, marker='o', label='turnover_per_time_period')
+        ax1.plot(df_average_turnover_per_time_period[x1],
+                 df_average_turnover_per_time_period[y1],
+                 color=color,
+                 marker='o')
 
-        # plot overall rating development for a restaurant in the same plot
+        # plot average rating for a restaurant in the same plot
         color = 'blue'
         ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
         ax2.set_ylabel('overall rating', color=color)
+        ax2.set_ylim(0, 5)
         ax2.tick_params(axis='y', labelcolor=color)
-        df_average_rating_per_time_period.plot(x=x2, y=y2, ax=ax2, color=color, marker='o',
-                                               label='average_rating_per_time_period')
+        ax2.plot(df_average_rating_per_time_period[x2],
+                 df_average_rating_per_time_period[y2],
+                 color=color,
+                 marker='o')
 
         # fig.tight_layout()  # otherwise the right y-label is slightly clipped
-        plt.title(title + ":\n" + restaurant.value)
-        plt.xlim([x_min, x_max])
-        plt.xlabel(x2)
-        plt.legend(loc="upper left")
-        plt.grid()
+        plt.title(title)
+        plt.setp(ax1.get_xticklabels(), rotation=30, horizontalalignment='right')
+        labels = ['average_turnover_per_' + self.__get_time_period_value(time_period),
+                  'average_rating_per_' + self.__get_time_period_value(time_period)]
+        fig.legend(labels, bbox_to_anchor=(1, 1), bbox_transform=ax1.transAxes)
+        # plt.savefig('haha.png',dpi=600)
         plt.show()
 
     def __get_time_period_value(self, time_period):
@@ -154,7 +141,8 @@ class PrognoliteTripadvisorRestaurantDataAnalyzer:
 
 
 prognoliteTripadvisorRestaurantDataAnalyzer = PrognoliteTripadvisorRestaurantDataAnalyzer()
-# prognoliteTripadvisorRestaurantDataAnalyzer.plot_development_of_overall_rating_and_turnover_since_beginning_for_all_restaurants('Q')
-# prognoliteTripadvisorRestaurantDataAnalyzer.plot_average_rating_vs_turnover_per_time_period_for_all_restaurants('Q')
-# prognoliteTripadvisorRestaurantDataAnalyzer.plot_development_of_overall_rating_and_turnover_since_beginning(Restaurant.BUTCHER_USTER,'Q')
-# prognoliteTripadvisorRestaurantDataAnalyzer.plot_average_rating_vs_turnover_per_time_period(Restaurant.BUTCHER_USTER,'Q')
+# prognoliteTripadvisorRestaurantDataAnalyzer.plot_development_of_overall_rating_and_average_turnover_per_time_period_for_all_restaurants('Q')
+# prognoliteTripadvisorRestaurantDataAnalyzer.plot_development_of_overall_rating_and_average_turnover_per_time_period(Restaurant.BUTCHER_USTER,'Q')
+
+# prognoliteTripadvisorRestaurantDataAnalyzer.plot_average_rating_vs_average_turnover_per_time_period_for_all_restaurants('Q')
+# prognoliteTripadvisorRestaurantDataAnalyzer.plot_average_rating_vs_average_turnover_per_time_period(Restaurant.BUTCHER_USTER,'Q')
