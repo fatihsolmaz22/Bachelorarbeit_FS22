@@ -20,17 +20,17 @@ class PrognoliteRestaurantDataAnalyzer:
         if df_turnover_per_time_period.empty:
             return
 
-        title = "Turnover per " + self.__get_value_of_time_period(time_period)
+        title = "Turnover per " + self.__get_value_of_time_period(time_period) + ":\n" + restaurant.value
         x = 'd'
         y = 'turnover_per_time_period'
         x_label = self.__get_value_of_time_period(time_period)
         y_label = "turnover in CHF"
         self.__plot_dataframe(df_turnover_per_time_period, x, y,
-                              title, x_label, y_label, restaurant)
+                              title, x_label, y_label)
 
     def plot_average_turnover_per_time_period_for_all_restaurants(self, time_period='m'):
         for restaurant in Restaurant:
-            self.plot_turnover_per_time_period(restaurant, time_period)
+            self.plot_average_turnover_per_time_period(restaurant, time_period)
 
     def plot_average_turnover_per_time_period(self, restaurant, time_period):
         df_average_turnover_per_time_period = self.__restaurantDataExtractor \
@@ -39,13 +39,13 @@ class PrognoliteRestaurantDataAnalyzer:
         if df_average_turnover_per_time_period.empty:
             return
 
-        title = "Turnover per " + self.__get_value_of_time_period(time_period)
+        title = "Average Turnover per " + self.__get_value_of_time_period(time_period) + ":\n" + restaurant.value
         x = 'd'
         y = 'average_turnover_per_time_period'
         x_label = self.__get_value_of_time_period(time_period)
         y_label = "turnover in CHF"
         self.__plot_dataframe(df_average_turnover_per_time_period, x, y,
-                              title, x_label, y_label, restaurant)
+                              title, x_label, y_label)
 
     # TODO: remove this method later, this is not what Martin asked for
     def plot_turnover_development_since_beginning_for_all_restaurants(self, time_period='m'):
@@ -60,13 +60,13 @@ class PrognoliteRestaurantDataAnalyzer:
         if df_turnover_development_since_beginning.empty:
             return
 
-        title = "Turnover development since beginning"
+        title = "Turnover development since beginning:\n" + restaurant.value
         x = 'd'
         y = 'turnover'
         x_label = self.__get_value_of_time_period(time_period)
         y_label = "turnover in CHF"
         self.__plot_dataframe(df_turnover_development_since_beginning, x, y,
-                              title, x_label, y_label, restaurant)
+                              title, x_label, y_label)
 
     def __get_value_of_time_period(self, time_period):
         time_period_value = ''
@@ -80,10 +80,10 @@ class PrognoliteRestaurantDataAnalyzer:
             time_period_value = 'year'
         return time_period_value
 
-    def __plot_dataframe(self, df, x, y, title, x_label, y_label, restaurant):
+    def __plot_dataframe(self, df, x, y, title, x_label, y_label):
         plt.figure()
         df.plot(x=x, y=y, marker='o')
-        plt.title(title + ":\n" + restaurant.value)
+        plt.title(title)
         plt.xlabel(x_label)
         plt.ylabel(y_label)
         plt.legend(loc="upper left")
