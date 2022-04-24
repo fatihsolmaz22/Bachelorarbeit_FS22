@@ -28,6 +28,25 @@ class PrognoliteRestaurantDataAnalyzer:
         self.__plot_dataframe(df_turnover_per_time_period, x, y,
                               title, x_label, y_label, restaurant)
 
+    def plot_average_turnover_per_time_period_for_all_restaurants(self, time_period='m'):
+        for restaurant in Restaurant:
+            self.plot_turnover_per_time_period(restaurant, time_period)
+
+    def plot_average_turnover_per_time_period(self, restaurant, time_period):
+        df_average_turnover_per_time_period = self.__restaurantDataExtractor \
+            .get_average_turnover_per_time_period_dataframe(restaurant, time_period)
+
+        if df_average_turnover_per_time_period.empty:
+            return
+
+        title = "Turnover per " + self.__get_value_of_time_period(time_period)
+        x = 'd'
+        y = 'average_turnover_per_time_period'
+        x_label = self.__get_value_of_time_period(time_period)
+        y_label = "turnover in CHF"
+        self.__plot_dataframe(df_average_turnover_per_time_period, x, y,
+                              title, x_label, y_label, restaurant)
+
     # TODO: remove this method later, this is not what Martin asked for
     def plot_turnover_development_since_beginning_for_all_restaurants(self, time_period='m'):
         for restaurant in Restaurant:
@@ -74,3 +93,4 @@ class PrognoliteRestaurantDataAnalyzer:
 
 prognoliteRestaurantDataAnalyzer = PrognoliteRestaurantDataAnalyzer()
 # prognoliteRestaurantDataAnalyzer.plot_turnover_per_time_period(Restaurant.BUTCHER_USTER, 'Q')
+# prognoliteRestaurantDataAnalyzer.plot_average_turnover_per_time_period(Restaurant.BUTCHER_USTER, 'm')

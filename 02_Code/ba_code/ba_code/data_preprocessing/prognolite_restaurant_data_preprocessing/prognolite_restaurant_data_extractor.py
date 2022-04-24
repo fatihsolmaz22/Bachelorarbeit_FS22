@@ -62,6 +62,33 @@ class PrognoliteRestaurantDataExtractor:
 
         return df_turnover_per_time_period
 
+    def get_average_turnover_per_time_period_dataframe(self, restaurant, time_period='m'):
+        df_date_turnover = self.__get_date_turnover_dataframe(restaurant)
+
+        df_average_turnover_per_time_period = None
+        if time_period == 'm' or time_period == 'Q' or time_period == 'Y':
+            # get turnover per day dataframe
+            df_turnover_per_day = df_date_turnover \
+                .groupby(pd.Grouper(key='d', axis=0, freq='d')).sum() \
+                .rename(columns={"turnover": "turnover_per_day"}).reset_index()
+
+            # get turnover per day where turnover != 0 dataframe
+            df_turnover_per_day_where_turnover_not_equal_zero = \
+                df_turnover_per_day[df_turnover_per_day['turnover_per_day'] != 0].reset_index(drop=True)
+
+            # get turnover per time period dataframe, month or year dataframe
+            df_average_turnover_per_time_period = df_turnover_per_day_where_turnover_not_equal_zero \
+                .groupby(pd.Grouper(key='d', axis=0, freq=time_period)).mean() \
+                .rename(columns={"turnover_per_day": "average_turnover_per_time_period"}).reset_index()
+        else:
+            print("Invalid time period, enter one of the following time periods:")
+            print("'m': Month")
+            print("'Q': Quarter")
+            print("'Y': Year")
+            return
+
+        return df_average_turnover_per_time_period
+
     def __print_invalid_time_period_message(self):
         print("Invalid time period, enter one of the following time periods:")
         print("'d': Day")
