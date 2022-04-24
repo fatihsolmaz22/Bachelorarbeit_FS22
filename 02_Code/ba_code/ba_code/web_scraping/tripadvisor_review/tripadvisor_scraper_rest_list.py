@@ -67,8 +67,10 @@ def get_list_of_rest():
         has_next_page = go_next_page(main_page_element)
         page_count += 1
 
+        """
         if page_count == 5:
             print(list_of_links)
             break
+        """
 
     return list_of_links
