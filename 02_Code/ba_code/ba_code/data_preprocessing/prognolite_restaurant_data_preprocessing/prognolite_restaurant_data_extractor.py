@@ -81,7 +81,7 @@ class PrognoliteRestaurantDataExtractor:
                 .groupby(pd.Grouper(key='d', axis=0, freq=time_period)).mean() \
                 .rename(columns={"turnover_per_day": "average_turnover_per_time_period"}).reset_index()
 
-            # remove nan in average_turnover_per_time_period column
+            # TODO: ask Martin about removing nan in average_turnover_per_time_period column
             df_average_turnover_per_time_period = \
                 df_average_turnover_per_time_period[
                     df_average_turnover_per_time_period['average_turnover_per_time_period'].notnull()
