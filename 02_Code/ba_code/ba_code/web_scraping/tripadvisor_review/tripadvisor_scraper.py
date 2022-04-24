@@ -8,7 +8,7 @@ from ba_code.web_scraping.scraping.scraping_constants import HtmlTags, HtmlAttri
 from ba_code.web_scraping.tripadvisor_review.tripadvisor_json_format import RestaurantInfo, AllReviews, AuthorData
 from ba_code.web_scraping.tripadvisor_review.tripadvisor_json_format import AuthorStats, AuthorDistribution, ReviewData
 from selenium.webdriver.common.by import By
-from ba_code.path import TRIPADVISOR_RESTAURANT_DATA_PATH
+from ba_code.path import TRIPADVISOR_RESTAURANT_ONLY_RATING_DATASET_PATH
 
 
 def click_on_all_languages(main_page_element):
@@ -125,16 +125,16 @@ def get_distr_as_dict_from_list(list_of_distr):
 
 from ba_code.web_scraping.tripadvisor_review.tripadvisor_scraper_rest_list import get_list_of_rest
 def main():
-    # list_of_rest = get_list_of_rest()
-    for restaurant in RestaurantURLs:
+    list_of_rest = get_list_of_rest()
+    for restaurant in list_of_rest:
         all_reviews_data = []
 
-        main_page_element = ScrapingTool.get_main_page_element(restaurant.value)
+        main_page_element = ScrapingTool.get_main_page_element(restaurant)#.value)
 
         # TODO: get overall rating of restaurant
         overall_rating = get_overall_rating_of_restaurant(main_page_element)
 
-        print("\n\nRestaurant link:", restaurant.value)
+        print("\n\nRestaurant link:", restaurant)#.value)
         print(overall_rating)
 
         has_next_page = True
@@ -159,7 +159,7 @@ def main():
                                 AuthorStats.PHOTOS.value:None
                             }
                 author_distr_dict = get_distr_as_dict_from_list([])
-
+                """
                 try:
                     # TODO: click on profile of author
                     ScrapingTool.click_element_on_page(
@@ -267,12 +267,13 @@ def main():
                     print("----------------------------")
                 except Exception:
                     pass
-
+                """
                 # TODO: review date (Format: 29-09-2015)
                 date_of_review = get_date_of_review(review_element)
                 print(date_of_review)
 
                 # TODO: review title
+                review_title = ""
                 review_title = ScrapingTool.get_html_elements_by_css_selector(
                     html_element=review_element,
                     html_tag=HtmlTags.DIV_TAG,
@@ -288,11 +289,13 @@ def main():
                 print(rating_of_review)
 
                 # TODO: text of review
+                content_of_review = ""
                 content_of_review = get_content_of_review(review_element)
                 print(content_of_review)
 
                 # TODO: Likes of review
                 likes = 0
+                """
                 try:
                     likes = int(ScrapingTool.get_html_elements_by_css_selector(
                         html_element=review_element,
@@ -305,6 +308,7 @@ def main():
                 except Exception:
                     pass
                 print(likes)
+                """
 
                 print("----------------------------\n")
 
@@ -332,14 +336,14 @@ def main():
             has_next_page = go_next_page(main_page_element)
             page_count += 1
 
-        restaurant_info_json = {RestaurantInfo.RESTAURANT_NAME:restaurant.name, # .split("Reviews-")[1].replace(".html", ""),
+        restaurant_info_json = {RestaurantInfo.RESTAURANT_NAME:restaurant.split("Reviews-")[1].replace(".html", ""), # restaurant.name
                                 RestaurantInfo.OVERALL_RATING:overall_rating,
                                 RestaurantInfo.ALL_REVIEWS:all_reviews_data}
 
         jsonString = json.dumps(restaurant_info_json)
         with open("{}/tripadvisor_review_data_{}.json".format(
-                TRIPADVISOR_RESTAURANT_DATA_PATH,
-                restaurant.name), "w+") as json_file: # was restaurant.split("Reviews-")[1].replace(".html", "")), "w+")
+                TRIPADVISOR_RESTAURANT_ONLY_RATING_DATASET_PATH,
+                restaurant.split("Reviews-")[1].replace(".html", "")), "w+") as json_file: # was  restaurant.name), "w+")
             json_file.write(jsonString)
 
 if __name__ == "__main__":
