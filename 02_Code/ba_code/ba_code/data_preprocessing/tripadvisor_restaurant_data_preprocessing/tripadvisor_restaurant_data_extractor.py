@@ -134,20 +134,25 @@ class TripadvisorRestaurantDataExtractor:
 
         return df_incremental_overall_rating
 
-    def get_overall_rating_development_since_beginning_dataframe(self, time_period='m'):
+    def get_overall_rating_development_since_beginning_dataframe(self, time_period='m', offset_in_months=0):
         df_review_data = self.get_review_data_dataframe()
+
+        df_review_data_with_offset_in_months = pd.DataFrame({
+            'date': df_review_data['date'] + pd.DateOffset(months=offset_in_months),
+            'rating': df_review_data['rating'].to_numpy()
+        })
 
         # I use ...time_period which is a "placeholder" for: per_day, per_month, per_quarter or per_year
         # 'd' --> day, 'm' --> month, 'Q' --> quarter, 'Y' --> year
         if time_period == 'd' or time_period == 'm' or time_period == 'Q' or time_period == 'Y':
             # get number of ratings per day, month or year dataframe
-            df_number_of_ratings_per_time_period = df_review_data \
+            df_number_of_ratings_per_time_period = df_review_data_with_offset_in_months \
                 .sort_values(by='date', ascending=True) \
                 .groupby(pd.Grouper(key='date', axis=0, freq=time_period)).count()['rating'] \
                 .to_frame().rename(columns={"rating": "number_of_ratings_per_time_period"}).reset_index()
 
             # get sum of ratings per day, month or year dataframe
-            df_sum_of_ratings_per_time_period = df_review_data \
+            df_sum_of_ratings_per_time_period = df_review_data_with_offset_in_months \
                 .sort_values(by='date', ascending=True) \
                 .groupby(pd.Grouper(key='date', axis=0, freq=time_period)).sum()['rating'] \
                 .to_frame().rename(columns={"rating": "sum_of_ratings_per_time_period"}).reset_index()

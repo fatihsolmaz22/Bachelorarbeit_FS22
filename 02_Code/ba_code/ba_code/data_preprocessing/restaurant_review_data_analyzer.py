@@ -25,18 +25,20 @@ class PrognoliteTripadvisorRestaurantDataAnalyzer:
                 tripadvisor_restaurant_data_extractor
 
     def plot_development_of_overall_rating_and_average_turnover_per_time_period_for_all_restaurants(self,
-                                                                                                    time_period='m'):
+                                                                                                    time_period='m',
+                                                                                                    rating_date_offset_in_months=0):
         for restaurant in self.__restaurants:
             self.plot_development_of_overall_rating_and_average_turnover_per_time_period(restaurant, time_period)
 
-    def plot_development_of_overall_rating_and_average_turnover_per_time_period(self, restaurant, time_period='m'):
+    def plot_development_of_overall_rating_and_average_turnover_per_time_period(self, restaurant, time_period='m',
+                                                                                rating_date_offset_in_months=0):
         df_average_turnover_per_time_period = self.__prognoliteRestaurantDataExtractor \
             .get_average_turnover_per_time_period_dataframe(restaurant, time_period)
 
         tripadvisor_restaurant_data_uri = self.__restaurants[restaurant]
         df_overall_rating_development_since_beginning = \
             self.__tripadvisor_restaurant_data_extractors[tripadvisor_restaurant_data_uri] \
-                .get_overall_rating_development_since_beginning_dataframe(time_period)
+                .get_overall_rating_development_since_beginning_dataframe(time_period, rating_date_offset_in_months)
 
         title = "Development of overall rating vs average turnover\n over " \
                 + self.__get_time_period_value(time_period) + "s: " + restaurant.value
@@ -76,18 +78,21 @@ class PrognoliteTripadvisorRestaurantDataAnalyzer:
         # plt.savefig('haha.png',dpi=600)
         plt.show()
 
-    def plot_average_rating_vs_average_turnover_per_time_period_for_all_restaurants(self, time_period='m'):
+    def plot_average_rating_vs_average_turnover_per_time_period_for_all_restaurants(self, time_period='m',
+                                                                                    rating_date_offset_in_months=0):
         for restaurant in self.__restaurants:
-            self.plot_average_rating_vs_average_turnover_per_time_period(restaurant, time_period)
+            self.plot_average_rating_vs_average_turnover_per_time_period(restaurant, time_period,
+                                                                         rating_date_offset_in_months)
 
-    def plot_average_rating_vs_average_turnover_per_time_period(self, restaurant, time_period='m'):
+    def plot_average_rating_vs_average_turnover_per_time_period(self, restaurant, time_period='m',
+                                                                rating_date_offset_in_months=0):
         df_average_turnover_per_time_period = self.__prognoliteRestaurantDataExtractor \
             .get_average_turnover_per_time_period_dataframe(restaurant, time_period)
 
         tripadvisor_restaurant_data_uri = self.__restaurants[restaurant]
         df_average_rating_per_time_period = \
             self.__tripadvisor_restaurant_data_extractors[tripadvisor_restaurant_data_uri] \
-                .get_average_rating_per_time_period_dataframe(time_period)
+                .get_average_rating_per_time_period_dataframe(time_period, rating_date_offset_in_months)
 
         title = "Average rating vs average turnover per " + self.__get_time_period_value(time_period) \
                 + ":\n" + restaurant.value
