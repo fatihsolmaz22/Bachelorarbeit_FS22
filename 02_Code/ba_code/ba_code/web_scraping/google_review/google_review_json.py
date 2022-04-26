@@ -123,7 +123,7 @@ with open("ba_code/web_scraping/google_review/google_rest_list.json") as rest_li
                                 RestaurantInfo.REVIEWS_COUNT: reviews_count}
 
         jsonString = json.dumps(restaurant_info_json)
-        with open("{}/tripadvisor_review_data_{}.json".format(
+        with open("{}/google_review_data_{}.json".format(
                 TRIPADVISOR_RESTAURANT_GOOGLE_DATASET_PATH,
                 rest_name, "w+")) as json_file: # was  restaurant.name), "w+")
             json_file.write(jsonString)
