@@ -5,8 +5,10 @@ from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.tripad
     TripadvisorRestaurantDataExtractor
 from ba_code.data_preprocessing.prognolite_restaurant_data_preprocessing.prognolite_restaurant_constants import \
     Restaurant
-from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.tripadvisor_restaurant_data_uri import \
+from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.restaurant_data_uri import \
     TripadvisorRestaurantDataUri
+import seaborn as sns
+import pandas as pd
 
 
 class PrognoliteTripadvisorRestaurantDataAnalyzer:
@@ -53,7 +55,7 @@ class PrognoliteTripadvisorRestaurantDataAnalyzer:
         fig, ax1 = plt.subplots()
         ax1.set_xlabel(x2)
         ax1.set_ylabel('turnover in CHF', color=color)
-        #ax1.set_ylim(bottom=0, top=df_average_turnover_per_time_period[y1].to_numpy().max())
+        # ax1.set_ylim(bottom=0, top=df_average_turnover_per_time_period[y1].to_numpy().max())
         ax1.tick_params(axis='y', labelcolor=color)
         ax1.plot(df_average_turnover_per_time_period[x1],
                  df_average_turnover_per_time_period[y1],
@@ -134,6 +136,65 @@ class PrognoliteTripadvisorRestaurantDataAnalyzer:
         # plt.savefig('haha.png',dpi=600)
         plt.show()
 
+    def compute_pearson_and_spearman_correlation_between_average_turnover_and_average_rating(self, restaurant,
+                                                                                             time_period='m',
+                                                                                             rating_date_offset_in_months=0):
+        # get df_average_turnover_per_time_period
+        df_average_turnover_per_time_period = \
+            self.__prognoliteRestaurantDataExtractor \
+                .get_average_turnover_per_time_period_dataframe(restaurant, time_period)
+
+        # rename column 'd' to 'date' of df_average_turnover_per_time_period and change format of 'date' to join later
+        df_average_turnover_per_time_period = df_average_turnover_per_time_period.rename(columns={'d': 'date'})
+        df_average_turnover_per_time_period['date'] = pd.to_datetime(
+            df_average_turnover_per_time_period['date'].dt.date)
+
+        # get tripadvisor_restaurant_data_extractor with tripadvisor_restaurant_data_uri
+        tripadvisor_restaurant_data_uri = self.__restaurants[restaurant]
+        tripadvisor_restaurant_data_extractor = \
+            self.__tripadvisor_restaurant_data_extractors[tripadvisor_restaurant_data_uri]
+
+        # get df_average_rating_per_time_period and change format of 'date' to join later
+        df_average_rating_per_time_period = tripadvisor_restaurant_data_extractor \
+            .get_average_rating_per_time_period_dataframe(time_period, rating_date_offset_in_months)
+        df_average_rating_per_time_period['date'] = pd.to_datetime(df_average_rating_per_time_period['date'].dt.date)
+
+        # df_average_turnover_per_time_period join df_average_rating_per_time_period
+        df_average_turnover_and_average_rating_per_time_period = \
+            pd.merge(left=df_average_turnover_per_time_period, right=df_average_rating_per_time_period, on='date')
+
+        # filter df_average_turnover_and_average_rating_per_time_period before corona
+        corona_start_year = 2020
+
+        df_average_turnover_and_average_rating_per_time_period = \
+            df_average_turnover_and_average_rating_per_time_period[
+                df_average_turnover_and_average_rating_per_time_period['date'].dt.year < corona_start_year
+                ]
+
+        # pearson correlation
+        print("Pearson correlation:")
+        print(df_average_turnover_and_average_rating_per_time_period.corr(method="pearson"))
+
+        # spearman correlation
+        print("\nSpearman correlation:")
+        print(df_average_turnover_and_average_rating_per_time_period.corr(method="spearman"))
+
+        # scatterplot average rating vs average turnover
+        df = df_average_turnover_and_average_rating_per_time_period
+        x = 'average_turnover_per_time_period'
+        y = 'average_rating_per_time_period'
+        title = 'average rating vs average turnover per ' \
+                + self.__get_time_period_value(time_period) + ":\n" \
+                + restaurant.value
+
+        self.__scatterplot_dataframe(df, x, y, title)
+
+    def __scatterplot_dataframe(self, df, x, y, title):
+        plt.figure()
+        sns.set_style("darkgrid")
+        sns.scatterplot(data=df, x=x, y=y).set(title=title)
+        plt.show()
+
     def __get_time_period_value(self, time_period):
         x_label = ''
         if time_period == 'd':
@@ -153,3 +214,10 @@ prognoliteTripadvisorRestaurantDataAnalyzer = PrognoliteTripadvisorRestaurantDat
 
 # prognoliteTripadvisorRestaurantDataAnalyzer.plot_average_rating_vs_average_turnover_per_time_period_for_all_restaurants('Q')
 # prognoliteTripadvisorRestaurantDataAnalyzer.plot_average_rating_vs_average_turnover_per_time_period(Restaurant.BUTCHER_USTER,'Q')
+
+"""
+prognoliteTripadvisorRestaurantDataAnalyzer \
+    .compute_pearson_and_spearman_correlation_between_average_turnover_and_average_rating(Restaurant.BUTCHER_USTER,
+                                                                                          time_period='m',
+                                                                                          rating_date_offset_in_months=0)
+"""
