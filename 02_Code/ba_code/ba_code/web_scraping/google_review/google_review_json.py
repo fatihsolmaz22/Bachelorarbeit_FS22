@@ -3,8 +3,6 @@ import requests
 import time
 import pickle
 import datetime
-from bs4 import BeautifulSoup
-from lxml import etree
 import math
 from ba_code.web_scraping.scraping.scraping_tool import ScrapingTool
 from ba_code.web_scraping.google_review.google_constants import RestListJsonFormat
@@ -18,15 +16,6 @@ from ba_code.path import TRIPADVISOR_RESTAURANT_GOOGLE_DATASET_PATH
 #
 # driver.get("http://www.google.com")
 # pickle.dump( driver.get_cookies() , open("cookies.pkl","wb"))
-
-# def get_overall_rating_and_reviews_count(session, url):
-#     page_raw = session.get(url).content
-#
-#     soup = BeautifulSoup(page_raw, "html.parser")
-#     print(soup.prettify())
-#     dom = etree.HTML(str(soup))
-#     print( dom.xpath('.//span[@class="Aq14fc"]'))
-#     pass
 
 def get_distr_as_dict_from_list(list_of_distr):
     distr_dict = {}
