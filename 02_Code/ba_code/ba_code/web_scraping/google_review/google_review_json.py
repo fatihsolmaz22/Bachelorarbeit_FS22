@@ -63,7 +63,7 @@ with open("google_rest_list.json") as json_file:
         print("restaurant:", rest_name)
         print("overall rating real:", overall_rating)
 
-        # page_limit = 1
+        page_limit = 1
         for i in range(0, page_limit):
             print("Page {} of {}".format(i, page_limit))
             x = s.get(reviews_link_template.format(i))
