@@ -30,7 +30,7 @@ def get_distr_as_dict_from_list(list_of_distr):
 
     return distr_dict
 
-cookies_pkl_file = open("./cookies.pkl", "rb")
+cookies_pkl_file = open("ba_code/web_scraping/google_review/cookies.pkl", "rb")
 cookies = pickle.load(cookies_pkl_file)
 
 with open("google_rest_list.json") as json_file:
