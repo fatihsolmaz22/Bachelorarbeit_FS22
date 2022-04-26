@@ -31,7 +31,7 @@ class PrognoliteRestaurantDataExtractor:
 
     # TODO: remove this method later, this is not what Martin asked for
     def get_turnover_development_since_beginning_dataframe(self, restaurant, time_period='m'):
-        df_date_turnover = self.__get_date_turnover_dataframe(restaurant)
+        df_date_turnover = self.get_date_turnover_dataframe(restaurant)
 
         df_turnover_development_since_beginning = None
         if time_period == 'd' or time_period == 'm' or time_period == 'Y':
@@ -49,7 +49,7 @@ class PrognoliteRestaurantDataExtractor:
         return df_turnover_development_since_beginning
 
     def get_turnover_per_time_period_dataframe(self, restaurant, time_period='m'):
-        df_date_turnover = self.__get_date_turnover_dataframe(restaurant)
+        df_date_turnover = self.get_date_turnover_dataframe(restaurant)
 
         df_turnover_per_time_period = None
         if time_period == 'd' or time_period == 'm' or time_period == 'Q' or time_period == 'Y':
@@ -63,7 +63,7 @@ class PrognoliteRestaurantDataExtractor:
         return df_turnover_per_time_period
 
     def get_average_turnover_per_time_period_dataframe(self, restaurant, time_period='m'):
-        df_date_turnover = self.__get_date_turnover_dataframe(restaurant)
+        df_date_turnover = self.get_date_turnover_dataframe(restaurant)
 
         df_average_turnover_per_time_period = None
         if time_period == 'm' or time_period == 'Q' or time_period == 'Y':
@@ -80,12 +80,6 @@ class PrognoliteRestaurantDataExtractor:
             df_average_turnover_per_time_period = df_turnover_per_day_where_turnover_not_equal_zero \
                 .groupby(pd.Grouper(key='d', axis=0, freq=time_period)).mean() \
                 .rename(columns={"turnover_per_day": "average_turnover_per_time_period"}).reset_index()
-
-            # TODO: ask Martin about removing nan in average_turnover_per_time_period column
-            df_average_turnover_per_time_period = \
-                df_average_turnover_per_time_period[
-                    df_average_turnover_per_time_period['average_turnover_per_time_period'].notnull()
-                ].reset_index(drop=True)
         else:
             print("Invalid time period, enter one of the following time periods:")
             print("'m': Month")
@@ -102,10 +96,9 @@ class PrognoliteRestaurantDataExtractor:
         print("'Q': Quarter")
         print("'Y': Year")
 
-    def __get_date_turnover_dataframe(self, restaurant):
+    def get_date_turnover_dataframe(self, restaurant):
         df_restaurant_data = self.__restaurant_data[restaurant.value]
         df_date_turnover = df_restaurant_data.filter(items=['d', 'turnover'])
-        df_date_turnover['turnover'] = df_date_turnover['turnover'].fillna(0)
         return df_date_turnover
 
 
