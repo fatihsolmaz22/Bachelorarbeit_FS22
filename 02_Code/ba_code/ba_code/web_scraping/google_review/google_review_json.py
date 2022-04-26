@@ -56,7 +56,7 @@ with open("google_rest_list.json") as json_file:
         rest_name = restaurant[RestListJsonFormat.RESTAURANT_NAME]
         reviews_link_template = restaurant[RestListJsonFormat.REVIEWS_LINK_TEMPLATE]
 
-        reviews_info_link = restaurant[RestListJsonFormat.REVIEWS_INFO_LINK]
+        # reviews_info_link = restaurant[RestListJsonFormat.REVIEWS_INFO_LINK]
         reviews_info_link = "https://www.google.com/search?q=" + "+".join(rest_name.split("_"))
         overall_rating, reviews_count, page_limit = get_overall_rating_and_reviews_count(reviews_info_link)
 

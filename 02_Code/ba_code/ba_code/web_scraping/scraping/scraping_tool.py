@@ -27,7 +27,6 @@ class ScrapingTool:
         # cookies = pickle.load(open("cookies.pkl", "rb"))
         # for cookie in cookies:
         #     driver.add_cookie(cookie)
-        print(url)
         driver.get(url)
         time.sleep(time_sleep)
         return driver
