@@ -42,7 +42,7 @@
   {
     "restaurant_name": "NOOCH_MATTENHOF",
     "reviews_info_link": "https://www.google.com/maps/place/Nooch+Asian+Kitchen+Mattenhof/@47.0263753,8.298133,17z/data=!3m1!4b1!4m5!3m4!1s0x478ffbb5617bd55f:0xb4d926d46a778d2!8m2!3d47.0263864!4d8.3003057",
-    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5156616854805665119!2y814468105658398930!2m2!1i10!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1sYHFlYqzOEoGCi-gPjfSJ6A8!7e81"
+    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5156616854805665119!2y814468105658398930!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1sYHFlYqzOEoGCi-gPjfSJ6A8!7e81"
   },
   {
     "restaurant_name": "BUTCHER_METALLI",
