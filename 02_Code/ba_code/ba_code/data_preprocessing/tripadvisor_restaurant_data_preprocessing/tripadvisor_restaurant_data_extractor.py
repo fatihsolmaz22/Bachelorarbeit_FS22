@@ -2,8 +2,8 @@ import json
 import pandas as pd
 import numpy as np
 
-from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.tripadvisor_restaurant_data_uri import \
-    TripadvisorRestaurantDataUri
+from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.restaurant_data_uri import \
+    TripadvisorRestaurantDataUri, GoogleRestaurantDataUri
 
 
 class TripadvisorRestaurantDataExtractor:
@@ -16,6 +16,8 @@ class TripadvisorRestaurantDataExtractor:
 
         restaurant_name = tripadvisor_restaurant_data_json['restaurant_name']
         overall_rating = tripadvisor_restaurant_data_json['overall_rating']
+        # TODO: commment out the line below as soon as the tripadvisor json dataset has reviews_count
+        #reviews_count = tripadvisor_restaurant_data_json['reviews_count']
 
         # extract author and review data
         all_reviews = tripadvisor_restaurant_data_json['all_reviews']
@@ -29,12 +31,15 @@ class TripadvisorRestaurantDataExtractor:
         # df_review_data
         df_review_data = self.__create_review_data_dataframe(review_data)
 
+        # TODO: duplicate removal only for tripadvisor dataset and not for google dataset!!
         # remove duplicates in dataframes
         [df_review_data, dfs_author_data] = self.__remove_duplicates_in_dataframes(df_review_data, dfs_author_data)
 
         self.__tripadvisor_restaurant_data = {
             'restaurant_name': restaurant_name,
             'overall_rating': overall_rating,
+            # TODO: commment out the line below as soon as the tripadvisor json dataset has reviews_count
+            #'reviews_count': reviews_count,
             'author_data': {
                 'df_author_base_infos': dfs_author_data[0],
                 'df_author_stats': dfs_author_data[1],
@@ -101,6 +106,9 @@ class TripadvisorRestaurantDataExtractor:
 
     def get_overall_rating(self):
         return self.__tripadvisor_restaurant_data['overall_rating']
+
+    def get_number_of_reviews(self):
+        return self.__tripadvisor_restaurant_data['reviews_count']
 
     def get_overall_rating_computed(self):
         review_data = self.__tripadvisor_restaurant_data['df_review_data']
@@ -235,4 +243,5 @@ class TripadvisorRestaurantDataExtractor:
 
 
 tripadvisorRestaurantDataExtractor = TripadvisorRestaurantDataExtractor()
-tripadvisorRestaurantDataExtractor.load_restaurant_data(open(TripadvisorRestaurantDataUri.BUTCHER_USTER.value))
+#tripadvisorRestaurantDataExtractor.load_restaurant_data(open(TripadvisorRestaurantDataUri.BUTCHER_USTER.value))
+#tripadvisorRestaurantDataExtractor.load_restaurant_data(open(GoogleRestaurantDataUri.BUTCHER_USTER.value))
