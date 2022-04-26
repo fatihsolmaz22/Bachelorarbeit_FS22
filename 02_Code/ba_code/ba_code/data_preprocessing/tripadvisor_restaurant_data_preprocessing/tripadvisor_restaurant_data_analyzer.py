@@ -7,8 +7,6 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from matplotlib.font_manager import FontProperties
-from ba_code.data_preprocessing.prognolite_restaurant_data_preprocessing.prognolite_restaurant_constants import \
-    Restaurant
 
 fontP = FontProperties()
 fontP.set_size('x-small')
@@ -140,9 +138,7 @@ class TripadvisorRestaurantDataAnalyzer:
     def __plot_dataframe(self, df, x, y, title, x_label, y_label):
         plt.figure()
         df.plot(x=x, y=y, marker='o')
-        ymin = df[y].to_numpy().min()
-        ymin = ymin if ymin < 1 else 1
-        plt.ylim([ymin, 5])
+        plt.ylim([1, 5])
         plt.title(title)
         plt.xlabel(x_label)
         plt.ylabel(y_label)

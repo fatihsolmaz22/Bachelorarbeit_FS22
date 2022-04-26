@@ -200,7 +200,7 @@ class TripadvisorRestaurantDataExtractor:
         df_average_rating_per_time_period = df_review_data \
             .sort_values(by='date', ascending=True) \
             .groupby(pd.Grouper(key='date', axis=0, freq=time_period)).mean()['rating'] \
-            .fillna(0).to_frame().rename(columns={"rating": "average_rating_per_time_period"}).reset_index()
+            .to_frame().rename(columns={"rating": "average_rating_per_time_period"}).reset_index()
 
         return df_average_rating_per_time_period
 
