@@ -52,9 +52,9 @@ with open("ba_code/web_scraping/google_review/google_rest_list.json") as rest_li
         print("restaurant:", rest_name)
         print("overall rating real:", overall_rating)
 
-        page_limit = 1
+        # page_limit = 1
         for i in range(0, page_limit):
-            print("Page {} of {}".format(i, page_limit))
+            print("Page {} of {}".format(i+1, page_limit))
             x = s.get(reviews_link_template.format(i))
             x = x.text[4:]#.replace(")]}'\n", "")
 
