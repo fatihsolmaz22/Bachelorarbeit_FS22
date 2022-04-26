@@ -1,30 +1,77 @@
 [
   {
-    "restaurant_name": "Zeughauskeller",
-    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5156632572410836831!2y15622472877203166342!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1sSjZUYuHXHIzd7_UPwLG_oAw!7e81"
+    "restaurant_name": "OUTBACK_STADELHOFEN",
+    "reviews_info_link": "https://www.google.com/maps/place/Outback+Lodge/@47.3669614,8.5455772,17z/data=!3m1!4b1!4m5!3m4!1s0x479aa0acb95d309d:0xd08132daefd16338!8m2!3d47.3669614!4d8.5477659",
+    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5159612986811035805!2y15024345747792421688!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1sMXRlYqbuKozXkgXnv6_AAw!7e81"
   },
   {
-    "restaurant_name": "Tadka",
-    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&authuser=0&pb=!1m2!1y5156632651619039837!2y2110953129580296388!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1sy0VUYpW1BoyF9u8P3tWxsAw!7e81"
+    "restaurant_name": "BUTCHER_USTER",
+    "reviews_info_link": "https://www.google.com/maps/place/The+Butcher+Uster/@47.3497342,8.7167753,17z/data=!3m1!4b1!4m5!3m4!1s0x479aa5cea5f9ad33:0x1395517e74846db1!8m2!3d47.3497342!4d8.718964",
+    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5159618630072773939!2y1411123661813083569!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1smm5lYvaqDo2dkwW1sY_QBA!7e81"
   },
   {
-    "restaurant_name": "Rooftop",
-    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5156632595744849937!2y15726919961204203724!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1sekRUYuB3lIyVB4yQnpAO!7e81"
+    "restaurant_name": "NEGISHI_METALLI",
+    "reviews_info_link": "https://www.google.com/maps/place/Negishi+Sushi+Bar+Metalli/@47.1722025,8.5146159,17z/data=!3m1!4b1!4m5!3m4!1s0x479aaa5822b6d35d:0x4fec93b6bb2b3d12!8m2!3d47.1722025!4d8.5168046",
+    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5159623618622575453!2y5759140436533525778!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1sbG5lYtS9BoWakwWH_oKADw!7e81"
   },
   {
-    "restaurant_name": "La Soupière",
-    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5156632605433095225!2y16725791340820443176!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1st0pUYu6FCceA9u8PjNe6wAg!7e81"
+    "restaurant_name": "BUTCHER_AARBERGERGASSE",
+    "reviews_info_link": "https://www.google.com/maps/place/The+Butcher+Aarbergergasse/@46.9497757,7.4404708,17z/data=!3m1!4b1!4m5!3m4!1s0x478e39c09d758e95:0x8d798626bc943a33!8m2!3d46.9497757!4d7.4426595",
+    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5156122122824027797!2y10194326732460538419!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1sBW9lYqfdGNDmsAe-saJo!7e81"
   },
   {
-    "restaurant_name": "Stadtkäserei",
-    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5156633779566080277!2y14107257448283912083!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1sSUtUYqW8AcWD9u8Piu6wwAo!7e81"
+    "restaurant_name": "NOOCH_AARBERGERGASSE",
+    "reviews_info_link": "https://www.google.com/maps/place/Nooch+Asian+Kitchen+Aarbergergasse/@46.9498593,7.439976,17z/data=!3m1!4b1!4m5!3m4!1s0x478e39bf65c7c47b:0x1c50d5b20ec63a22!8m2!3d46.9498593!4d7.4421647",
+    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5156122117594924155!2y2040365591927601698!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1sR29lYrXkPJrxkgWNzLKQCA!7e81"
   },
   {
-    "restaurant_name": "Glogge Egge",
-    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5156632596931062843!2y14744792858625359836!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1s50tUYrvWAbyP9u8P99K82AM!7e81"
+    "restaurant_name": "NOOCH_BARFI",
+    "reviews_info_link": "https://www.google.com/maps/place/Nooch+(Barfi)/@47.555323,7.5867579,17z/data=!3m1!4b1!4m5!3m4!1s0x4791b9ada4d957df:0x467ed12b53e60135!8m2!3d47.555323!4d7.5889466",
+    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5157107203762116575!2y5079727413741879605!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1ss3BlYvCCKMOZsAeB57GYBA!7e81"
   },
   {
-    "restaurant_name": "Conrad",
-    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5156632596783872149!2y1451157984500050573!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1sekxUYsbsBKng7_UP3aGL-As!7e81"
+    "restaurant_name": "MISSMIU_EUROPAALLEE",
+    "reviews_info_link": "https://www.google.com/maps/place/Miss+Miu+Europaallee/@47.3791868,8.5300258,17z/data=!3m1!4b1!4m5!3m4!1s0x47900be12704bf09:0x6f07220098a7923e!8m2!3d47.3791868!4d8.5322145",
+    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5156634634989387529!2y8000400649003438654!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1s8XBlYo6WM8b5kwXVxbugDQ!7e81"
+  },
+  {
+    "restaurant_name": "NOOCH_MALL_OF_SWITZERLAND",
+    "reviews_info_link": "https://www.google.com/maps/place/Nooch/@47.0931236,8.3557429,17z/data=!3m1!4b1!4m5!3m4!1s0x478ffc265a682db5:0xd7122157c4925a5f!8m2!3d47.0931236!4d8.3579316",
+    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5156617340018240949!2y15497485928579095135!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1sL3FlYp-zC-vc7_UPtOiSuAQ!7e81"
+  },
+  {
+    "restaurant_name": "NOOCH_MATTENHOF",
+    "reviews_info_link": "https://www.google.com/maps/place/Nooch+Asian+Kitchen+Mattenhof/@47.0263753,8.298133,17z/data=!3m1!4b1!4m5!3m4!1s0x478ffbb5617bd55f:0xb4d926d46a778d2!8m2!3d47.0263864!4d8.3003057",
+    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5156616854805665119!2y814468105658398930!2m2!1i10!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1sYHFlYqzOEoGCi-gPjfSJ6A8!7e81"
+  },
+  {
+    "restaurant_name": "BUTCHER_METALLI",
+    "reviews_info_link": "https://www.google.com/maps/place/The+Butcher+Metalli/@47.1720694,8.5157478,17z/data=!3m1!4b1!4m5!3m4!1s0x479aaa58037de76d:0x26dac273eff70ef3!8m2!3d47.1720694!4d8.5179365",
+    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5159623618098751341!2y2799763921567158003!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1sj3FlYtS9Jou-kwXRp56wBA!7e81"
+  },
+  {
+    "restaurant_name": "NEGISHI_PILATUSSTRASSE",
+    "reviews_info_link": "https://www.google.com/maps/place/Negishi/@47.0498291,8.3066437,17z/data=!3m1!4b1!4m5!3m4!1s0x478ffb989fbe2a15:0x23d7c85e92b8364e!8m2!3d47.0498291!4d8.3088324",
+    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5156616731296147989!2y2582753219834295886!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1svnNlYoHtEZPxkgWevbyQDA!7e81"
+  },
+  {
+    "restaurant_name": "NOOCH_RICHTI",
+    "reviews_info_link": "https://www.google.com/maps/place/Nooch/@47.4100836,8.5934507,17z/data=!3m1!4b1!4m5!3m4!1s0x479aa05196cd470f:0xcbf455bd8ae9f14!8m2!3d47.4101072!4d8.5955691",
+    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5159612595389155087!2y918529109786533652!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1s-3NlYragL4WykwXO34j4Dw!7e81"
+  },
+  {
+    "restaurant_name": "NEGISHI_STEINEN",
+    "reviews_info_link": "https://www.google.com/maps/place/Negishi+Sushi+Bar+Steinen/@47.5527255,7.587218,17z/data=!3m1!4b1!4m5!3m4!1s0x4791b9ad4fb28413:0xb7fcc736766cff17!8m2!3d47.5527255!4d7.5894067",
+    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5157107202333508627!2y13257690439800913687!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1sW3RlYuf3NoTpkgW5srT4Bg!7e81"
+  },
+  {
+    "restaurant_name": "NOOCH_USTER",
+    "reviews_info_link": "https://www.google.com/maps/place/Nooch+Asian+Kitchen+Uster/@47.3497342,8.7167753,17z/data=!3m1!4b1!4m5!3m4!1s0x479aa56276bc1bfd:0x20b818ba7b3124d3!8m2!3d47.3497342!4d8.718964",
+    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5159618165423741949!2y2357661594138256595!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1siXRlYrHaF-PBlAbV_YSQCw!7e81"
+  },
+  {
+    "restaurant_name": "BUTCHER_ZUERICH_WEST",
+    "reviews_info_link": "https://www.google.com/maps/place/The+Butcher/@47.3887025,8.5199952,17z/data=!3m1!4b1!4m5!3m4!1s0x47900a401848740f:0x4a9c7e840a7dcae6!8m2!3d47.3887025!4d8.5221839",
+    "reviews_link_template": "https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5156632843740804111!2y5376311160750328550!2m2!1i{}0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1sqnRlYsiHBpH2sAe3r4KYCA!7e81"
   }
 ]

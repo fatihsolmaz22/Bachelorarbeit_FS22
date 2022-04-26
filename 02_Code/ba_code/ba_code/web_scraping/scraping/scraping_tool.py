@@ -3,6 +3,7 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 import time
+import pickle
 
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
@@ -13,14 +14,22 @@ from ba_code.web_scraping.scraping.scraping_constants import XPathTemplates
 class ScrapingTool:
 
     @staticmethod
-    def get_main_page_element(url):
+    def get_main_page_element(url, time_sleep=15, google=False):
         s = Service(ChromeDriverManager().install())
         chrome_options = Options()
-        chrome_options.add_argument("--no-sandbox") # linux only
-        chrome_options.add_argument("--headless")
+        # chrome_options.add_argument("--no-sandbox") # linux only
+        # chrome_options.add_argument("--headless")
         driver = webdriver.Chrome(service=s, options=chrome_options)
+        # if google:
+        #     print("switched to google")
+        #     driver.get("https://www.google.com/")
+        #     time.sleep(2)
+        # cookies = pickle.load(open("cookies.pkl", "rb"))
+        # for cookie in cookies:
+        #     driver.add_cookie(cookie)
+        print(url)
         driver.get(url)
-        time.sleep(15)
+        time.sleep(time_sleep)
         return driver
 
     @staticmethod
@@ -58,7 +67,7 @@ class ScrapingTool:
         element_to_click = search_in_element.find_element(by=By.XPATH, value=css_selector)#.click()
         main_page_element.execute_script("arguments[0].click();", element_to_click)
         is_not_clickable = False
-        time.sleep(2)
+        time.sleep(5)
             # except Exception:
             #     time.sleep(2)
             #     pass
