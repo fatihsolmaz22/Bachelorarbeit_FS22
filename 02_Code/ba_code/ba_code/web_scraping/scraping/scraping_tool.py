@@ -17,8 +17,8 @@ class ScrapingTool:
     def get_main_page_element(url, time_sleep=15, google=False):
         s = Service(ChromeDriverManager().install())
         chrome_options = Options()
-        # chrome_options.add_argument("--no-sandbox") # linux only
-        # chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--no-sandbox") # linux only
+        chrome_options.add_argument("--headless")
         driver = webdriver.Chrome(service=s, options=chrome_options)
         # if google:
         #     print("switched to google")
