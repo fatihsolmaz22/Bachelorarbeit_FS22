@@ -194,10 +194,15 @@ class TripadvisorRestaurantDataExtractor:
 
         return df_overall_rating_development_since_beginning
 
-    def get_average_rating_per_time_period_dataframe(self, time_period='m'):
+    def get_average_rating_per_time_period_dataframe(self, time_period='m', offset_in_months=0):
         df_review_data = self.get_review_data_dataframe()
 
-        df_average_rating_per_time_period = df_review_data \
+        df_review_data_with_offset_in_months = pd.DataFrame({
+            'date': df_review_data['date'] + pd.DateOffset(months=offset_in_months),
+            'rating': df_review_data['rating'].to_numpy()
+        })
+
+        df_average_rating_per_time_period = df_review_data_with_offset_in_months \
             .sort_values(by='date', ascending=True) \
             .groupby(pd.Grouper(key='date', axis=0, freq=time_period)).mean()['rating'] \
             .to_frame().rename(columns={"rating": "average_rating_per_time_period"}).reset_index()

@@ -29,24 +29,34 @@ def print_infos_of_tripadvisor_restaurant_data(restaurant_data_extractor):
     print("Number of entries in df_author_stats", len(df_author_stats))
     print("Number of entries in df_author_distribution", len(df_author_distribution))
 
+def test_get_average_rating_per_time_period_dataframe_offset_in_months(restaurant_data_extractor):
+    df_average_rating_per_month = \
+        restaurant_data_extractor.get_average_rating_per_time_period_dataframe('m', offset_in_months=0)
 
-def print_overall_rating_history(restaurant_data_extractor):
-    df_review_data_1 = restaurant_data_extractor.get_review_data_dataframe()
+    print("df_average_rating_per_month\n", df_average_rating_per_month.head(5))
 
-    overall_rating_history_over_time = df_review_data_1 \
-        .sort_values(by='date', ascending=True)['rating'] \
-        .expanding().mean().to_list()
+    df_average_rating_per_month_minus_2 = \
+        restaurant_data_extractor.get_average_rating_per_time_period_dataframe('m', offset_in_months=-2)
 
-    df_overall_rating_history_over_time_deprecated = pd.DataFrame({
-        'date': df_review_data_1['date'].to_list(),
-        'rating_history': overall_rating_history_over_time
-    })
+    print("df_average_rating_per_month_minus_2\n", df_average_rating_per_month_minus_2.head(5))
 
-    print(df_overall_rating_history_over_time_deprecated.head)
+    df_average_rating_per_month_minus_1 = \
+        restaurant_data_extractor.get_average_rating_per_time_period_dataframe('m', offset_in_months=-1)
 
+    print("df_average_rating_per_month_minus_1\n", df_average_rating_per_month_minus_1.head(5))
+
+    df_average_rating_per_month_plus_1 = \
+        restaurant_data_extractor.get_average_rating_per_time_period_dataframe('m', offset_in_months=1)
+
+    print("df_average_rating_per_month_plus_1\n", df_average_rating_per_month_plus_1.head(5))
+
+    df_average_rating_per_month_plus_2 = \
+        restaurant_data_extractor.get_average_rating_per_time_period_dataframe('m', offset_in_months=2)
+
+    print("df_average_rating_per_month_plus_2\n", df_average_rating_per_month_plus_2.head(5))
 
 tripadvisor_restaurant_data_extractor = TripadvisorRestaurantDataExtractor()
-tripadvisor_restaurant_data_extractor.load_restaurant_data(open(TripadvisorRestaurantDataUri.WEISSES_ROSSLI.value))
+tripadvisor_restaurant_data_extractor.load_restaurant_data(open(TripadvisorRestaurantDataUri.BUTCHER_USTER.value))
 
 print_infos_of_tripadvisor_restaurant_data(tripadvisor_restaurant_data_extractor)
-print_overall_rating_history(tripadvisor_restaurant_data_extractor)
+test_get_average_rating_per_time_period_dataframe_offset_in_months(tripadvisor_restaurant_data_extractor)
