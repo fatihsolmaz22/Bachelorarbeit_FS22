@@ -19,14 +19,14 @@ from ba_code.path import TRIPADVISOR_RESTAURANT_GOOGLE_DATASET_PATH
 # driver.get("http://www.google.com")
 # pickle.dump( driver.get_cookies() , open("cookies.pkl","wb"))
 
-def get_overall_rating_and_reviews_count(session, url):
-    page_raw = session.get(url).content
-
-    soup = BeautifulSoup(page_raw, "html.parser")
-    print(soup.prettify())
-    dom = etree.HTML(str(soup))
-    print( dom.xpath('.//span[@class="Aq14fc"]'))
-    pass
+# def get_overall_rating_and_reviews_count(session, url):
+#     page_raw = session.get(url).content
+#
+#     soup = BeautifulSoup(page_raw, "html.parser")
+#     print(soup.prettify())
+#     dom = etree.HTML(str(soup))
+#     print( dom.xpath('.//span[@class="Aq14fc"]'))
+#     pass
 
 def get_distr_as_dict_from_list(list_of_distr):
     distr_dict = {}
@@ -57,7 +57,8 @@ with open("google_rest_list.json") as json_file:
         reviews_link_template = restaurant[RestListJsonFormat.REVIEWS_LINK_TEMPLATE]
 
         reviews_info_link = restaurant[RestListJsonFormat.REVIEWS_INFO_LINK]
-        overall_rating, reviews_count, page_limit = "","", 10#get_overall_rating_and_reviews_count(s, reviews_info_link)
+        reviews_info_link = "https://www.google.com/search?q=" + "+".join(rest_name.split("_"))
+        overall_rating, reviews_count, page_limit = get_overall_rating_and_reviews_count(reviews_info_link)
 
         print("restaurant:", rest_name)
         print("overall rating real:", overall_rating)

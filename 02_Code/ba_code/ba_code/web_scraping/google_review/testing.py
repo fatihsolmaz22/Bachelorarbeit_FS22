@@ -16,6 +16,9 @@ import time
 #
 # cookies_pkl_file.close()
 
-main_page = ScrapingTool.get_main_page_element("https://www.google.com/maps/preview/review/listentitiesreviews?authuser=0&hl=en&gl=ch&pb=!1m2!1y5159612986811035805!2y15024345747792421688!2m2!1i0!2i10!3e1!4m5!3b1!4b1!5b1!6b1!7b1!5m2!1sMXRlYqbuKozXkgXnv6_AAw!7e81")
+main_page = ScrapingTool.get_main_page_element("https://www.google.com/search?q=OUTBACK+STADELHOFEN")
 time.sleep(30)
-pickle.dump( main_page.get_cookies() , open("cookies.pkl","wb"))
+pickle.dump( main_page.get_cookies() , open("cookies2.pkl","wb"))
+
+"""
+"""
