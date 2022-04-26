@@ -1,7 +1,7 @@
 from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing \
     .tripadvisor_restaurant_data_extractor import TripadvisorRestaurantDataExtractor
 from ba_code.utils.file_util import FileUtil
-from ba_code.path import TRIPADVISOR_RESTAURANT_DATA_PATH
+from ba_code.path import TRIPADVISOR_RESTAURANT_DATA_PATH, TRIPADVISOR_RESTAURANT_ONLY_RATING_DATASET_PATH
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -19,7 +19,7 @@ class TripadvisorRestaurantDataAnalyzer:
         self.__initialize()
 
     def __initialize(self):
-        restaurant_files = FileUtil.get_files_in_dir(TRIPADVISOR_RESTAURANT_DATA_PATH)
+        restaurant_files = FileUtil.get_files_in_dir(TRIPADVISOR_RESTAURANT_ONLY_RATING_DATASET_PATH)
 
         for restaurant_file in restaurant_files:
             tripadvisor_restaurant_data_extractor = TripadvisorRestaurantDataExtractor()
