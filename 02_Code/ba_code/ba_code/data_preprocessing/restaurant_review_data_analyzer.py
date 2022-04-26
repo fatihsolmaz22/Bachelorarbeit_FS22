@@ -28,7 +28,8 @@ class PrognoliteTripadvisorRestaurantDataAnalyzer:
                                                                                                     time_period='m',
                                                                                                     rating_date_offset_in_months=0):
         for restaurant in self.__restaurants:
-            self.plot_development_of_overall_rating_and_average_turnover_per_time_period(restaurant, time_period)
+            self.plot_development_of_overall_rating_and_average_turnover_per_time_period(restaurant, time_period,
+                                                                                         rating_date_offset_in_months)
 
     def plot_development_of_overall_rating_and_average_turnover_per_time_period(self, restaurant, time_period='m',
                                                                                 rating_date_offset_in_months=0):
