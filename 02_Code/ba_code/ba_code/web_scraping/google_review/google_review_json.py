@@ -33,7 +33,7 @@ def get_distr_as_dict_from_list(list_of_distr):
 cookies_pkl_file = open("ba_code/web_scraping/google_review/cookies.pkl", "rb")
 cookies = pickle.load(cookies_pkl_file)
 
-with open("google_rest_list.json") as json_file:
+with open("ba_code/web_scraping/google_review/google_rest_list.json") as json_file:
     restaurant_list = json.load(json_file)
     for restaurant in restaurant_list:
         all_reviews_data = []
