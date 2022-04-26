@@ -112,7 +112,7 @@ class PrognoliteTripadvisorRestaurantDataAnalyzer:
         color = 'blue'
         ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
         ax2.set_ylabel('overall rating', color=color)
-        ax2.set_ylim(0, 5)
+        ax2.set_ylim(1, 5)
         ax2.tick_params(axis='y', labelcolor=color)
         ax2.plot(df_average_rating_per_time_period[x2],
                  df_average_rating_per_time_period[y2],
