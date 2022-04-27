@@ -183,10 +183,11 @@ class PrognoliteTripadvisorRestaurantDataAnalyzer:
                 df_average_turnover_and_average_rating_per_time_period['date'].dt.year < corona_start_year
                 ]
 
+        print("df_average_turnover_and_average_rating_per_time_period:\n")
         print(df_average_turnover_and_average_rating_per_time_period)
 
         # pearson correlation
-        print("Pearson correlation:")
+        print("\nPearson correlation:")
         print(df_average_turnover_and_average_rating_per_time_period.corr(method="pearson"))
 
         # spearman correlation
@@ -231,7 +232,7 @@ prognoliteTripadvisorRestaurantDataAnalyzer = PrognoliteTripadvisorRestaurantDat
 
 """
 prognoliteTripadvisorRestaurantDataAnalyzer \
-    .compute_pearson_and_spearman_correlation_between_average_turnover_and_average_rating(Restaurant.NOOCH_USTER,
+    .compute_pearson_and_spearman_correlation_between_average_turnover_and_average_rating(Restaurant.BUTCHER_USTER,
                                                                                           time_period='m',
                                                                                           rating_date_offset_in_months=0)
 """
