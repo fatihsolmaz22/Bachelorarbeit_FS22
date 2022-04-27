@@ -149,6 +149,8 @@ class PrognoliteTripadvisorRestaurantDataAnalyzer:
         df_average_turnover_per_time_period['date'] = pd.to_datetime(
             df_average_turnover_per_time_period['date'].dt.date)
 
+        # print(df_average_turnover_per_time_period)
+
         # get tripadvisor_restaurant_data_extractor with tripadvisor_restaurant_data_uri
         tripadvisor_restaurant_data_uri = self.__restaurants[restaurant]
         tripadvisor_restaurant_data_extractor = \
@@ -159,9 +161,19 @@ class PrognoliteTripadvisorRestaurantDataAnalyzer:
             .get_average_rating_per_time_period_dataframe(time_period, rating_date_offset_in_months)
         df_average_rating_per_time_period['date'] = pd.to_datetime(df_average_rating_per_time_period['date'].dt.date)
 
+        # print(df_average_rating_per_time_period)
+
         # df_average_turnover_per_time_period join df_average_rating_per_time_period
         df_average_turnover_and_average_rating_per_time_period = \
             pd.merge(left=df_average_turnover_per_time_period, right=df_average_rating_per_time_period, on='date')
+
+        # print(df_average_turnover_and_average_rating_per_time_period)
+
+        # dropping rows containing NaN
+        df_average_turnover_and_average_rating_per_time_period = \
+            df_average_turnover_and_average_rating_per_time_period.dropna().reset_index(drop=True)
+
+        # print(df_average_turnover_and_average_rating_per_time_period)
 
         # filter df_average_turnover_and_average_rating_per_time_period before corona
         corona_start_year = 2020
@@ -170,6 +182,8 @@ class PrognoliteTripadvisorRestaurantDataAnalyzer:
             df_average_turnover_and_average_rating_per_time_period[
                 df_average_turnover_and_average_rating_per_time_period['date'].dt.year < corona_start_year
                 ]
+
+        print(df_average_turnover_and_average_rating_per_time_period)
 
         # pearson correlation
         print("Pearson correlation:")
@@ -217,7 +231,7 @@ prognoliteTripadvisorRestaurantDataAnalyzer = PrognoliteTripadvisorRestaurantDat
 
 """
 prognoliteTripadvisorRestaurantDataAnalyzer \
-    .compute_pearson_and_spearman_correlation_between_average_turnover_and_average_rating(Restaurant.BUTCHER_USTER,
+    .compute_pearson_and_spearman_correlation_between_average_turnover_and_average_rating(Restaurant.NOOCH_USTER,
                                                                                           time_period='m',
                                                                                           rating_date_offset_in_months=0)
 """
