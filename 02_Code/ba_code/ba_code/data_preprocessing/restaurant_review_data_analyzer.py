@@ -196,8 +196,8 @@ class PrognoliteTripadvisorRestaurantDataAnalyzer:
 
         # scatterplot average rating vs average turnover
         df = df_average_turnover_and_average_rating_per_time_period
-        x = 'average_turnover_per_time_period'
-        y = 'average_rating_per_time_period'
+        x = 'average_rating_per_time_period'
+        y = 'average_turnover_per_time_period'
         title = 'average rating vs average turnover per ' \
                 + self.__get_time_period_value(time_period) + ":\n" \
                 + restaurant.value
