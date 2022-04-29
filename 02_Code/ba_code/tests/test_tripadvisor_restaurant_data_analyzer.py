@@ -3,7 +3,7 @@ from ba_code.data_processing_and_analysis.google_and_tripadvisor.restaurant_revi
 
 
 def print_infos_of_tripadvisor_restaurant_data_of_all_restaurants(tripadvisor_restaurant_data_analyzer):
-    tripadvisor_restaurant_data = tripadvisor_restaurant_data_analyzer.get_tripadvisor_restaurant_data_extractors()
+    tripadvisor_restaurant_data = tripadvisor_restaurant_data_analyzer.get_restaurant_review_data_extractors()
 
     for tripadvisor_restaurant_data_extractor in tripadvisor_restaurant_data.values():
         df_review_data = tripadvisor_restaurant_data_extractor.get_review_data_dataframe()
@@ -31,7 +31,7 @@ def print_infos_of_tripadvisor_restaurant_data_of_all_restaurants(tripadvisor_re
 
 
 def print_author_level_infos(tripadvisor_restaurant_data_analyzer):
-    tripadvisor_restaurant_data = tripadvisor_restaurant_data_analyzer.get_tripadvisor_restaurant_data_extractors()
+    tripadvisor_restaurant_data = tripadvisor_restaurant_data_analyzer.get_restaurant_review_data_extractors()
 
     for tripadvisor_restaurant_data_extractor in tripadvisor_restaurant_data.values():
         df_author_level_with_rating = tripadvisor_restaurant_data_extractor.get_author_level_with_rating_dataframe()

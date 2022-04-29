@@ -17,28 +17,28 @@ fontP.set_size('x-small')
 class RestaurantReviewDataAnalyzer:
 
     def __init__(self):
-        self.__tripadvisor_restaurant_data_extractors = dict()
+        self.__restaurant_review_data_extractors_dict = dict()
         self.__initialize()
 
     def __initialize(self):
         restaurant_files = FileUtil.get_files_in_dir(TRIPADVISOR_RESTAURANT_ONLY_RATING_DATASET_PATH)
 
         for restaurant_file in restaurant_files:
-            tripadvisor_restaurant_data_extractor = RestaurantReviewDataExtractor()
-            tripadvisor_restaurant_data_extractor \
+            restaurant_review_data_extractor = RestaurantReviewDataExtractor()
+            restaurant_review_data_extractor \
                 .load_restaurant_review_data(open(restaurant_file), RestaurantReviewDataType.TRIPADVISOR_REVIEW)
-            restaurant_name = tripadvisor_restaurant_data_extractor.get_restaurant_name()
-            self.__tripadvisor_restaurant_data_extractors[restaurant_name] = tripadvisor_restaurant_data_extractor
+            restaurant_name = restaurant_review_data_extractor.get_restaurant_name()
+            self.__restaurant_review_data_extractors_dict[restaurant_name] = restaurant_review_data_extractor
 
     def scatterplot_overall_rating_vs_overall_rating_computed(self):
         overall_ratings = []
         overall_ratings_computed = []
         overall_ratings_computed_and_rounded = []
 
-        for tripadvisor_restaurant_data_extractor in self.__tripadvisor_restaurant_data_extractors.values():
-            overall_ratings.append(tripadvisor_restaurant_data_extractor.get_overall_rating())
-            overall_ratings_computed.append(tripadvisor_restaurant_data_extractor.get_overall_rating_computed())
-            overall_ratings_computed_and_rounded.append(tripadvisor_restaurant_data_extractor
+        for restaurant_review_data_extractor in self.__restaurant_review_data_extractors_dict.values():
+            overall_ratings.append(restaurant_review_data_extractor.get_overall_rating())
+            overall_ratings_computed.append(restaurant_review_data_extractor.get_overall_rating_computed())
+            overall_ratings_computed_and_rounded.append(restaurant_review_data_extractor
                                                         .get_overall_rating_computed_and_rounded())
 
         df = pd.DataFrame({
@@ -67,14 +67,14 @@ class RestaurantReviewDataAnalyzer:
         plt.show()
 
     def plot_incremental_overall_rating_for_all_restaurants(self):
-        for restaurant_name in self.__tripadvisor_restaurant_data_extractors.keys():
+        for restaurant_name in self.__restaurant_review_data_extractors_dict.keys():
             self.plot_incremental_overall_rating_for_restaurant(restaurant_name)
 
     def plot_incremental_overall_rating_for_restaurant(self, restaurant_name):
-        tripadvisor_restaurant_data_extractor = self.__tripadvisor_restaurant_data_extractors[restaurant_name]
+        restaurant_review_data_extractor = self.__restaurant_review_data_extractors_dict[restaurant_name]
 
         df_incremental_overall_rating = \
-            tripadvisor_restaurant_data_extractor.get_incremental_overall_rating_over_years_dataframe()
+            restaurant_review_data_extractor.get_incremental_overall_rating_over_years_dataframe()
 
         x = 'bygone_year'
         y = ['incremental_overall_rating']
@@ -85,7 +85,7 @@ class RestaurantReviewDataAnalyzer:
         y_min = df_incremental_overall_rating[y].to_numpy().min()
         y_max = df_incremental_overall_rating[y].to_numpy().max()
 
-        overall_rating = tripadvisor_restaurant_data_extractor.get_overall_rating()
+        overall_rating = restaurant_review_data_extractor.get_overall_rating()
         y_min = overall_rating if overall_rating < y_min else y_min
 
         plt.figure()
@@ -103,14 +103,14 @@ class RestaurantReviewDataAnalyzer:
         plt.show()
 
     def plot_average_rating_per_time_period_for_all_restaurants(self, time_period='m'):
-        for restaurant_name in self.__tripadvisor_restaurant_data_extractors.keys():
+        for restaurant_name in self.__restaurant_review_data_extractors_dict.keys():
             self.plot_average_rating_per_time_period(restaurant_name, time_period)
 
     def plot_average_rating_per_time_period(self, restaurant_name, time_period='m'):
-        tripadvisor_restaurant_data_extractor = self.__tripadvisor_restaurant_data_extractors[restaurant_name]
+        restaurant_review_data_extractor = self.__restaurant_review_data_extractors_dict[restaurant_name]
 
         df_average_rating_per_time_period = \
-            tripadvisor_restaurant_data_extractor.get_average_rating_per_time_period_dataframe(time_period)
+            restaurant_review_data_extractor.get_average_rating_per_time_period_dataframe(time_period)
 
         title = "Average rating per " + self.__get_value_of_time_period(time_period) + ":\n" + restaurant_name
         x = 'date'
@@ -121,14 +121,14 @@ class RestaurantReviewDataAnalyzer:
         self.__plot_dataframe(df_average_rating_per_time_period, x, y, title, x_label, y_label)
 
     def plot_overall_rating_development_since_beginning_for_all_restaurants(self, time_period='m'):
-        for restaurant_name in self.__tripadvisor_restaurant_data_extractors.keys():
+        for restaurant_name in self.__restaurant_review_data_extractors_dict.keys():
             self.plot_overall_rating_development_since_beginning(restaurant_name, time_period)
 
     def plot_overall_rating_development_since_beginning(self, restaurant_name, time_period='m'):
-        tripadvisor_restaurant_data_extractor = self.__tripadvisor_restaurant_data_extractors[restaurant_name]
+        restaurant_review_data_extractor = self.__restaurant_review_data_extractors_dict[restaurant_name]
 
         df_overall_rating_development_over_time_period = \
-            tripadvisor_restaurant_data_extractor.get_overall_rating_development_over_time_period_dataframe(time_period)
+            restaurant_review_data_extractor.get_overall_rating_development_over_time_period_dataframe(time_period)
 
         title = "Overall rating development since beginning:\n" + restaurant_name
         x = 'date'
@@ -153,9 +153,9 @@ class RestaurantReviewDataAnalyzer:
         overall_ratings = []
         overall_ratings_computed = []
 
-        for tripadvisor_restaurant_data_extractor in self.__tripadvisor_restaurant_data_extractors.values():
-            overall_ratings.append(tripadvisor_restaurant_data_extractor.get_overall_rating())
-            overall_ratings_computed.append(tripadvisor_restaurant_data_extractor.get_overall_rating_computed())
+        for restaurant_review_data_extractor in self.__restaurant_review_data_extractors_dict.values():
+            overall_ratings.append(restaurant_review_data_extractor.get_overall_rating())
+            overall_ratings_computed.append(restaurant_review_data_extractor.get_overall_rating_computed())
 
         df = pd.DataFrame({
             'overall_rating': overall_ratings,
@@ -181,15 +181,15 @@ class RestaurantReviewDataAnalyzer:
         plt.show()
 
     def boxplot_of_rating_by_author_level_for_all_restaurants(self):
-        for restaurant_name in self.__tripadvisor_restaurant_data_extractors.keys():
+        for restaurant_name in self.__restaurant_review_data_extractors_dict.keys():
             self.boxplot_of_rating_by_author_level_for_restaurant(restaurant_name)
 
     def boxplot_of_rating_by_author_level_for_restaurant(self, restaurant_name):
-        tripadvisor_restaurant_data_extractor = self.__tripadvisor_restaurant_data_extractors[restaurant_name]
-        df_author_level_with_rating = tripadvisor_restaurant_data_extractor.get_author_level_with_rating_dataframe()
+        restaurant_review_data_extractor = self.__restaurant_review_data_extractors_dict[restaurant_name]
+        df_author_level_with_rating = restaurant_review_data_extractor.get_author_level_with_rating_dataframe()
 
-        overall_rating = tripadvisor_restaurant_data_extractor.get_overall_rating()
-        overall_rating_computed = tripadvisor_restaurant_data_extractor.get_overall_rating_computed()
+        overall_rating = restaurant_review_data_extractor.get_overall_rating()
+        overall_rating_computed = restaurant_review_data_extractor.get_overall_rating_computed()
 
         if df_author_level_with_rating['author_level'].isnull().values.any():
             df_author_level_with_rating = df_author_level_with_rating[
@@ -217,20 +217,20 @@ class RestaurantReviewDataAnalyzer:
         plt.show()
 
     def get_restaurant_data_extractors_where_overall_rating_not_equal_computed_and_rounded_one(self):
-        tripadvisor_restaurant_data_extractors = []
+        restaurant_review_data_extractors = []
 
-        for tripadvisor_restaurant_data_extractor in self.__tripadvisor_restaurant_data_extractors.values():
-            if (tripadvisor_restaurant_data_extractor.get_overall_rating() != tripadvisor_restaurant_data_extractor
+        for restaurant_review_data_extractor in self.__restaurant_review_data_extractors_dict.values():
+            if (restaurant_review_data_extractor.get_overall_rating() != restaurant_review_data_extractor
                     .get_overall_rating_computed_and_rounded()):
-                tripadvisor_restaurant_data_extractors.append(tripadvisor_restaurant_data_extractor)
+                restaurant_review_data_extractors.append(restaurant_review_data_extractor)
 
-        return tripadvisor_restaurant_data_extractors
+        return restaurant_review_data_extractors
 
-    def get_tripadvisor_restaurant_data_extractors(self):
-        return self.__tripadvisor_restaurant_data_extractors
+    def get_restaurant_review_data_extractors(self):
+        return self.__restaurant_review_data_extractors_dict
 
     def get_restaurant_names(self):
-        return self.__tripadvisor_restaurant_data_extractors.keys()
+        return self.__restaurant_review_data_extractors_dict.keys()
 
     def __get_value_of_time_period(self, time_period):
         time_period_value = ''
