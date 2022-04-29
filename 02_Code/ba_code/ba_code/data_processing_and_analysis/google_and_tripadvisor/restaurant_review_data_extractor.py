@@ -17,7 +17,7 @@ class RestaurantReviewDataExtractor:
         restaurant_name = tripadvisor_restaurant_data_json['restaurant_name']
         overall_rating = tripadvisor_restaurant_data_json['overall_rating']
         # TODO: commment out the line below as soon as the tripadvisor json dataset has reviews_count
-        #reviews_count = tripadvisor_restaurant_data_json['reviews_count']
+        # reviews_count = tripadvisor_restaurant_data_json['reviews_count']
 
         # extract author and review data
         all_reviews = tripadvisor_restaurant_data_json['all_reviews']
@@ -39,7 +39,7 @@ class RestaurantReviewDataExtractor:
             'restaurant_name': restaurant_name,
             'overall_rating': overall_rating,
             # TODO: commment out the line below as soon as the tripadvisor json dataset has reviews_count
-            #'reviews_count': reviews_count,
+            # 'reviews_count': reviews_count,
             'author_data': {
                 'df_author_base_infos': dfs_author_data[0],
                 'df_author_stats': dfs_author_data[1],
@@ -116,7 +116,16 @@ class RestaurantReviewDataExtractor:
 
     def get_overall_rating_computed_and_rounded(self):
         overall_rating_computed = self.get_overall_rating_computed()
-        return np.round(overall_rating_computed * 2) / 2
+        overall_rating_computed_times_two = overall_rating_computed * 2
+
+        overall_rating_computed_and_rounded = None
+
+        if (overall_rating_computed_times_two - int(overall_rating_computed_times_two)) >= 0.5:
+            overall_rating_computed_and_rounded = np.ceil(overall_rating_computed_times_two) / 2
+        else:
+            overall_rating_computed_and_rounded = np.floor(overall_rating_computed_times_two) / 2
+
+        return overall_rating_computed_and_rounded
 
     def get_review_data_dataframe(self):
         return self.__tripadvisor_restaurant_data['df_review_data']
@@ -243,5 +252,5 @@ class RestaurantReviewDataExtractor:
 
 
 restaurantReviewDataExtractor = RestaurantReviewDataExtractor()
-#restaurantReviewDataExtractor.load_restaurant_data(open(TripadvisorRestaurantDataUri.BUTCHER_USTER.value))
-#restaurantReviewDataExtractor.load_restaurant_data(open(GoogleRestaurantDataUri.BUTCHER_USTER.value))
+# restaurantReviewDataExtractor.load_restaurant_data(open(TripadvisorRestaurantDataUri.BUTCHER_USTER.value))
+# restaurantReviewDataExtractor.load_restaurant_data(open(GoogleRestaurantDataUri.BUTCHER_USTER.value))
