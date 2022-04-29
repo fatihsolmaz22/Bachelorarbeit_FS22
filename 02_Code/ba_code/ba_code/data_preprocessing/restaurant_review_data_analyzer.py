@@ -136,9 +136,78 @@ class PrognoliteTripadvisorRestaurantDataAnalyzer:
         # plt.savefig('haha.png',dpi=600)
         plt.show()
 
-    def compute_pearson_and_spearman_correlation_between_average_turnover_and_average_rating(self, restaurant,
-                                                                                             time_period='m',
-                                                                                             rating_date_offset_in_months=0):
+    def compute_correlation_between_average_turnover_and_overall_rating_development(self, restaurant,
+                                                                                    time_period='m',
+                                                                                    rating_date_offset_in_months=0):
+        # get df_average_turnover_per_time_period
+        df_average_turnover_per_time_period = self.__prognoliteRestaurantDataExtractor \
+            .get_average_turnover_per_time_period_dataframe(restaurant, time_period)
+
+        # rename column 'd' to 'date' of df_average_turnover_per_time_period and change format of 'date' to join later
+        df_average_turnover_per_time_period = df_average_turnover_per_time_period.rename(columns={'d': 'date'})
+        df_average_turnover_per_time_period['date'] = pd.to_datetime(
+            df_average_turnover_per_time_period['date'].dt.date)
+
+        # print(df_average_turnover_per_time_period)
+
+        # get tripadvisor_restaurant_data_extractor with tripadvisor_restaurant_data_uri
+        tripadvisor_restaurant_data_uri = self.__restaurants[restaurant]
+        tripadvisor_restaurant_data_extractor = \
+            self.__tripadvisor_restaurant_data_extractors[tripadvisor_restaurant_data_uri]
+
+        # get df_average_rating_per_time_period and change format of 'date' to join later
+        df_overall_rating_development_over_time_period = tripadvisor_restaurant_data_extractor \
+            .get_overall_rating_development_since_beginning_dataframe(time_period, rating_date_offset_in_months)
+        df_overall_rating_development_over_time_period['date'] = pd.to_datetime(
+            df_overall_rating_development_over_time_period['date'].dt.date)
+
+        # print(df_average_turnover_and_average_rating_per_time_period)
+
+        # df_average_turnover_per_time_period join df_average_rating_per_time_period
+        df_average_turnover_and_overall_rating_development_per_time_period = \
+            pd.merge(left=df_average_turnover_per_time_period, right=df_overall_rating_development_over_time_period,
+                     on='date')
+
+        # print(df_average_turnover_and_overall_rating_development_per_time_period)
+
+        # dropping rows containing NaN
+        df_average_turnover_and_overall_rating_development_per_time_period = \
+            df_average_turnover_and_overall_rating_development_per_time_period.dropna().reset_index(drop=True)
+
+        # print(df_average_turnover_and_overall_rating_development_per_time_period)
+
+        # filter df_average_turnover_and_average_rating_per_time_period before corona
+        corona_start_year = 2020
+
+        df_average_turnover_and_overall_rating_development_per_time_period = \
+            df_average_turnover_and_overall_rating_development_per_time_period[
+                df_average_turnover_and_overall_rating_development_per_time_period['date'].dt.year < corona_start_year
+                ]
+
+        print("df_average_turnover_and_overall_rating_development_per_time_period:\n")
+        print(df_average_turnover_and_overall_rating_development_per_time_period)
+
+        # pearson correlation
+        print("\nPearson correlation:")
+        print(df_average_turnover_and_overall_rating_development_per_time_period.corr(method="pearson"))
+
+        # spearman correlation
+        print("\nSpearman correlation:")
+        print(df_average_turnover_and_overall_rating_development_per_time_period.corr(method="spearman"))
+
+        # scatterplot average rating vs average turnover
+        df = df_average_turnover_and_overall_rating_development_per_time_period
+        x = 'overall_rating_development'
+        y = 'average_turnover_per_time_period'
+        title = 'overall rating development vs average turnover per ' \
+                + self.__get_time_period_value(time_period) + ":\n" \
+                + restaurant.value
+
+        self.__scatterplot_dataframe(df, x, y, title)
+
+    def compute_correlation_between_average_turnover_and_average_rating(self, restaurant,
+                                                                        time_period='m',
+                                                                        rating_date_offset_in_months=0):
         # get df_average_turnover_per_time_period
         df_average_turnover_per_time_period = \
             self.__prognoliteRestaurantDataExtractor \
@@ -232,7 +301,12 @@ prognoliteTripadvisorRestaurantDataAnalyzer = PrognoliteTripadvisorRestaurantDat
 
 """
 prognoliteTripadvisorRestaurantDataAnalyzer \
-    .compute_pearson_and_spearman_correlation_between_average_turnover_and_average_rating(Restaurant.BUTCHER_USTER,
-                                                                                          time_period='m',
-                                                                                          rating_date_offset_in_months=0)
+    .compute_correlation_between_average_turnover_and_average_rating(Restaurant.BUTCHER_USTER,
+                                                                     time_period='m',
+                                                                     rating_date_offset_in_months=0)"""
+"""
+prognoliteTripadvisorRestaurantDataAnalyzer \
+    .compute_correlation_between_average_turnover_and_overall_rating_development(Restaurant.BUTCHER_USTER,
+                                                                     time_period='m',
+                                                                     rating_date_offset_in_months=0)
 """
