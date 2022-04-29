@@ -1,5 +1,5 @@
 import pandas as pd
-from ba_code.data_preprocessing.prognolite_restaurant_data_preprocessing.prognolite_restaurant_constants \
+from ba_code.data_processing_and_analysis.prognolite.prognolite_restaurant_constants \
     import PrognoliteRestaurantDataUri, Restaurant
 
 

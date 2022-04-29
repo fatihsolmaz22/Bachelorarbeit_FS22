@@ -1,4 +1,4 @@
-from ba_code.data_preprocessing.prognolite_restaurant_data_preprocessing.prognolite_restaurant_data_extractor import \
+from ba_code.data_processing_and_analysis.prognolite.prognolite_restaurant_data_extractor import \
     PrognoliteRestaurantDataExtractor, Restaurant
 import pandas as pd
 

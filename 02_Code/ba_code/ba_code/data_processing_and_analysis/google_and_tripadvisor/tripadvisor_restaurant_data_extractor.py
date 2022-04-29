@@ -2,7 +2,7 @@ import json
 import pandas as pd
 import numpy as np
 
-from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.restaurant_data_uri import \
+from ba_code.data_processing_and_analysis.google_and_tripadvisor.restaurant_data_uri import \
     TripadvisorRestaurantDataUri, GoogleRestaurantDataUri
 
 

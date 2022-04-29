@@ -1,5 +1,5 @@
 from prognolite_restaurant_data_extractor import PrognoliteRestaurantDataExtractor
-from ba_code.data_preprocessing.prognolite_restaurant_data_preprocessing.prognolite_restaurant_constants import \
+from ba_code.data_processing_and_analysis.prognolite.prognolite_restaurant_constants import \
     Restaurant
 import matplotlib.pyplot as plt
 
@@ -94,6 +94,5 @@ class PrognoliteRestaurantDataAnalyzer:
 prognoliteRestaurantDataAnalyzer = PrognoliteRestaurantDataAnalyzer()
 # prognoliteRestaurantDataAnalyzer.plot_turnover_per_time_period(Restaurant.BUTCHER_USTER, 'Q')
 # prognoliteRestaurantDataAnalyzer.plot_average_turnover_per_time_period(Restaurant.BUTCHER_USTER, 'm')
-# TODO: show the line below to martin, but comment out TODO in prognolite_..._extractor.py
 # prognoliteRestaurantDataAnalyzer.plot_average_turnover_per_time_period_for_all_restaurants('Q')
 

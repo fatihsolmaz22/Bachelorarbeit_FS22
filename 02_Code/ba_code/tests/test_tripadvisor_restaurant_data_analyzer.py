@@ -1,4 +1,4 @@
-from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.tripadvisor_restaurant_data_analyzer import \
+from ba_code.data_processing_and_analysis.google_and_tripadvisor.tripadvisor_restaurant_data_analyzer import \
     TripadvisorRestaurantDataAnalyzer
 
 

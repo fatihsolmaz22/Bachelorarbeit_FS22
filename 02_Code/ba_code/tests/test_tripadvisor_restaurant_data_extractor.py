@@ -1,6 +1,6 @@
-from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.restaurant_data_uri import \
+from ba_code.data_processing_and_analysis.google_and_tripadvisor.restaurant_data_uri import \
     TripadvisorRestaurantDataUri
-from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.tripadvisor_restaurant_data_extractor import \
+from ba_code.data_processing_and_analysis.google_and_tripadvisor.tripadvisor_restaurant_data_extractor import \
     TripadvisorRestaurantDataExtractor
 import pandas as pd
 

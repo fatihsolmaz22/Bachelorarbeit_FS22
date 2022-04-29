@@ -1,11 +1,11 @@
 import matplotlib.pyplot as plt
-from ba_code.data_preprocessing.prognolite_restaurant_data_preprocessing.prognolite_restaurant_data_extractor import \
+from ba_code.data_processing_and_analysis.prognolite.prognolite_restaurant_data_extractor import \
     PrognoliteRestaurantDataExtractor
-from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.tripadvisor_restaurant_data_extractor import \
+from ba_code.data_processing_and_analysis.google_and_tripadvisor.tripadvisor_restaurant_data_extractor import \
     TripadvisorRestaurantDataExtractor
-from ba_code.data_preprocessing.prognolite_restaurant_data_preprocessing.prognolite_restaurant_constants import \
+from ba_code.data_processing_and_analysis.prognolite.prognolite_restaurant_constants import \
     Restaurant
-from ba_code.data_preprocessing.tripadvisor_restaurant_data_preprocessing.restaurant_data_uri import \
+from ba_code.data_processing_and_analysis.google_and_tripadvisor.restaurant_data_uri import \
     TripadvisorRestaurantDataUri
 import seaborn as sns
 import pandas as pd
