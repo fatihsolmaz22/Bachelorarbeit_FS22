@@ -2,11 +2,11 @@ import json
 import pandas as pd
 import numpy as np
 
-from ba_code.data_processing_and_analysis.google_and_tripadvisor.restaurant_data_uri import \
+from ba_code.data_processing_and_analysis.google_and_tripadvisor.restaurant_review_data_uri import \
     TripadvisorRestaurantDataUri, GoogleRestaurantDataUri
 
 
-class TripadvisorRestaurantDataExtractor:
+class RestaurantReviewDataExtractor:
 
     def __init__(self):
         self.__tripadvisor_restaurant_data = None
@@ -242,6 +242,6 @@ class TripadvisorRestaurantDataExtractor:
         return df_author_level_with_rating
 
 
-tripadvisorRestaurantDataExtractor = TripadvisorRestaurantDataExtractor()
-#tripadvisorRestaurantDataExtractor.load_restaurant_data(open(TripadvisorRestaurantDataUri.BUTCHER_USTER.value))
-#tripadvisorRestaurantDataExtractor.load_restaurant_data(open(GoogleRestaurantDataUri.BUTCHER_USTER.value))
+restaurantReviewDataExtractor = RestaurantReviewDataExtractor()
+#restaurantReviewDataExtractor.load_restaurant_data(open(TripadvisorRestaurantDataUri.BUTCHER_USTER.value))
+#restaurantReviewDataExtractor.load_restaurant_data(open(GoogleRestaurantDataUri.BUTCHER_USTER.value))

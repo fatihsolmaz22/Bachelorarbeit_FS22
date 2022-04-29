@@ -1,7 +1,7 @@
-from ba_code.data_processing_and_analysis.google_and_tripadvisor.restaurant_data_uri import \
+from ba_code.data_processing_and_analysis.google_and_tripadvisor.restaurant_review_data_uri import \
     TripadvisorRestaurantDataUri
-from ba_code.data_processing_and_analysis.google_and_tripadvisor.tripadvisor_restaurant_data_extractor import \
-    TripadvisorRestaurantDataExtractor
+from ba_code.data_processing_and_analysis.google_and_tripadvisor.restaurant_review_data_extractor import \
+    RestaurantReviewDataExtractor
 import pandas as pd
 
 
@@ -29,6 +29,7 @@ def print_infos_of_tripadvisor_restaurant_data(restaurant_data_extractor):
     print("Number of entries in df_author_stats", len(df_author_stats))
     print("Number of entries in df_author_distribution", len(df_author_distribution))
 
+
 def test_get_average_rating_per_time_period_dataframe_offset_in_months(restaurant_data_extractor):
     df_average_rating_per_month = \
         restaurant_data_extractor.get_average_rating_per_time_period_dataframe('m', offset_in_months=0)
@@ -55,8 +56,9 @@ def test_get_average_rating_per_time_period_dataframe_offset_in_months(restauran
 
     print("df_average_rating_per_month_plus_2\n", df_average_rating_per_month_plus_2.head(5))
 
-tripadvisor_restaurant_data_extractor = TripadvisorRestaurantDataExtractor()
-tripadvisor_restaurant_data_extractor.load_restaurant_data(open(TripadvisorRestaurantDataUri.BUTCHER_USTER.value))
 
-print_infos_of_tripadvisor_restaurant_data(tripadvisor_restaurant_data_extractor)
-test_get_average_rating_per_time_period_dataframe_offset_in_months(tripadvisor_restaurant_data_extractor)
+restaurantReviewDataExtractor = RestaurantReviewDataExtractor()
+restaurantReviewDataExtractor.load_restaurant_data(open(TripadvisorRestaurantDataUri.BUTCHER_USTER.value))
+
+print_infos_of_tripadvisor_restaurant_data(restaurantReviewDataExtractor)
+test_get_average_rating_per_time_period_dataframe_offset_in_months(restaurantReviewDataExtractor)

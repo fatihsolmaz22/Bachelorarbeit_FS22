@@ -1,17 +1,17 @@
 import matplotlib.pyplot as plt
 from ba_code.data_processing_and_analysis.prognolite.prognolite_restaurant_data_extractor import \
     PrognoliteRestaurantDataExtractor
-from ba_code.data_processing_and_analysis.google_and_tripadvisor.tripadvisor_restaurant_data_extractor import \
-    TripadvisorRestaurantDataExtractor
+from ba_code.data_processing_and_analysis.google_and_tripadvisor.restaurant_review_data_extractor import \
+    RestaurantReviewDataExtractor
 from ba_code.data_processing_and_analysis.prognolite.prognolite_restaurant_constants import \
     Restaurant
-from ba_code.data_processing_and_analysis.google_and_tripadvisor.restaurant_data_uri import \
+from ba_code.data_processing_and_analysis.google_and_tripadvisor.restaurant_review_data_uri import \
     TripadvisorRestaurantDataUri
 import seaborn as sns
 import pandas as pd
 
 
-class PrognoliteTripadvisorRestaurantDataAnalyzer:
+class DataAnalyzer:
 
     def __init__(self):
         self.__prognoliteRestaurantDataExtractor = PrognoliteRestaurantDataExtractor()
@@ -21,7 +21,7 @@ class PrognoliteTripadvisorRestaurantDataAnalyzer:
 
     def __initialize_tripadvisor_restaurant_data_extractors(self):
         for tripadvisor_restaurant_data_uri in TripadvisorRestaurantDataUri:
-            tripadvisor_restaurant_data_extractor = TripadvisorRestaurantDataExtractor()
+            tripadvisor_restaurant_data_extractor = RestaurantReviewDataExtractor()
             tripadvisor_restaurant_data_extractor.load_restaurant_data(open(tripadvisor_restaurant_data_uri.value))
             self.__tripadvisor_restaurant_data_extractors[tripadvisor_restaurant_data_uri] = \
                 tripadvisor_restaurant_data_extractor
@@ -292,20 +292,20 @@ class PrognoliteTripadvisorRestaurantDataAnalyzer:
         return x_label
 
 
-prognoliteTripadvisorRestaurantDataAnalyzer = PrognoliteTripadvisorRestaurantDataAnalyzer()
-# prognoliteTripadvisorRestaurantDataAnalyzer.plot_development_of_overall_rating_and_average_turnover_per_time_period_for_all_restaurants('Q')
-# prognoliteTripadvisorRestaurantDataAnalyzer.plot_development_of_overall_rating_and_average_turnover_per_time_period(Restaurant.BUTCHER_USTER,'Q')
+dataAnalyzer = DataAnalyzer()
+# dataAnalyzer.plot_development_of_overall_rating_and_average_turnover_per_time_period_for_all_restaurants('Q')
+# dataAnalyzer.plot_development_of_overall_rating_and_average_turnover_per_time_period(Restaurant.BUTCHER_USTER,'Q')
 
-# prognoliteTripadvisorRestaurantDataAnalyzer.plot_average_rating_vs_average_turnover_per_time_period_for_all_restaurants('Q')
-# prognoliteTripadvisorRestaurantDataAnalyzer.plot_average_rating_vs_average_turnover_per_time_period(Restaurant.BUTCHER_USTER,'Q')
+# dataAnalyzer.plot_average_rating_vs_average_turnover_per_time_period_for_all_restaurants('Q')
+# dataAnalyzer.plot_average_rating_vs_average_turnover_per_time_period(Restaurant.BUTCHER_USTER,'Q')
 
 """
-prognoliteTripadvisorRestaurantDataAnalyzer \
+dataAnalyzer \
     .compute_correlation_between_average_turnover_and_average_rating(Restaurant.BUTCHER_USTER,
                                                                      time_period='m',
                                                                      rating_date_offset_in_months=0)"""
 """
-prognoliteTripadvisorRestaurantDataAnalyzer \
+dataAnalyzer \
     .compute_correlation_between_average_turnover_and_overall_rating_development(Restaurant.BUTCHER_USTER,
                                                                      time_period='m',
                                                                      rating_date_offset_in_months=0)

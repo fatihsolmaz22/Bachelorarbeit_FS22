@@ -1,5 +1,5 @@
-from ba_code.data_processing_and_analysis.google_and_tripadvisor.tripadvisor_restaurant_data_analyzer import \
-    TripadvisorRestaurantDataAnalyzer
+from ba_code.data_processing_and_analysis.google_and_tripadvisor.restaurant_review_data_analyzer import \
+    RestaurantReviewDataAnalyzer
 
 
 def print_infos_of_tripadvisor_restaurant_data_of_all_restaurants(tripadvisor_restaurant_data_analyzer):
@@ -41,6 +41,6 @@ def print_author_level_infos(tripadvisor_restaurant_data_analyzer):
         print("Number of nans in author_level:", df_author_level_with_rating['author_level'].isnull().sum())
 
 
-tripadvisorRestaurantDataAnalyzer = TripadvisorRestaurantDataAnalyzer()
-print_infos_of_tripadvisor_restaurant_data_of_all_restaurants(tripadvisorRestaurantDataAnalyzer)
-print_author_level_infos(tripadvisorRestaurantDataAnalyzer)
+restaurantReviewDataAnalyzer = RestaurantReviewDataAnalyzer()
+print_infos_of_tripadvisor_restaurant_data_of_all_restaurants(restaurantReviewDataAnalyzer)
+print_author_level_infos(restaurantReviewDataAnalyzer)

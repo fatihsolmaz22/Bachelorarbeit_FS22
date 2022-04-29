@@ -1,5 +1,5 @@
 from ba_code.data_processing_and_analysis.google_and_tripadvisor \
-    .tripadvisor_restaurant_data_extractor import TripadvisorRestaurantDataExtractor
+    .restaurant_review_data_extractor import RestaurantReviewDataExtractor
 from ba_code.utils.file_util import FileUtil
 from ba_code.path import TRIPADVISOR_RESTAURANT_DATA_PATH, TRIPADVISOR_RESTAURANT_ONLY_RATING_DATASET_PATH
 import matplotlib.pyplot as plt
@@ -12,7 +12,7 @@ fontP = FontProperties()
 fontP.set_size('x-small')
 
 
-class TripadvisorRestaurantDataAnalyzer:
+class RestaurantReviewDataAnalyzer:
 
     def __init__(self):
         self.__tripadvisor_restaurant_data_extractors = dict()
@@ -22,7 +22,7 @@ class TripadvisorRestaurantDataAnalyzer:
         restaurant_files = FileUtil.get_files_in_dir(TRIPADVISOR_RESTAURANT_ONLY_RATING_DATASET_PATH)
 
         for restaurant_file in restaurant_files:
-            tripadvisor_restaurant_data_extractor = TripadvisorRestaurantDataExtractor()
+            tripadvisor_restaurant_data_extractor = RestaurantReviewDataExtractor()
             tripadvisor_restaurant_data_extractor.load_restaurant_data(open(restaurant_file))
             restaurant_name = tripadvisor_restaurant_data_extractor.get_restaurant_name()
             self.__tripadvisor_restaurant_data_extractors[restaurant_name] = tripadvisor_restaurant_data_extractor
@@ -242,6 +242,6 @@ class TripadvisorRestaurantDataAnalyzer:
         return time_period_value
 
 
-tripadvisorRestaurantDataAnalyzer = TripadvisorRestaurantDataAnalyzer()
-# tripadvisorRestaurantDataAnalyzer.plot_overall_rating_development_since_beginning('BUTCHER_USTER', 'Q')
-# tripadvisorRestaurantDataAnalyzer.plot_average_rating_per_time_period('BUTCHER_USTER', 'Q')
+restaurantReviewDataAnalyzer = RestaurantReviewDataAnalyzer()
+# restaurantReviewDataAnalyzer.plot_overall_rating_development_since_beginning('BUTCHER_USTER', 'Q')
+# restaurantReviewDataAnalyzer.plot_average_rating_per_time_period('BUTCHER_USTER', 'Q')

@@ -2,7 +2,7 @@ import json
 import pandas as pd
 import numpy as np
 from datetime import datetime
-from ba_code.data_processing_and_analysis.google_and_tripadvisor.restaurant_data_uri import TripadvisorRestaurantDataUri
+from ba_code.data_processing_and_analysis.google_and_tripadvisor.restaurant_review_data_uri import TripadvisorRestaurantDataUri
 
 # TODO: this file is deprecated, update equations after the review data were analysed
 def get_mlr_equations_dataframe():
