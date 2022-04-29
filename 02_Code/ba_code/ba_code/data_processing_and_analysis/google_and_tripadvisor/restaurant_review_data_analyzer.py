@@ -2,6 +2,8 @@ from ba_code.data_processing_and_analysis.google_and_tripadvisor \
     .restaurant_review_data_extractor import RestaurantReviewDataExtractor
 from ba_code.utils.file_util import FileUtil
 from ba_code.path import TRIPADVISOR_RESTAURANT_DATA_PATH, TRIPADVISOR_RESTAURANT_ONLY_RATING_DATASET_PATH
+from ba_code.data_processing_and_analysis.google_and_tripadvisor.restaurant_review_data_uri import \
+    RestaurantReviewDataType
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -23,7 +25,8 @@ class RestaurantReviewDataAnalyzer:
 
         for restaurant_file in restaurant_files:
             tripadvisor_restaurant_data_extractor = RestaurantReviewDataExtractor()
-            tripadvisor_restaurant_data_extractor.load_restaurant_data(open(restaurant_file))
+            tripadvisor_restaurant_data_extractor \
+                .load_restaurant_review_data(open(restaurant_file), RestaurantReviewDataType.TRIPADVISOR_REVIEW)
             restaurant_name = tripadvisor_restaurant_data_extractor.get_restaurant_name()
             self.__tripadvisor_restaurant_data_extractors[restaurant_name] = tripadvisor_restaurant_data_extractor
 

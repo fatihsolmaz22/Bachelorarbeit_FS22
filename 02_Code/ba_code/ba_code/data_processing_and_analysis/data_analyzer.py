@@ -6,7 +6,7 @@ from ba_code.data_processing_and_analysis.google_and_tripadvisor.restaurant_revi
 from ba_code.data_processing_and_analysis.prognolite.prognolite_restaurant_constants import \
     Restaurant
 from ba_code.data_processing_and_analysis.google_and_tripadvisor.restaurant_review_data_uri import \
-    TripadvisorRestaurantDataUri
+    TripadvisorRestaurantReviewDataUri, RestaurantReviewDataType
 import seaborn as sns
 import pandas as pd
 
@@ -17,12 +17,14 @@ class DataAnalyzer:
         self.__prognoliteRestaurantDataExtractor = PrognoliteRestaurantDataExtractor()
         self.__tripadvisor_restaurant_data_extractors = dict()
         self.__initialize_tripadvisor_restaurant_data_extractors()
-        self.__restaurants = dict(zip(Restaurant, TripadvisorRestaurantDataUri))
+        self.__restaurants = dict(zip(Restaurant, TripadvisorRestaurantReviewDataUri))
 
     def __initialize_tripadvisor_restaurant_data_extractors(self):
-        for tripadvisor_restaurant_data_uri in TripadvisorRestaurantDataUri:
+        for tripadvisor_restaurant_data_uri in TripadvisorRestaurantReviewDataUri:
             tripadvisor_restaurant_data_extractor = RestaurantReviewDataExtractor()
-            tripadvisor_restaurant_data_extractor.load_restaurant_data(open(tripadvisor_restaurant_data_uri.value))
+            tripadvisor_restaurant_data_extractor \
+                .load_restaurant_review_data(open(tripadvisor_restaurant_data_uri.value),
+                                             RestaurantReviewDataType.TRIPADVISOR_REVIEW)
             self.__tripadvisor_restaurant_data_extractors[tripadvisor_restaurant_data_uri] = \
                 tripadvisor_restaurant_data_extractor
 

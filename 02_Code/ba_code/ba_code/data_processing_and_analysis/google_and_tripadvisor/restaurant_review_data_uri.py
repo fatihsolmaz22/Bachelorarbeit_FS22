@@ -7,7 +7,7 @@ path_tripadvisor = TRIPADVISOR_RESTAURANT_DATA_PATH
 path_google = TRIPADVISOR_RESTAURANT_GOOGLE_DATASET_PATH
 
 
-class TripadvisorRestaurantDataUri(Enum):
+class TripadvisorRestaurantReviewDataUri(Enum):
     BUTCHER_USTER = os.path.join(path_tripadvisor, 'tripadvisor_review_data_BUTCHER_USTER.json')
     NEGISHI_METALLI = os.path.join(path_tripadvisor, 'tripadvisor_review_data_NEGISHI_METALLI.json')
     BUTCHER_AARBERGERGASSE = os.path.join(path_tripadvisor, 'tripadvisor_review_data_BUTCHER_AARBERGERGASSE.json')
@@ -25,7 +25,7 @@ class TripadvisorRestaurantDataUri(Enum):
     BUTCHER_ZUERICH_WEST = os.path.join(path_tripadvisor, 'tripadvisor_review_data_BUTCHER_ZUERICH_WEST.json')
 
 
-class GoogleRestaurantDataUri(Enum):
+class GoogleRestaurantReviewDataUri(Enum):
     BUTCHER_USTER = os.path.join(path_google, 'google_review_data_BUTCHER_USTER.json')
     NEGISHI_METALLI = os.path.join(path_google, 'google_review_data_NEGISHI_METALLI.json')
     BUTCHER_AARBERGERGASSE = os.path.join(path_google, 'google_review_data_BUTCHER_AARBERGERGASSE.json')
@@ -41,3 +41,8 @@ class GoogleRestaurantDataUri(Enum):
     NEGISHI_STEINEN = os.path.join(path_google, 'google_review_data_NEGISHI_STEINEN.json')
     NOOCH_USTER = os.path.join(path_google, 'google_review_data_NOOCH_USTER.json')
     BUTCHER_ZUERICH_WEST = os.path.join(path_google, 'google_review_data_BUTCHER_ZUERICH_WEST.json')
+
+
+class RestaurantReviewDataType(Enum):
+    GOOGLE_REVIEW = 1
+    TRIPADVISOR_REVIEW = 2

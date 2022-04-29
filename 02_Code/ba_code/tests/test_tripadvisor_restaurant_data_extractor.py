@@ -1,8 +1,7 @@
 from ba_code.data_processing_and_analysis.google_and_tripadvisor.restaurant_review_data_uri import \
-    TripadvisorRestaurantDataUri
+    TripadvisorRestaurantReviewDataUri, RestaurantReviewDataType
 from ba_code.data_processing_and_analysis.google_and_tripadvisor.restaurant_review_data_extractor import \
     RestaurantReviewDataExtractor
-import pandas as pd
 
 
 def print_infos_of_tripadvisor_restaurant_data(restaurant_data_extractor):
@@ -58,7 +57,8 @@ def test_get_average_rating_per_time_period_dataframe_offset_in_months(restauran
 
 
 restaurantReviewDataExtractor = RestaurantReviewDataExtractor()
-restaurantReviewDataExtractor.load_restaurant_data(open(TripadvisorRestaurantDataUri.BUTCHER_USTER.value))
+restaurantReviewDataExtractor.load_restaurant_review_data(
+    open(TripadvisorRestaurantReviewDataUri.BUTCHER_USTER.value), RestaurantReviewDataType.TRIPADVISOR_REVIEW)
 
 print_infos_of_tripadvisor_restaurant_data(restaurantReviewDataExtractor)
 test_get_average_rating_per_time_period_dataframe_offset_in_months(restaurantReviewDataExtractor)
