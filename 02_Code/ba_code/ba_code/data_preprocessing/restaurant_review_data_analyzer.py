@@ -39,9 +39,9 @@ class PrognoliteTripadvisorRestaurantDataAnalyzer:
             .get_average_turnover_per_time_period_dataframe(restaurant, time_period)
 
         tripadvisor_restaurant_data_uri = self.__restaurants[restaurant]
-        df_overall_rating_development_since_beginning = \
+        df_overall_rating_development_over_time_period = \
             self.__tripadvisor_restaurant_data_extractors[tripadvisor_restaurant_data_uri] \
-                .get_overall_rating_development_since_beginning_dataframe(time_period, rating_date_offset_in_months)
+                .get_overall_rating_development_over_time_period_dataframe(time_period, rating_date_offset_in_months)
 
         title = "Development of overall rating vs average turnover\n over " \
                 + self.__get_time_period_value(time_period) + "s: " + restaurant.value
@@ -68,8 +68,8 @@ class PrognoliteTripadvisorRestaurantDataAnalyzer:
         ax2.set_ylabel('overall rating', color=color)
         ax2.set_ylim(1, 5)
         ax2.tick_params(axis='y', labelcolor=color)
-        ax2.plot(df_overall_rating_development_since_beginning[x2],
-                 df_overall_rating_development_since_beginning[y2],
+        ax2.plot(df_overall_rating_development_over_time_period[x2],
+                 df_overall_rating_development_over_time_period[y2],
                  color=color,
                  marker='o')
 
@@ -157,7 +157,7 @@ class PrognoliteTripadvisorRestaurantDataAnalyzer:
 
         # get df_average_rating_per_time_period and change format of 'date' to join later
         df_overall_rating_development_over_time_period = tripadvisor_restaurant_data_extractor \
-            .get_overall_rating_development_since_beginning_dataframe(time_period, rating_date_offset_in_months)
+            .get_overall_rating_development_over_time_period_dataframe(time_period, rating_date_offset_in_months)
         df_overall_rating_development_over_time_period['date'] = pd.to_datetime(
             df_overall_rating_development_over_time_period['date'].dt.date)
 

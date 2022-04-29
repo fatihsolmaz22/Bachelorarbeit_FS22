@@ -124,8 +124,8 @@ class TripadvisorRestaurantDataAnalyzer:
     def plot_overall_rating_development_since_beginning(self, restaurant_name, time_period='m'):
         tripadvisor_restaurant_data_extractor = self.__tripadvisor_restaurant_data_extractors[restaurant_name]
 
-        df_overall_rating_development_since_beginning = \
-            tripadvisor_restaurant_data_extractor.get_overall_rating_development_since_beginning_dataframe(time_period)
+        df_overall_rating_development_over_time_period = \
+            tripadvisor_restaurant_data_extractor.get_overall_rating_development_over_time_period_dataframe(time_period)
 
         title = "Overall rating development since beginning:\n" + restaurant_name
         x = 'date'
@@ -133,7 +133,7 @@ class TripadvisorRestaurantDataAnalyzer:
         x_label = self.__get_value_of_time_period(time_period)
         y_label = 'rating'
 
-        self.__plot_dataframe(df_overall_rating_development_since_beginning, x, y, title, x_label, y_label)
+        self.__plot_dataframe(df_overall_rating_development_over_time_period, x, y, title, x_label, y_label)
 
     def __plot_dataframe(self, df, x, y, title, x_label, y_label):
         plt.figure()

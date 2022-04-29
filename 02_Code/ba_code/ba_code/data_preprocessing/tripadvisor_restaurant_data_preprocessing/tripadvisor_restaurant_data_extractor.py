@@ -142,7 +142,7 @@ class TripadvisorRestaurantDataExtractor:
 
         return df_incremental_overall_rating
 
-    def get_overall_rating_development_since_beginning_dataframe(self, time_period='m', offset_in_months=0):
+    def get_overall_rating_development_over_time_period_dataframe(self, time_period='m', offset_in_months=0):
         df_review_data = self.get_review_data_dataframe()
 
         df_review_data_with_offset_in_months = pd.DataFrame({
