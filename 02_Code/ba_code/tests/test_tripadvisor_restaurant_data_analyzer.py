@@ -1,11 +1,19 @@
 from ba_code.data_processing_and_analysis.google_and_tripadvisor.restaurant_review_data_analyzer import \
     RestaurantReviewDataAnalyzer
+from ba_code.path import TRIPADVISOR_RESTAURANT_DATA_PATH, TRIPADVISOR_RESTAURANT_ONLY_RATING_DATASET_PATH, \
+    TRIPADVISOR_RESTAURANT_GOOGLE_DATASET_PATH
+from ba_code.data_processing_and_analysis.google_and_tripadvisor.restaurant_review_data_uri import \
+    RestaurantReviewDataType
 
 
-def print_infos_of_tripadvisor_restaurant_data_of_all_restaurants(tripadvisor_restaurant_data_analyzer):
-    tripadvisor_restaurant_data = tripadvisor_restaurant_data_analyzer.get_restaurant_review_data_extractors()
+def print_infos_of_tripadvisor_restaurant_data_of_all_restaurants():
+    path = TRIPADVISOR_RESTAURANT_DATA_PATH
+    data_type = RestaurantReviewDataType.TRIPADVISOR_REVIEW
+    restaurant_review_data_analyzer = RestaurantReviewDataAnalyzer(path, data_type)
 
-    for tripadvisor_restaurant_data_extractor in tripadvisor_restaurant_data.values():
+    tripadvisor_restaurant_data_extractors = restaurant_review_data_analyzer.get_restaurant_review_data_extractors()
+
+    for tripadvisor_restaurant_data_extractor in tripadvisor_restaurant_data_extractors.values():
         df_review_data = tripadvisor_restaurant_data_extractor.get_review_data_dataframe()
         df_author_base_infos = tripadvisor_restaurant_data_extractor.get_author_base_infos_dataframe()
         df_author_stats = tripadvisor_restaurant_data_extractor.get_author_stats_dataframe()
@@ -29,8 +37,51 @@ def print_infos_of_tripadvisor_restaurant_data_of_all_restaurants(tripadvisor_re
         print("Number of entries in df_author_stats", len(df_author_stats))
         print("Number of entries in df_author_distribution", len(df_author_distribution))
 
+def test_google_review_data_type():
+    path = TRIPADVISOR_RESTAURANT_GOOGLE_DATASET_PATH
+    data_type = RestaurantReviewDataType.GOOGLE_REVIEW
+    restaurant_review_data_analyzer = RestaurantReviewDataAnalyzer(path, data_type)
+    restaurant_review_data_extractors = restaurant_review_data_analyzer.get_restaurant_review_data_extractors()
 
-def print_author_level_infos(tripadvisor_restaurant_data_analyzer):
+    for restaurant_review_data_extractor in restaurant_review_data_extractors.values():
+        print("Restaurant name:", restaurant_review_data_extractor.get_restaurant_name())
+        print("Number of Reviews",
+              restaurant_review_data_extractor.get_number_of_reviews() == len(restaurant_review_data_extractor
+                                                                              .get_review_data_dataframe()))
+
+def test_google_review_data_overall_rating_vs_overall_rating_computed():
+    path = TRIPADVISOR_RESTAURANT_GOOGLE_DATASET_PATH
+    data_type = RestaurantReviewDataType.GOOGLE_REVIEW
+    restaurant_review_data_analyzer = RestaurantReviewDataAnalyzer(path, data_type)
+    restaurant_review_data_extractors = restaurant_review_data_analyzer.get_restaurant_review_data_extractors()
+
+    for restaurant_review_data_extractor in restaurant_review_data_extractors.values():
+        print("Restaurant name:", restaurant_review_data_extractor.get_restaurant_name())
+        print("overall_rating:", restaurant_review_data_extractor.get_overall_rating())
+        print("overall_rating_computed:", restaurant_review_data_extractor.get_overall_rating_computed())
+        print("overall_rating == overall_rating_computed_and_rounded_one:",
+              restaurant_review_data_extractor.get_overall_rating() == restaurant_review_data_extractor
+              .get_overall_rating_computed_and_rounded())
+
+def test_tripadvisor_review_data_overall_rating_vs_overall_rating_computed():
+    path = TRIPADVISOR_RESTAURANT_ONLY_RATING_DATASET_PATH
+    data_type = RestaurantReviewDataType.TRIPADVISOR_REVIEW
+    restaurant_review_data_analyzer = RestaurantReviewDataAnalyzer(path, data_type)
+    restaurant_review_data_extractors = restaurant_review_data_analyzer.get_restaurant_review_data_extractors()
+
+    for restaurant_review_data_extractor in restaurant_review_data_extractors.values():
+        print("Restaurant name:", restaurant_review_data_extractor.get_restaurant_name())
+        print("overall_rating:", restaurant_review_data_extractor.get_overall_rating())
+        print("overall_rating_computed:", restaurant_review_data_extractor.get_overall_rating_computed())
+        print("overall_rating == overall_rating_computed_and_rounded_one:",
+              restaurant_review_data_extractor.get_overall_rating() == restaurant_review_data_extractor
+              .get_overall_rating_computed_and_rounded())
+
+def print_author_level_infos():
+    path = TRIPADVISOR_RESTAURANT_DATA_PATH
+    data_type = RestaurantReviewDataType.TRIPADVISOR_REVIEW
+    tripadvisor_restaurant_data_analyzer = RestaurantReviewDataAnalyzer(path, data_type)
+
     tripadvisor_restaurant_data = tripadvisor_restaurant_data_analyzer.get_restaurant_review_data_extractors()
 
     for tripadvisor_restaurant_data_extractor in tripadvisor_restaurant_data.values():
@@ -41,6 +92,8 @@ def print_author_level_infos(tripadvisor_restaurant_data_analyzer):
         print("Number of nans in author_level:", df_author_level_with_rating['author_level'].isnull().sum())
 
 
-restaurantReviewDataAnalyzer = RestaurantReviewDataAnalyzer()
-print_infos_of_tripadvisor_restaurant_data_of_all_restaurants(restaurantReviewDataAnalyzer)
-print_author_level_infos(restaurantReviewDataAnalyzer)
+#print_infos_of_tripadvisor_restaurant_data_of_all_restaurants()
+#test_google_review_data_type()
+#print_author_level_infos()
+#test_google_review_data_overall_rating_vs_overall_rating_computed()
+#test_tripadvisor_review_data_overall_rating_vs_overall_rating_computed()
