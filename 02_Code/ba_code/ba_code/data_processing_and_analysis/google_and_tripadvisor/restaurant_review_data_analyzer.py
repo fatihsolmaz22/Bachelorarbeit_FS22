@@ -19,15 +19,16 @@ class RestaurantReviewDataAnalyzer:
 
     def __init__(self, restaurant_review_data_path, restaurant_review_data_type):
         self.__restaurant_review_data_extractors_dict = dict()
-        self.__initialize(restaurant_review_data_path, restaurant_review_data_type)
+        self.__restaurant_review_data_type = restaurant_review_data_type
+        self.__initialize(restaurant_review_data_path)
 
-    def __initialize(self, restaurant_review_data_path, restaurant_review_data_type):
+    def __initialize(self, restaurant_review_data_path):
         restaurant_files = FileUtil.get_files_in_dir(restaurant_review_data_path)
 
         for restaurant_file in restaurant_files:
             restaurant_review_data_extractor = RestaurantReviewDataExtractor()
             restaurant_review_data_extractor \
-                .load_restaurant_review_data(open(restaurant_file), restaurant_review_data_type)
+                .load_restaurant_review_data(open(restaurant_file), self.__restaurant_review_data_type)
             restaurant_name = restaurant_review_data_extractor.get_restaurant_name()
             self.__restaurant_review_data_extractors_dict[restaurant_name] = restaurant_review_data_extractor
 
@@ -56,9 +57,17 @@ class RestaurantReviewDataAnalyzer:
         self.__scatterplot_dataframe(df, x2, y)
 
     def __scatterplot_dataframe(self, df, x, y):
-        vertical_line_positions = np.arange(1.25, 5, 0.5)
+        vertical_line_positions = np.arange(1.25, 5, 0.5) \
+            if self.__restaurant_review_data_type == RestaurantReviewDataType.TRIPADVISOR_REVIEW \
+            else np.arange(1.05, 5, 0.1)
+
         min_overall_rating_computed = df[x].to_numpy().min()
-        vertical_line_positions = vertical_line_positions[vertical_line_positions > min_overall_rating_computed]
+        max_overall_rating_computed = df[x].to_numpy().max()
+
+        vertical_line_positions = vertical_line_positions[
+            np.logical_and(vertical_line_positions > min_overall_rating_computed,
+                           vertical_line_positions < max_overall_rating_computed)
+            ]
 
         plt.figure()
         sns.set_style("darkgrid")
@@ -250,9 +259,22 @@ class RestaurantReviewDataAnalyzer:
 """
 set restaurant_review_data_path, paths are defined in path.py 
 set restaurant_review_data_type, RestaurantReviewDataType.TRIPADVISOR_REVIEW or RestaurantReviewDataType.GOOGLE_REVIEW
-"""
+
+Option 1:
+path = TRIPADVISOR_RESTAURANT_ONLY_RATING_DATASET_PATH
+data_type = RestaurantReviewDataType.TRIPADVISOR_REVIEW
+
+Option 2:
 path = TRIPADVISOR_RESTAURANT_DATA_PATH
 data_type = RestaurantReviewDataType.TRIPADVISOR_REVIEW
+
+Option 3:
+path = TRIPADVISOR_RESTAURANT_GOOGLE_DATASET_PATH
+data_type = RestaurantReviewDataType.GOOGLE_REVIEW
+"""
+
+path = TRIPADVISOR_RESTAURANT_GOOGLE_DATASET_PATH
+data_type = RestaurantReviewDataType.GOOGLE_REVIEW
 restaurantReviewDataAnalyzer = RestaurantReviewDataAnalyzer(path, data_type)
 # restaurantReviewDataAnalyzer.plot_overall_rating_development_since_beginning('BUTCHER_USTER', 'Q')
 # restaurantReviewDataAnalyzer.plot_average_rating_per_time_period('BUTCHER_USTER', 'Q')
