@@ -1,7 +1,8 @@
 from ba_code.data_processing_and_analysis.google_and_tripadvisor \
     .restaurant_review_data_extractor import RestaurantReviewDataExtractor
 from ba_code.utils.file_util import FileUtil
-from ba_code.path import TRIPADVISOR_RESTAURANT_DATA_PATH, TRIPADVISOR_RESTAURANT_ONLY_RATING_DATASET_PATH
+from ba_code.path import TRIPADVISOR_RESTAURANT_DATA_PATH, TRIPADVISOR_RESTAURANT_ONLY_RATING_DATASET_PATH, \
+    TRIPADVISOR_RESTAURANT_GOOGLE_DATASET_PATH
 from ba_code.data_processing_and_analysis.google_and_tripadvisor.restaurant_review_data_uri import \
     RestaurantReviewDataType
 import matplotlib.pyplot as plt
@@ -16,17 +17,17 @@ fontP.set_size('x-small')
 
 class RestaurantReviewDataAnalyzer:
 
-    def __init__(self):
+    def __init__(self, restaurant_review_data_path, restaurant_review_data_type):
         self.__restaurant_review_data_extractors_dict = dict()
-        self.__initialize()
+        self.__initialize(restaurant_review_data_path, restaurant_review_data_type)
 
-    def __initialize(self):
-        restaurant_files = FileUtil.get_files_in_dir(TRIPADVISOR_RESTAURANT_ONLY_RATING_DATASET_PATH)
+    def __initialize(self, restaurant_review_data_path, restaurant_review_data_type):
+        restaurant_files = FileUtil.get_files_in_dir(restaurant_review_data_path)
 
         for restaurant_file in restaurant_files:
             restaurant_review_data_extractor = RestaurantReviewDataExtractor()
             restaurant_review_data_extractor \
-                .load_restaurant_review_data(open(restaurant_file), RestaurantReviewDataType.TRIPADVISOR_REVIEW)
+                .load_restaurant_review_data(open(restaurant_file), restaurant_review_data_type)
             restaurant_name = restaurant_review_data_extractor.get_restaurant_name()
             self.__restaurant_review_data_extractors_dict[restaurant_name] = restaurant_review_data_extractor
 
@@ -94,7 +95,7 @@ class RestaurantReviewDataAnalyzer:
         plt.axhline(y=overall_rating, color='g', linestyle='dashed', label='overall_rating')
         plt.axhline(y=overall_rating + 0.25, color='r', linestyle='dashed', label='upper_bound')
         plt.ylim([1, 5])
-        #plt.ylim([y_min - 0.05, y_max + 0.05])
+        # plt.ylim([y_min - 0.05, y_max + 0.05])
         plt.title(title)
         plt.xlabel(x_label)
         plt.ylabel(y_label)
@@ -245,6 +246,13 @@ class RestaurantReviewDataAnalyzer:
         return time_period_value
 
 
-restaurantReviewDataAnalyzer = RestaurantReviewDataAnalyzer()
+# set restaurant_review_data_path and restaurant_review_data_type
+"""
+set restaurant_review_data_path, paths are defined in path.py 
+set restaurant_review_data_type, RestaurantReviewDataType.TRIPADVISOR_REVIEW or RestaurantReviewDataType.GOOGLE_REVIEW
+"""
+path = TRIPADVISOR_RESTAURANT_DATA_PATH
+data_type = RestaurantReviewDataType.TRIPADVISOR_REVIEW
+restaurantReviewDataAnalyzer = RestaurantReviewDataAnalyzer(path, data_type)
 # restaurantReviewDataAnalyzer.plot_overall_rating_development_since_beginning('BUTCHER_USTER', 'Q')
 # restaurantReviewDataAnalyzer.plot_average_rating_per_time_period('BUTCHER_USTER', 'Q')

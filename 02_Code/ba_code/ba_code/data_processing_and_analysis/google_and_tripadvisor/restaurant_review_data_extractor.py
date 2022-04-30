@@ -16,7 +16,13 @@ class RestaurantReviewDataExtractor:
 
         restaurant_name = restaurant_review_data_json['restaurant_name']
         overall_rating = restaurant_review_data_json['overall_rating']
-        reviews_count = restaurant_review_data_json['reviews_count']
+        reviews_count = None
+
+        # TODO: remove try/except as soon as the reviews_count is added.
+        try:
+            reviews_count = restaurant_review_data_json['reviews_count']
+        except KeyError:
+            pass
 
         # extract author and review data
         all_reviews = restaurant_review_data_json['all_reviews']
