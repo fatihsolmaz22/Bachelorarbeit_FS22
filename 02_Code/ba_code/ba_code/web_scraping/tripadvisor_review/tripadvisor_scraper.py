@@ -125,16 +125,16 @@ def get_distr_as_dict_from_list(list_of_distr):
 
 from ba_code.web_scraping.tripadvisor_review.tripadvisor_scraper_rest_list import get_list_of_rest
 def main():
-    # list_of_rest = get_list_of_rest()
-    for restaurant in RestaurantURLs:
+    list_of_rest = get_list_of_rest()
+    for restaurant in list_of_rest:
         all_reviews_data = []
 
-        main_page_element = ScrapingTool.get_main_page_element(restaurant.value)
+        main_page_element = ScrapingTool.get_main_page_element(restaurant) # .value
 
         # TODO: get overall rating of restaurant
         overall_rating = get_overall_rating_of_restaurant(main_page_element)
 
-        print("\n\nRestaurant link:", restaurant.value)
+        print("\n\nRestaurant link:", restaurant) # .value
         print(overall_rating)
 
         # TODO: get review count of restaurant
@@ -345,7 +345,7 @@ def main():
             has_next_page = go_next_page(main_page_element)
             page_count += 1
 
-        restaurant_info_json = {RestaurantInfo.RESTAURANT_NAME:restaurant.name,#split("Reviews-")[1].replace(".html", ""),
+        restaurant_info_json = {RestaurantInfo.RESTAURANT_NAME:restaurant.split("Reviews-")[1].replace(".html", ""),#.name,
                                 RestaurantInfo.OVERALL_RATING:overall_rating,
                                 RestaurantInfo.ALL_REVIEWS:all_reviews_data,
                                 RestaurantInfo.REVIEWS_COUNT:reviews_count}
@@ -353,7 +353,7 @@ def main():
         jsonString = json.dumps(restaurant_info_json)
         with open("{}/tripadvisor_review_data_{}.json".format(
                 TRIPADVISOR_RESTAURANT_DATA_PATH,
-                restaurant.name), "w+") as json_file:#split("Reviews-")[1].replace(".html", "")), "w+") as json_file:
+                restaurant.split("Reviews-")[1].replace(".html", "")), "w+") as json_file:#name), "w+") as json_file:
             json_file.write(jsonString)
 
 if __name__ == "__main__":
