@@ -10,8 +10,11 @@ class RestaurantReviewDataExtractor:
 
     def __init__(self):
         self.__restaurant_review_data = None
+        self.__restaurant_review_data_type = None
 
     def load_restaurant_review_data(self, file, restaurant_review_data_type):
+        self.__restaurant_review_data_type = restaurant_review_data_type
+
         restaurant_review_data_json = json.load(file)
 
         restaurant_name = restaurant_review_data_json['restaurant_name']
@@ -120,6 +123,14 @@ class RestaurantReviewDataExtractor:
         return review_data['rating'].mean()
 
     def get_overall_rating_computed_and_rounded(self):
+        if self.__restaurant_review_data_type == RestaurantReviewDataType.TRIPADVISOR_REVIEW:
+            return self.__get_overall_rating_computed_and_rounded_tripadvisor()
+        elif self.__restaurant_review_data_type == RestaurantReviewDataType.GOOGLE_REVIEW:
+            return self.__get_overall_rating_computed_and_rounded_google()
+
+        return None
+
+    def __get_overall_rating_computed_and_rounded_tripadvisor(self):
         overall_rating_computed = self.get_overall_rating_computed()
         overall_rating_computed_times_two = overall_rating_computed * 2
 
@@ -131,6 +142,16 @@ class RestaurantReviewDataExtractor:
             overall_rating_computed_and_rounded = np.floor(overall_rating_computed_times_two) / 2
 
         return overall_rating_computed_and_rounded
+
+    def __get_overall_rating_computed_and_rounded_google(self):
+        overall_rating_computed = self.get_overall_rating_computed()
+
+        precision = 1
+
+        if np.abs(overall_rating_computed*10 - int(overall_rating_computed*10)) >= 0.5:
+            return np.true_divide(np.ceil(overall_rating_computed * 10**precision), 10**precision)
+        else:
+            return np.true_divide(np.floor(overall_rating_computed * 10**precision), 10**precision)
 
     def get_review_data_dataframe(self):
         return self.__restaurant_review_data['df_review_data']
