@@ -72,43 +72,33 @@ class DataAnalyzer:
             restaurant_review_data_extractor \
                 .get_overall_rating_development_over_time_period_dataframe(time_period, rating_date_offset_in_months)
 
+        # define variables for plot
         title = "Development of overall rating vs average turnover\n over " \
                 + self.__get_time_period_value(time_period) + "s: " + restaurant.value
-        x1 = 'd'
-        y1 = 'average_turnover_per_time_period'
-        x2 = 'date'
-        y2 = 'overall_rating_development'
+        labels_for_legend = ['average_turnover_per_' + self.__get_time_period_value(time_period),
+                             'overall_rating_development']
+        # define variables for the first plot (df1)
+        parameters_for_the_first_plot = {
+            'x1': 'd',
+            'y1': 'average_turnover_per_time_period',
+            'df1': df_average_turnover_per_time_period,
+            'y1_label': 'turnover in CHF',
+            'color1': 'red'
+        }
 
-        # plot average turnover per time period
-        color = 'red'
-        fig, ax1 = plt.subplots()
-        ax1.set_xlabel(x2)
-        ax1.set_ylabel('turnover in CHF', color=color)
-        # ax1.set_ylim(bottom=0, top=df_average_turnover_per_time_period[y1].to_numpy().max())
-        ax1.tick_params(axis='y', labelcolor=color)
-        ax1.plot(df_average_turnover_per_time_period[x1],
-                 df_average_turnover_per_time_period[y1],
-                 color=color,
-                 marker='o')
+        # define variables for second plot (df2)
+        parameters_for_the_second_plot = {
+            'x2': 'date',
+            'y2': 'overall_rating_development',
+            'df2': df_overall_rating_development_over_time_period,
+            'y2_label': 'overall rating',
+            'color2': 'blue'
+        }
 
-        # plot overall rating development for a restaurant in the same plot
-        color = 'blue'
-        ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
-        ax2.set_ylabel('overall rating', color=color)
-        ax2.set_ylim(1, 5)
-        ax2.tick_params(axis='y', labelcolor=color)
-        ax2.plot(df_overall_rating_development_over_time_period[x2],
-                 df_overall_rating_development_over_time_period[y2],
-                 color=color,
-                 marker='o')
-
-        # fig.tight_layout()  # otherwise the right y-label is slightly clipped
-        plt.title(title)
-        plt.setp(ax1.get_xticklabels(), rotation=30, horizontalalignment='right')
-        labels = ['average_turnover_per_' + self.__get_time_period_value(time_period), 'overall_rating_development']
-        fig.legend(labels, bbox_to_anchor=(1, 1), bbox_transform=ax1.transAxes)
-        # plt.savefig('haha.png',dpi=600)
-        plt.show()
+        self.__plot_turnover_and_rating_in_one_figure(title=title,
+                                                      labels_for_legend=labels_for_legend,
+                                                      parameters_for_the_first_plot=parameters_for_the_first_plot,
+                                                      parameters_for_the_second_plot=parameters_for_the_second_plot)
 
     def plot_average_rating_vs_average_turnover_per_time_period_for_all_restaurants(self,
                                                                                     restaurant_review_data_type,
@@ -134,44 +124,80 @@ class DataAnalyzer:
             restaurant_review_data_extractor \
                 .get_average_rating_per_time_period_dataframe(time_period, rating_date_offset_in_months)
 
+        # define variables for plot
         title = "Average rating vs average turnover per " + self.__get_time_period_value(time_period) \
                 + ":\n" + restaurant.value
-        x1 = 'd'
-        y1 = 'average_turnover_per_time_period'
-        x2 = 'date'
-        y2 = 'average_rating_per_time_period'
+        labels_for_legend = ['average_turnover_per_' + self.__get_time_period_value(time_period),
+                             'average_rating_per_' + self.__get_time_period_value(time_period)]
+        # define variables for the first plot (df1)
+        parameters_for_the_first_plot = {
+            'x1': 'd',
+            'y1': 'average_turnover_per_time_period',
+            'df1': df_average_turnover_per_time_period,
+            'y1_label': 'turnover in CHF',
+            'color1': 'red'
+        }
 
-        # plot average turnover per time period
-        color = 'red'
+        # define variables for second plot (df2)
+        parameters_for_the_second_plot = {
+            'x2': 'date',
+            'y2': 'average_rating_per_time_period',
+            'df2': df_average_rating_per_time_period,
+            'y2_label': 'overall rating',
+            'color2': 'blue'
+        }
+
+        self.__plot_turnover_and_rating_in_one_figure(title=title,
+                                                      labels_for_legend=labels_for_legend,
+                                                      parameters_for_the_first_plot=parameters_for_the_first_plot,
+                                                      parameters_for_the_second_plot=parameters_for_the_second_plot)
+
+    def __plot_turnover_and_rating_in_one_figure(self, title,
+                                                 labels_for_legend,
+                                                 parameters_for_the_first_plot,
+                                                 parameters_for_the_second_plot):
+        # parameters for the first plot
+        x1 = parameters_for_the_first_plot['x1']
+        y1 = parameters_for_the_first_plot['y1']
+        df1 = parameters_for_the_first_plot['df1']
+        y1_label = parameters_for_the_first_plot['y1_label']
+        color1 = parameters_for_the_first_plot['color1']
+
+        # parameters for the second plot
+        x2 = parameters_for_the_second_plot['x2']
+        y2 = parameters_for_the_second_plot['y2']
+        df2 = parameters_for_the_second_plot['df2']
+        y2_label = parameters_for_the_second_plot['y2_label']
+        color2 = parameters_for_the_second_plot['color2']
+
+        # plot df1
         fig, ax1 = plt.subplots()
         ax1.set_xlabel(x2)
-        ax1.set_ylabel('turnover in CHF', color=color)
+        ax1.set_ylabel(y1_label, color=color1)
         # ax1.set_ylim(bottom=0, top=df_average_turnover_per_time_period[y1].to_numpy().max())
-        ax1.tick_params(axis='y', labelcolor=color)
-        ax1.plot(df_average_turnover_per_time_period[x1],
-                 df_average_turnover_per_time_period[y1],
-                 color=color,
+        ax1.tick_params(axis='y', labelcolor=color1)
+        ax1.plot(df1[x1],
+                 df1[y1],
+                 color=color1,
                  marker='o')
 
-        # plot average rating for a restaurant in the same plot
-        color = 'blue'
+        # plot df2 in the same plot
         ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
-        ax2.set_ylabel('overall rating', color=color)
+        ax2.set_ylabel(y2_label, color=color2)
         ax2.set_ylim(1, 5)
-        ax2.tick_params(axis='y', labelcolor=color)
-        ax2.plot(df_average_rating_per_time_period[x2],
-                 df_average_rating_per_time_period[y2],
-                 color=color,
+        ax2.tick_params(axis='y', labelcolor=color2)
+        ax2.plot(df2[x2],
+                 df2[y2],
+                 color=color2,
                  marker='o')
 
         # fig.tight_layout()  # otherwise the right y-label is slightly clipped
         plt.title(title)
         plt.setp(ax1.get_xticklabels(), rotation=30, horizontalalignment='right')
-        labels = ['average_turnover_per_' + self.__get_time_period_value(time_period),
-                  'average_rating_per_' + self.__get_time_period_value(time_period)]
-        fig.legend(labels, bbox_to_anchor=(1, 1), bbox_transform=ax1.transAxes)
+        fig.legend(labels_for_legend, bbox_to_anchor=(1, 1), bbox_transform=ax1.transAxes)
         # plt.savefig('haha.png',dpi=600)
         plt.show()
+
 
     def compute_correlation_between_average_turnover_and_overall_rating_development(self, restaurant,
                                                                                     restaurant_review_data_type,
