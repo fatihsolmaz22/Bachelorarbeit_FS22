@@ -255,26 +255,24 @@ class RestaurantReviewDataAnalyzer:
         return time_period_value
 
 
-# set restaurant_review_data_path and restaurant_review_data_type
+# code template to create a restaurantReviewDataAnalyzer which uses Tripadvisor review data from a given path
 """
-set restaurant_review_data_path, paths are defined in path.py 
-set restaurant_review_data_type, RestaurantReviewDataType.TRIPADVISOR_REVIEW or RestaurantReviewDataType.GOOGLE_REVIEW
-
-Option 1:
-path = TRIPADVISOR_RESTAURANT_ONLY_RATING_DATASET_PATH
-data_type = RestaurantReviewDataType.TRIPADVISOR_REVIEW
-
-Option 2:
 path = TRIPADVISOR_RESTAURANT_DATA_PATH
 data_type = RestaurantReviewDataType.TRIPADVISOR_REVIEW
-
-Option 3:
-path = TRIPADVISOR_RESTAURANT_GOOGLE_DATASET_PATH
-data_type = RestaurantReviewDataType.GOOGLE_REVIEW
+restaurantReviewDataAnalyzer = RestaurantReviewDataAnalyzer(path, data_type)
 """
 
+# code template to create a restaurantReviewDataAnalyzer which uses only ratings from
+# Tripadvisor review data from a given path
+"""
+path = TRIPADVISOR_RESTAURANT_ONLY_RATING_DATASET_PATH
+data_type = RestaurantReviewDataType.TRIPADVISOR_REVIEW
+restaurantReviewDataAnalyzer = RestaurantReviewDataAnalyzer(path, data_type)
+"""
+
+# code template to create a restaurantReviewDataAnalyzer which uses Tripadvisor review data from a given path
+"""
 path = TRIPADVISOR_RESTAURANT_GOOGLE_DATASET_PATH
 data_type = RestaurantReviewDataType.GOOGLE_REVIEW
 restaurantReviewDataAnalyzer = RestaurantReviewDataAnalyzer(path, data_type)
-# restaurantReviewDataAnalyzer.plot_overall_rating_development_since_beginning('BUTCHER_USTER', 'Q')
-# restaurantReviewDataAnalyzer.plot_average_rating_per_time_period('BUTCHER_USTER', 'Q')
+"""
