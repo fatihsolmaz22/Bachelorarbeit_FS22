@@ -1,12 +1,12 @@
 from enum import Enum
 import os
-from ba_code.path import TRIPADVISOR_RESTAURANT_DATA_PATH, TRIPADVISOR_RESTAURANT_GOOGLE_DATASET_PATH, \
-    TRIPADVISOR_RESTAURANT_ONLY_RATING_DATASET_PATH
+from ba_code.path import TRIPADVISOR_RESTAURANT_DATA_PATH, TRIPADVISOR_RESTAURANT_GOOGLE_DATASET_PATH
 
 path_tripadvisor = TRIPADVISOR_RESTAURANT_DATA_PATH
 path_google = TRIPADVISOR_RESTAURANT_GOOGLE_DATASET_PATH
 
 
+# Tripadvisor restaurant review data of restaurants where we have the turnover infos etc. from Prognolite
 class TripadvisorRestaurantReviewDataUri(Enum):
     BUTCHER_USTER = os.path.join(path_tripadvisor, 'tripadvisor_review_data_BUTCHER_USTER.json')
     NEGISHI_METALLI = os.path.join(path_tripadvisor, 'tripadvisor_review_data_NEGISHI_METALLI.json')
@@ -25,6 +25,7 @@ class TripadvisorRestaurantReviewDataUri(Enum):
     BUTCHER_ZUERICH_WEST = os.path.join(path_tripadvisor, 'tripadvisor_review_data_BUTCHER_ZUERICH_WEST.json')
 
 
+# Google restaurant review data of restaurants where we have the turnover infos etc. from Prognolite
 class GoogleRestaurantReviewDataUri(Enum):
     BUTCHER_USTER = os.path.join(path_google, 'google_review_data_BUTCHER_USTER.json')
     NEGISHI_METALLI = os.path.join(path_google, 'google_review_data_NEGISHI_METALLI.json')
