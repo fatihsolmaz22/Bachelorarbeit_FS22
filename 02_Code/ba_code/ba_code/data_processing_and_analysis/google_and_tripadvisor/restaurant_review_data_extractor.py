@@ -250,10 +250,14 @@ class RestaurantReviewDataExtractor:
             'rating': df_review_data['rating'].to_numpy()
         })
 
-        df_average_rating_per_time_period = df_review_data_with_offset_in_months \
-            .sort_values(by='date', ascending=True) \
-            .groupby(pd.Grouper(key='date', axis=0, freq=time_period)).mean()['rating'] \
-            .to_frame().rename(columns={"rating": "average_rating_per_time_period"}).reset_index()
+        df_average_rating_per_time_period = None
+        if time_period == 'd' or time_period == 'm' or time_period == 'Q' or time_period == 'Y':
+            df_average_rating_per_time_period = df_review_data_with_offset_in_months \
+                .sort_values(by='date', ascending=True) \
+                .groupby(pd.Grouper(key='date', axis=0, freq=time_period)).mean()['rating'] \
+                .to_frame().rename(columns={"rating": "average_rating_per_time_period"}).reset_index()
+        else:
+            self.__print_invalid_time_period_message()
 
         return df_average_rating_per_time_period
 
