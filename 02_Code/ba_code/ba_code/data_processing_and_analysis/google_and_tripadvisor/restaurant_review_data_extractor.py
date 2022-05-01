@@ -258,6 +258,7 @@ class RestaurantReviewDataExtractor:
                 .to_frame().rename(columns={"rating": "average_rating_per_time_period"}).reset_index()
         else:
             self.__print_invalid_time_period_message()
+            return
 
         return df_average_rating_per_time_period
 
