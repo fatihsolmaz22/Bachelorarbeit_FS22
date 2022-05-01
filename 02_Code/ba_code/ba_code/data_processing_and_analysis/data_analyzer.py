@@ -337,7 +337,10 @@ class DataAnalyzer:
         return x_label
 
 
+# code template to create a dataAnalyzer
+"""
 dataAnalyzer = DataAnalyzer()
+"""
 
 # code templates to analyse tripadvisor review data with prognolite restaurant data
 """
