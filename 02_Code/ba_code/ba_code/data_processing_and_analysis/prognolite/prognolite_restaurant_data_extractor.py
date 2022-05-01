@@ -102,4 +102,7 @@ class PrognoliteRestaurantDataExtractor:
         return df_date_turnover
 
 
+# code template to create a prognoliteRestaurantDataExtractor
+"""
 prognoliteRestaurantDataExtractor = PrognoliteRestaurantDataExtractor()
+"""
