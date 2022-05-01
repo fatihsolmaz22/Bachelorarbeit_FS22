@@ -282,10 +282,16 @@ class RestaurantReviewDataExtractor:
         return df_author_level_with_rating
 
 
-restaurantReviewDataExtractor = RestaurantReviewDataExtractor()
+# code template to create a restaurantReviewDataExtractor which loads a Tripadvisor restaurant review data
 """
+restaurantReviewDataExtractor = RestaurantReviewDataExtractor()
 restaurantReviewDataExtractor.load_restaurant_review_data(open(TripadvisorRestaurantReviewDataUri.BUTCHER_USTER.value),
                                                           RestaurantReviewDataType.TRIPADVISOR_REVIEW)
+"""
+
+# code template to create a restaurantReviewDataExtractor which loads a Google restaurant review data
+"""
+restaurantReviewDataExtractor = RestaurantReviewDataExtractor()                       
 restaurantReviewDataExtractor.load_restaurant_review_data(open(GoogleRestaurantReviewDataUri.BUTCHER_USTER.value),
                                                           RestaurantReviewDataType.GOOGLE_REVIEW)
 """
