@@ -130,11 +130,11 @@ class RestaurantReviewDataAnalyzer:
 
         self.__plot_dataframe(df_average_rating_per_time_period, x, y, title, x_label, y_label)
 
-    def plot_overall_rating_development_since_beginning_for_all_restaurants(self, time_period='m'):
+    def plot_overall_rating_development_for_all_restaurants(self, time_period='m'):
         for restaurant_name in self.__restaurant_review_data_extractors_dict.keys():
-            self.plot_overall_rating_development_since_beginning(restaurant_name, time_period)
+            self.plot_overall_rating_development(restaurant_name, time_period)
 
-    def plot_overall_rating_development_since_beginning(self, restaurant_name, time_period='m'):
+    def plot_overall_rating_development(self, restaurant_name, time_period='m'):
         restaurant_review_data_extractor = self.__restaurant_review_data_extractors_dict[restaurant_name]
 
         df_overall_rating_development_over_time_period = \
@@ -172,29 +172,33 @@ class RestaurantReviewDataAnalyzer:
             'overall_rating_computed': overall_ratings_computed,
         })
 
+        title = 'Boxplot of overall_rating_computed by overall_rating'
+        x = 'overall_rating'
+        y = 'overall_rating_computed'
+
         plt.figure()
         sns.boxplot(data=df,
-                    x='overall_rating',
-                    y="overall_rating_computed",
+                    x=x,
+                    y=y,
                     width=0.5)
 
         sns.stripplot(data=df,
-                      x='overall_rating',
-                      y="overall_rating_computed",
+                      x=x,
+                      y=y,
                       jitter=True,
                       marker='o',
                       alpha=0.5,
                       color='black')
 
-        plt.title("Boxplot of overall_rating_computed by overall_rating")
+        plt.title(title)
         plt.legend(loc='lower right', prop=fontP)
         plt.show()
 
-    def boxplot_of_rating_by_author_level_for_all_restaurants(self):
+    def boxplot_rating_by_author_level_for_all_restaurants(self):
         for restaurant_name in self.__restaurant_review_data_extractors_dict.keys():
-            self.boxplot_of_rating_by_author_level_for_restaurant(restaurant_name)
+            self.boxplot_rating_by_author_level_for_restaurant(restaurant_name)
 
-    def boxplot_of_rating_by_author_level_for_restaurant(self, restaurant_name):
+    def boxplot_rating_by_author_level_for_restaurant(self, restaurant_name):
         restaurant_review_data_extractor = self.__restaurant_review_data_extractors_dict[restaurant_name]
         df_author_level_with_rating = restaurant_review_data_extractor.get_author_level_with_rating_dataframe()
 
@@ -205,15 +209,19 @@ class RestaurantReviewDataAnalyzer:
             df_author_level_with_rating = df_author_level_with_rating[
                 ~df_author_level_with_rating['author_level'].isnull()]
 
+        title = "Boxplot of rating by author level for " + restaurant_name
+        x = 'author_level'
+        y = 'rating'
+
         plt.figure()
         sns.boxplot(data=df_author_level_with_rating,
-                    x="author_level",
-                    y="rating",
+                    x=x,
+                    y=y,
                     width=0.5)
 
         sns.stripplot(data=df_author_level_with_rating,
-                      x="author_level",
-                      y="rating",
+                      x=x,
+                      y=y,
                       jitter=True,
                       marker='o',
                       alpha=0.5,
@@ -222,7 +230,7 @@ class RestaurantReviewDataAnalyzer:
         plt.axhline(y=overall_rating, color='g', linestyle='dashed', label='overall_rating')
         plt.axhline(y=overall_rating_computed, color='r', linestyle='dashed', label='overall_rating_computed')
 
-        plt.title("Boxplot of rating by author level for " + restaurant_name)
+        plt.title(title)
         plt.legend(loc='lower right', prop=fontP)
         plt.show()
 
@@ -236,7 +244,7 @@ class RestaurantReviewDataAnalyzer:
 
         return restaurant_review_data_extractors
 
-    def get_restaurant_review_data_extractors(self):
+    def get_restaurant_review_data_extractors_dict(self):
         return self.__restaurant_review_data_extractors_dict
 
     def get_restaurant_names(self):
