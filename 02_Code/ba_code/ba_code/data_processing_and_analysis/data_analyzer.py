@@ -198,7 +198,6 @@ class DataAnalyzer:
         # plt.savefig('haha.png',dpi=600)
         plt.show()
 
-
     def compute_correlation_between_average_turnover_and_overall_rating_development(self, restaurant,
                                                                                     restaurant_review_data_type,
                                                                                     time_period='m',
@@ -224,39 +223,21 @@ class DataAnalyzer:
         df_overall_rating_development_over_time_period['date'] = pd.to_datetime(
             df_overall_rating_development_over_time_period['date'].dt.date)
 
-        # print(df_average_turnover_and_average_rating_per_time_period)
-
-        # df_average_turnover_per_time_period join df_average_rating_per_time_period
+        # join df_average_turnover_per_time_period with df_overall_rating_development_over_time_period
         df_average_turnover_and_overall_rating_development_per_time_period = \
-            pd.merge(left=df_average_turnover_per_time_period, right=df_overall_rating_development_over_time_period,
-                     on='date')
+            self.__join_two_dataframes_on_date(df1=df_average_turnover_per_time_period,
+                                               df2=df_overall_rating_development_over_time_period)
 
-        # print(df_average_turnover_and_overall_rating_development_per_time_period)
-
-        # dropping rows containing NaN
+        # filter df_average_turnover_per_time_period before corona
         df_average_turnover_and_overall_rating_development_per_time_period = \
-            df_average_turnover_and_overall_rating_development_per_time_period.dropna().reset_index(drop=True)
-
-        # print(df_average_turnover_and_overall_rating_development_per_time_period)
-
-        # filter df_average_turnover_and_average_rating_per_time_period before corona
-        corona_start_year = 2020
-
-        df_average_turnover_and_overall_rating_development_per_time_period = \
-            df_average_turnover_and_overall_rating_development_per_time_period[
-                df_average_turnover_and_overall_rating_development_per_time_period['date'].dt.year < corona_start_year
-                ]
+            self.__filter_entries_from_dataframe_before_corona(
+                df_average_turnover_and_overall_rating_development_per_time_period)
 
         print("df_average_turnover_and_overall_rating_development_per_time_period:\n")
         print(df_average_turnover_and_overall_rating_development_per_time_period)
 
-        # pearson correlation
-        print("\nPearson correlation:")
-        print(df_average_turnover_and_overall_rating_development_per_time_period.corr(method="pearson"))
-
-        # spearman correlation
-        print("\nSpearman correlation:")
-        print(df_average_turnover_and_overall_rating_development_per_time_period.corr(method="spearman"))
+        self.__compute_pearson_and_spearman_correlation(
+            df_average_turnover_and_overall_rating_development_per_time_period)
 
         # scatterplot average rating vs average turnover
         df = df_average_turnover_and_overall_rating_development_per_time_period
@@ -293,38 +274,19 @@ class DataAnalyzer:
             .get_average_rating_per_time_period_dataframe(time_period, rating_date_offset_in_months)
         df_average_rating_per_time_period['date'] = pd.to_datetime(df_average_rating_per_time_period['date'].dt.date)
 
-        # print(df_average_rating_per_time_period)
-
-        # df_average_turnover_per_time_period join df_average_rating_per_time_period
+        # join df_average_turnover_per_time_period with df_average_rating_per_time_period
         df_average_turnover_and_average_rating_per_time_period = \
-            pd.merge(left=df_average_turnover_per_time_period, right=df_average_rating_per_time_period, on='date')
+            self.__join_two_dataframes_on_date(df1=df_average_turnover_per_time_period,
+                                               df2=df_average_rating_per_time_period)
 
-        # print(df_average_turnover_and_average_rating_per_time_period)
-
-        # dropping rows containing NaN
+        # filter df_average_turnover_per_time_period before corona
         df_average_turnover_and_average_rating_per_time_period = \
-            df_average_turnover_and_average_rating_per_time_period.dropna().reset_index(drop=True)
-
-        # print(df_average_turnover_and_average_rating_per_time_period)
-
-        # filter df_average_turnover_and_average_rating_per_time_period before corona
-        corona_start_year = 2020
-
-        df_average_turnover_and_average_rating_per_time_period = \
-            df_average_turnover_and_average_rating_per_time_period[
-                df_average_turnover_and_average_rating_per_time_period['date'].dt.year < corona_start_year
-                ]
+            self.__filter_entries_from_dataframe_before_corona(df_average_turnover_and_average_rating_per_time_period)
 
         print("df_average_turnover_and_average_rating_per_time_period:\n")
         print(df_average_turnover_and_average_rating_per_time_period)
 
-        # pearson correlation
-        print("\nPearson correlation:")
-        print(df_average_turnover_and_average_rating_per_time_period.corr(method="pearson"))
-
-        # spearman correlation
-        print("\nSpearman correlation:")
-        print(df_average_turnover_and_average_rating_per_time_period.corr(method="spearman"))
+        self.__compute_pearson_and_spearman_correlation(df_average_turnover_and_average_rating_per_time_period)
 
         # scatterplot average rating vs average turnover
         df = df_average_turnover_and_average_rating_per_time_period
@@ -335,6 +297,33 @@ class DataAnalyzer:
                 + restaurant.value
 
         self.__scatterplot_dataframe(df, x, y, title)
+
+    def __join_two_dataframes_on_date(self, df1, df2):
+        # df1 join df2
+        df_merged = \
+            pd.merge(left=df1, right=df2, on='date')
+
+        # print(df_merged)
+
+        # dropping rows containing NaN
+        df_merged = \
+            df_merged.dropna().reset_index(drop=True)
+
+        # print(df_merged)
+        return df_merged
+
+    def __filter_entries_from_dataframe_before_corona(self, df):
+        corona_start_year = 2020
+        return df[df['date'].dt.year < corona_start_year]
+
+    def __compute_pearson_and_spearman_correlation(self, df):
+        # pearson correlation
+        print("\nPearson correlation:")
+        print(df.corr(method="pearson"))
+
+        # spearman correlation
+        print("\nSpearman correlation:")
+        print(df.corr(method="spearman"))
 
     def __get_restaurant_review_data_extractor(self, restaurant, restaurant_review_data_type):
         restaurant_review_data_extractor = None
