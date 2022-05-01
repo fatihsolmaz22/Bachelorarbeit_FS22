@@ -152,6 +152,46 @@ class DataAnalyzer:
                                                       parameters_for_the_first_plot=parameters_for_the_first_plot,
                                                       parameters_for_the_second_plot=parameters_for_the_second_plot)
 
+    def plot_average_rating_google_and_average_rating_tripadvisor_for_all_restaurants(self, time_period='m'):
+        for restaurant in Restaurant:
+            self.plot_average_rating_google_and_average_rating_tripadvisor(restaurant, time_period)
+
+    def plot_average_rating_google_and_average_rating_tripadvisor(self, restaurant, time_period='m'):
+        # get tripadvisor_restaurant_review_data_extractor for a restaurant
+        tripadvisor_restaurant_review_data_extractor = \
+            self.__get_restaurant_review_data_extractor(restaurant, RestaurantReviewDataType.TRIPADVISOR_REVIEW)
+
+        # get df_average_rating_per_time_period and change format of 'date' to join later
+        df_average_rating_per_time_period_tripadvisor = tripadvisor_restaurant_review_data_extractor \
+            .get_average_rating_per_time_period_dataframe(time_period)
+
+        # get google_restaurant_review_data_extractor for a restaurant
+        google_restaurant_review_data_extractor = \
+            self.__get_restaurant_review_data_extractor(restaurant, RestaurantReviewDataType.GOOGLE_REVIEW)
+
+        # get df_average_rating_per_time_period and change format of 'date' to join later
+        df_average_rating_per_time_period_google = google_restaurant_review_data_extractor \
+            .get_average_rating_per_time_period_dataframe(time_period)
+
+        title = "Average rating tripadvisor vs average rating google " + self.__get_time_period_value(time_period) \
+                + ":\n" + restaurant.value
+        x1 = 'date'
+        y1 = 'average_rating_per_time_period'
+        df1 = df_average_rating_per_time_period_tripadvisor
+        x2 = x1
+        y2 = y1
+        df2 = df_average_rating_per_time_period_google
+
+        plt.figure()
+        ax = df1.plot(x=x1, y=y1, marker='o')
+        df2.plot(ax=ax, x=x2, y=y2, marker='o')
+        plt.title(title)
+        plt.ylim([1, 5])
+        plt.xlabel(x1)
+        plt.ylabel(y1)
+        plt.legend()
+        plt.show()
+
     def __plot_turnover_and_rating_in_one_figure(self, title,
                                                  labels_for_legend,
                                                  parameters_for_the_first_plot,
@@ -293,6 +333,59 @@ class DataAnalyzer:
         x = 'average_rating_per_time_period'
         y = 'average_turnover_per_time_period'
         title = 'average rating vs average turnover per ' \
+                + self.__get_time_period_value(time_period) + ":\n" \
+                + restaurant.value
+
+        self.__scatterplot_dataframe(df, x, y, title)
+
+    def compute_correlation_between_average_rating_google_and_average_rating_tripadvisor(self, restaurant,
+                                                                                         time_period='m'):
+
+        # get tripadvisor_restaurant_review_data_extractor for a restaurant
+        tripadvisor_restaurant_review_data_extractor = \
+            self.__get_restaurant_review_data_extractor(restaurant, RestaurantReviewDataType.TRIPADVISOR_REVIEW)
+
+        # get df_average_rating_per_time_period and change format of 'date' to join later
+        df_average_rating_per_time_period_tripadvisor = tripadvisor_restaurant_review_data_extractor \
+            .get_average_rating_per_time_period_dataframe(time_period)
+        df_average_rating_per_time_period_tripadvisor['date'] = \
+            pd.to_datetime(df_average_rating_per_time_period_tripadvisor['date'].dt.date)
+
+        print(df_average_rating_per_time_period_tripadvisor)
+
+        # get google_restaurant_review_data_extractor for a restaurant
+        google_restaurant_review_data_extractor = \
+            self.__get_restaurant_review_data_extractor(restaurant, RestaurantReviewDataType.GOOGLE_REVIEW)
+
+        # get df_average_rating_per_time_period and change format of 'date' to join later
+        df_average_rating_per_time_period_google = google_restaurant_review_data_extractor \
+            .get_average_rating_per_time_period_dataframe(time_period)
+        df_average_rating_per_time_period_google['date'] = \
+            pd.to_datetime(df_average_rating_per_time_period_google['date'].dt.date)
+
+        print(df_average_rating_per_time_period_google)
+
+        # join df_average_turnover_per_time_period with df_average_rating_per_time_period
+        df_average_rating_tripadvisor_and_google_per_time_period = \
+            self.__join_two_dataframes_on_date(df1=df_average_rating_per_time_period_tripadvisor,
+                                               df2=df_average_rating_per_time_period_google)
+
+        # filter df_average_turnover_per_time_period before corona
+        df_average_rating_tripadvisor_and_google_per_time_period = \
+            self.__filter_entries_from_dataframe_before_corona(df_average_rating_tripadvisor_and_google_per_time_period)
+
+        print("df_average_rating_tripadvisor_and_google_per_time_period:\n")
+        print(df_average_rating_tripadvisor_and_google_per_time_period)
+
+        self.__compute_pearson_and_spearman_correlation(df_average_rating_tripadvisor_and_google_per_time_period)
+
+        # scatterplot average rating vs average turnover
+        df = df_average_rating_tripadvisor_and_google_per_time_period \
+            .rename(columns={"average_rating_per_time_period_x": "average_rating_per_time_period_tripadvisor",
+                             "average_rating_per_time_period_y": "average_rating_per_time_period_google"})
+        x = 'average_rating_per_time_period_tripadvisor'
+        y = 'average_rating_per_time_period_google'
+        title = 'average rating tripadvisor vs average rating google per ' \
                 + self.__get_time_period_value(time_period) + ":\n" \
                 + restaurant.value
 
