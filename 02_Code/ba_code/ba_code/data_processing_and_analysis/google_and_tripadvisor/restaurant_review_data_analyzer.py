@@ -176,19 +176,7 @@ class RestaurantReviewDataAnalyzer:
         x = 'overall_rating'
         y = 'overall_rating_computed'
 
-        plt.figure()
-        sns.boxplot(data=df,
-                    x=x,
-                    y=y,
-                    width=0.5)
-
-        sns.stripplot(data=df,
-                      x=x,
-                      y=y,
-                      jitter=True,
-                      marker='o',
-                      alpha=0.5,
-                      color='black')
+        self.__boxplot_dataframe(df, x, y)
 
         plt.title(title)
         plt.legend(loc='lower right', prop=fontP)
@@ -213,19 +201,7 @@ class RestaurantReviewDataAnalyzer:
         x = 'author_level'
         y = 'rating'
 
-        plt.figure()
-        sns.boxplot(data=df_author_level_with_rating,
-                    x=x,
-                    y=y,
-                    width=0.5)
-
-        sns.stripplot(data=df_author_level_with_rating,
-                      x=x,
-                      y=y,
-                      jitter=True,
-                      marker='o',
-                      alpha=0.5,
-                      color='black')
+        self.__boxplot_dataframe(df_author_level_with_rating, x, y)
 
         plt.axhline(y=overall_rating, color='g', linestyle='dashed', label='overall_rating')
         plt.axhline(y=overall_rating_computed, color='r', linestyle='dashed', label='overall_rating_computed')
@@ -233,6 +209,20 @@ class RestaurantReviewDataAnalyzer:
         plt.title(title)
         plt.legend(loc='lower right', prop=fontP)
         plt.show()
+
+    def __boxplot_dataframe(self, df, x, y):
+        plt.figure()
+        sns.boxplot(data=df,
+                    x=x,
+                    y=y,
+                    width=0.5)
+        sns.stripplot(data=df,
+                      x=x,
+                      y=y,
+                      jitter=True,
+                      marker='o',
+                      alpha=0.5,
+                      color='black')
 
     def get_restaurant_data_extractors_where_overall_rating_not_equal_computed_and_rounded_one(self):
         restaurant_review_data_extractors = []
