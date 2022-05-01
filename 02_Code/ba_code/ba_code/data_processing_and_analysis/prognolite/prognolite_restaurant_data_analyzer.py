@@ -90,9 +90,15 @@ class PrognoliteRestaurantDataAnalyzer:
         plt.grid()
         plt.show()
 
-
+# code template to create a prognoliteRestaurantDataExtractor
+"""
 prognoliteRestaurantDataAnalyzer = PrognoliteRestaurantDataAnalyzer()
-# prognoliteRestaurantDataAnalyzer.plot_turnover_per_time_period(Restaurant.BUTCHER_USTER, 'Q')
-# prognoliteRestaurantDataAnalyzer.plot_average_turnover_per_time_period(Restaurant.BUTCHER_USTER, 'm')
-# prognoliteRestaurantDataAnalyzer.plot_average_turnover_per_time_period_for_all_restaurants('Q')
+"""
+
+# code template to analyse a prognoliteRestaurantDataExtractor
+"""
+prognoliteRestaurantDataAnalyzer.plot_turnover_per_time_period(Restaurant.BUTCHER_USTER, 'Q')
+prognoliteRestaurantDataAnalyzer.plot_average_turnover_per_time_period(Restaurant.BUTCHER_USTER, 'm')
+prognoliteRestaurantDataAnalyzer.plot_average_turnover_per_time_period_for_all_restaurants('Q')
+"""
 
