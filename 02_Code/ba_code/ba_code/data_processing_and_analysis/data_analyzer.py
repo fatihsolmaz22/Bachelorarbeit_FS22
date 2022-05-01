@@ -6,7 +6,7 @@ from ba_code.data_processing_and_analysis.google_and_tripadvisor.restaurant_revi
 from ba_code.data_processing_and_analysis.prognolite.prognolite_restaurant_constants import \
     Restaurant
 from ba_code.data_processing_and_analysis.google_and_tripadvisor.restaurant_review_data_uri import \
-    TripadvisorRestaurantReviewDataUri, RestaurantReviewDataType
+    TripadvisorRestaurantReviewDataUri, GoogleRestaurantReviewDataUri, RestaurantReviewDataType
 import seaborn as sns
 import pandas as pd
 
@@ -14,35 +14,60 @@ import pandas as pd
 class DataAnalyzer:
 
     def __init__(self):
-        self.__prognoliteRestaurantDataExtractor = PrognoliteRestaurantDataExtractor()
-        self.__tripadvisor_restaurant_data_extractors = dict()
-        self.__initialize_tripadvisor_restaurant_data_extractors()
-        self.__restaurants = dict(zip(Restaurant, TripadvisorRestaurantReviewDataUri))
+        self.__prognolite_restaurant_data_extractor = PrognoliteRestaurantDataExtractor()
+        self.__tripadvisor_restaurant_review_data_extractors_dict = dict()
+        self.__google_restaurant_review_data_extractors_dict = dict()
+        self.__initialize_restaurant_review_data_extractors()
 
-    def __initialize_tripadvisor_restaurant_data_extractors(self):
-        for tripadvisor_restaurant_data_uri in TripadvisorRestaurantReviewDataUri:
-            tripadvisor_restaurant_data_extractor = RestaurantReviewDataExtractor()
-            tripadvisor_restaurant_data_extractor \
-                .load_restaurant_review_data(open(tripadvisor_restaurant_data_uri.value),
-                                             RestaurantReviewDataType.TRIPADVISOR_REVIEW)
-            self.__tripadvisor_restaurant_data_extractors[tripadvisor_restaurant_data_uri] = \
-                tripadvisor_restaurant_data_extractor
+    def __initialize_restaurant_review_data_extractors(self):
+        restaurant_review_data_uris = [TripadvisorRestaurantReviewDataUri, GoogleRestaurantReviewDataUri]
+
+        for uri in restaurant_review_data_uris:
+            restaurants_dict = dict(zip(Restaurant, uri))
+
+            for restaurant, restaurant_review_data_uri in restaurants_dict.items():
+                restaurant_review_data_extractor = RestaurantReviewDataExtractor()
+
+                # initialize self.__tripadvisor_restaurant_review_data_extractors_dict
+                if uri == TripadvisorRestaurantReviewDataUri:
+                    restaurant_review_data_extractor \
+                        .load_restaurant_review_data(open(restaurant_review_data_uri.value),
+                                                     RestaurantReviewDataType.TRIPADVISOR_REVIEW)
+
+                    self.__tripadvisor_restaurant_review_data_extractors_dict[restaurant] = \
+                        restaurant_review_data_extractor
+
+                # initialize self.__google_restaurant_review_data_extractors_dict
+                elif uri == GoogleRestaurantReviewDataUri:
+                    restaurant_review_data_extractor \
+                        .load_restaurant_review_data(open(restaurant_review_data_uri.value),
+                                                     RestaurantReviewDataType.GOOGLE_REVIEW)
+
+                    self.__google_restaurant_review_data_extractors_dict[restaurant] = \
+                        restaurant_review_data_extractor
 
     def plot_development_of_overall_rating_and_average_turnover_per_time_period_for_all_restaurants(self,
+                                                                                                    restaurant_review_data_type,
                                                                                                     time_period='m',
                                                                                                     rating_date_offset_in_months=0):
-        for restaurant in self.__restaurants:
-            self.plot_development_of_overall_rating_and_average_turnover_per_time_period(restaurant, time_period,
+        for restaurant in Restaurant:
+            self.plot_development_of_overall_rating_and_average_turnover_per_time_period(restaurant,
+                                                                                         restaurant_review_data_type,
+                                                                                         time_period,
                                                                                          rating_date_offset_in_months)
 
-    def plot_development_of_overall_rating_and_average_turnover_per_time_period(self, restaurant, time_period='m',
+    def plot_development_of_overall_rating_and_average_turnover_per_time_period(self, restaurant,
+                                                                                restaurant_review_data_type,
+                                                                                time_period='m',
                                                                                 rating_date_offset_in_months=0):
-        df_average_turnover_per_time_period = self.__prognoliteRestaurantDataExtractor \
+
+        df_average_turnover_per_time_period = self.__prognolite_restaurant_data_extractor \
             .get_average_turnover_per_time_period_dataframe(restaurant, time_period)
 
-        tripadvisor_restaurant_data_uri = self.__restaurants[restaurant]
+        restaurant_review_data_extractor = self.__get_restaurant_review_data_extractor(restaurant,
+                                                                                       restaurant_review_data_type)
         df_overall_rating_development_over_time_period = \
-            self.__tripadvisor_restaurant_data_extractors[tripadvisor_restaurant_data_uri] \
+            restaurant_review_data_extractor \
                 .get_overall_rating_development_over_time_period_dataframe(time_period, rating_date_offset_in_months)
 
         title = "Development of overall rating vs average turnover\n over " \
@@ -83,20 +108,28 @@ class DataAnalyzer:
         # plt.savefig('haha.png',dpi=600)
         plt.show()
 
-    def plot_average_rating_vs_average_turnover_per_time_period_for_all_restaurants(self, time_period='m',
+    def plot_average_rating_vs_average_turnover_per_time_period_for_all_restaurants(self,
+                                                                                    restaurant_review_data_type,
+                                                                                    time_period='m',
                                                                                     rating_date_offset_in_months=0):
-        for restaurant in self.__restaurants:
-            self.plot_average_rating_vs_average_turnover_per_time_period(restaurant, time_period,
+        for restaurant in Restaurant:
+            self.plot_average_rating_vs_average_turnover_per_time_period(restaurant,
+                                                                         restaurant_review_data_type,
+                                                                         time_period,
                                                                          rating_date_offset_in_months)
 
-    def plot_average_rating_vs_average_turnover_per_time_period(self, restaurant, time_period='m',
+    def plot_average_rating_vs_average_turnover_per_time_period(self, restaurant,
+                                                                restaurant_review_data_type,
+                                                                time_period='m',
                                                                 rating_date_offset_in_months=0):
-        df_average_turnover_per_time_period = self.__prognoliteRestaurantDataExtractor \
+
+        df_average_turnover_per_time_period = self.__prognolite_restaurant_data_extractor \
             .get_average_turnover_per_time_period_dataframe(restaurant, time_period)
 
-        tripadvisor_restaurant_data_uri = self.__restaurants[restaurant]
+        restaurant_review_data_extractor = self.__get_restaurant_review_data_extractor(restaurant,
+                                                                                       restaurant_review_data_type)
         df_average_rating_per_time_period = \
-            self.__tripadvisor_restaurant_data_extractors[tripadvisor_restaurant_data_uri] \
+            restaurant_review_data_extractor \
                 .get_average_rating_per_time_period_dataframe(time_period, rating_date_offset_in_months)
 
         title = "Average rating vs average turnover per " + self.__get_time_period_value(time_period) \
@@ -139,10 +172,11 @@ class DataAnalyzer:
         plt.show()
 
     def compute_correlation_between_average_turnover_and_overall_rating_development(self, restaurant,
+                                                                                    restaurant_review_data_type,
                                                                                     time_period='m',
                                                                                     rating_date_offset_in_months=0):
         # get df_average_turnover_per_time_period
-        df_average_turnover_per_time_period = self.__prognoliteRestaurantDataExtractor \
+        df_average_turnover_per_time_period = self.__prognolite_restaurant_data_extractor \
             .get_average_turnover_per_time_period_dataframe(restaurant, time_period)
 
         # rename column 'd' to 'date' of df_average_turnover_per_time_period and change format of 'date' to join later
@@ -153,12 +187,11 @@ class DataAnalyzer:
         # print(df_average_turnover_per_time_period)
 
         # get tripadvisor_restaurant_data_extractor with tripadvisor_restaurant_data_uri
-        tripadvisor_restaurant_data_uri = self.__restaurants[restaurant]
-        tripadvisor_restaurant_data_extractor = \
-            self.__tripadvisor_restaurant_data_extractors[tripadvisor_restaurant_data_uri]
+        restaurant_review_data_extractor = self.__get_restaurant_review_data_extractor(restaurant,
+                                                                                       restaurant_review_data_type)
 
         # get df_average_rating_per_time_period and change format of 'date' to join later
-        df_overall_rating_development_over_time_period = tripadvisor_restaurant_data_extractor \
+        df_overall_rating_development_over_time_period = restaurant_review_data_extractor \
             .get_overall_rating_development_over_time_period_dataframe(time_period, rating_date_offset_in_months)
         df_overall_rating_development_over_time_period['date'] = pd.to_datetime(
             df_overall_rating_development_over_time_period['date'].dt.date)
@@ -208,11 +241,12 @@ class DataAnalyzer:
         self.__scatterplot_dataframe(df, x, y, title)
 
     def compute_correlation_between_average_turnover_and_average_rating(self, restaurant,
+                                                                        restaurant_review_data_type,
                                                                         time_period='m',
                                                                         rating_date_offset_in_months=0):
         # get df_average_turnover_per_time_period
         df_average_turnover_per_time_period = \
-            self.__prognoliteRestaurantDataExtractor \
+            self.__prognolite_restaurant_data_extractor \
                 .get_average_turnover_per_time_period_dataframe(restaurant, time_period)
 
         # rename column 'd' to 'date' of df_average_turnover_per_time_period and change format of 'date' to join later
@@ -222,13 +256,12 @@ class DataAnalyzer:
 
         # print(df_average_turnover_per_time_period)
 
-        # get tripadvisor_restaurant_data_extractor with tripadvisor_restaurant_data_uri
-        tripadvisor_restaurant_data_uri = self.__restaurants[restaurant]
-        tripadvisor_restaurant_data_extractor = \
-            self.__tripadvisor_restaurant_data_extractors[tripadvisor_restaurant_data_uri]
+        # get restaurant_review_data_extractor
+        restaurant_review_data_extractor = self.__get_restaurant_review_data_extractor(restaurant,
+                                                                                       restaurant_review_data_type)
 
         # get df_average_rating_per_time_period and change format of 'date' to join later
-        df_average_rating_per_time_period = tripadvisor_restaurant_data_extractor \
+        df_average_rating_per_time_period = restaurant_review_data_extractor \
             .get_average_rating_per_time_period_dataframe(time_period, rating_date_offset_in_months)
         df_average_rating_per_time_period['date'] = pd.to_datetime(df_average_rating_per_time_period['date'].dt.date)
 
@@ -275,6 +308,16 @@ class DataAnalyzer:
 
         self.__scatterplot_dataframe(df, x, y, title)
 
+    def __get_restaurant_review_data_extractor(self, restaurant, restaurant_review_data_type):
+        restaurant_review_data_extractor = None
+
+        if restaurant_review_data_type == RestaurantReviewDataType.TRIPADVISOR_REVIEW:
+            restaurant_review_data_extractor = self.__tripadvisor_restaurant_review_data_extractors_dict[restaurant]
+        elif restaurant_review_data_type == RestaurantReviewDataType.GOOGLE_REVIEW:
+            restaurant_review_data_extractor = self.__google_restaurant_review_data_extractors_dict[restaurant]
+
+        return restaurant_review_data_extractor
+
     def __scatterplot_dataframe(self, df, x, y, title):
         plt.figure()
         sns.set_style("darkgrid")
@@ -295,20 +338,77 @@ class DataAnalyzer:
 
 
 dataAnalyzer = DataAnalyzer()
-# dataAnalyzer.plot_development_of_overall_rating_and_average_turnover_per_time_period_for_all_restaurants('Q')
-# dataAnalyzer.plot_development_of_overall_rating_and_average_turnover_per_time_period(Restaurant.BUTCHER_USTER,'Q')
 
-# dataAnalyzer.plot_average_rating_vs_average_turnover_per_time_period_for_all_restaurants('Q')
-# dataAnalyzer.plot_average_rating_vs_average_turnover_per_time_period(Restaurant.BUTCHER_USTER,'Q')
+# code templates to analyse tripadvisor review data with prognolite restaurant data
+"""
+dataAnalyzer.plot_development_of_overall_rating_and_average_turnover_per_time_period_for_all_restaurants(
+    restaurant_review_data_type=RestaurantReviewDataType.TRIPADVISOR_REVIEW,
+    time_period='m',
+    rating_date_offset_in_months=0)
 
+dataAnalyzer.plot_development_of_overall_rating_and_average_turnover_per_time_period(
+    restaurant=Restaurant.BUTCHER_USTER,
+    restaurant_review_data_type=RestaurantReviewDataType.TRIPADVISOR_REVIEW,
+    time_period='m',
+    rating_date_offset_in_months=0)
+
+dataAnalyzer.plot_average_rating_vs_average_turnover_per_time_period_for_all_restaurants(
+    restaurant_review_data_type=RestaurantReviewDataType.TRIPADVISOR_REVIEW,
+    time_period='m',
+    rating_date_offset_in_months=0)
+
+dataAnalyzer.plot_average_rating_vs_average_turnover_per_time_period(
+    restaurant=Restaurant.BUTCHER_USTER,
+    restaurant_review_data_type=RestaurantReviewDataType.TRIPADVISOR_REVIEW,
+    time_period='m',
+    rating_date_offset_in_months=0)
+
+dataAnalyzer.compute_correlation_between_average_turnover_and_average_rating(
+    restaurant=Restaurant.BUTCHER_USTER,
+    restaurant_review_data_type=RestaurantReviewDataType.TRIPADVISOR_REVIEW,
+    time_period='m',
+    rating_date_offset_in_months=0)
+
+dataAnalyzer.compute_correlation_between_average_turnover_and_overall_rating_development(
+    restaurant=Restaurant.BUTCHER_USTER,
+    restaurant_review_data_type=RestaurantReviewDataType.TRIPADVISOR_REVIEW,
+    time_period='m',
+    rating_date_offset_in_months=0)
 """
-dataAnalyzer \
-    .compute_correlation_between_average_turnover_and_average_rating(Restaurant.BUTCHER_USTER,
-                                                                     time_period='m',
-                                                                     rating_date_offset_in_months=0)"""
+
+# code templates to analyse google review data with prognolite restaurant data
 """
-dataAnalyzer \
-    .compute_correlation_between_average_turnover_and_overall_rating_development(Restaurant.BUTCHER_USTER,
-                                                                     time_period='m',
-                                                                     rating_date_offset_in_months=0)
+dataAnalyzer.plot_development_of_overall_rating_and_average_turnover_per_time_period_for_all_restaurants(
+    restaurant_review_data_type=RestaurantReviewDataType.GOOGLE_REVIEW,
+    time_period='m',
+    rating_date_offset_in_months=0)
+
+dataAnalyzer.plot_development_of_overall_rating_and_average_turnover_per_time_period(
+    restaurant=Restaurant.BUTCHER_USTER,
+    restaurant_review_data_type=RestaurantReviewDataType.GOOGLE_REVIEW,
+    time_period='m',
+    rating_date_offset_in_months=0)
+
+dataAnalyzer.plot_average_rating_vs_average_turnover_per_time_period_for_all_restaurants(
+    restaurant_review_data_type=RestaurantReviewDataType.GOOGLE_REVIEW,
+    time_period='m',
+    rating_date_offset_in_months=0)
+
+dataAnalyzer.plot_average_rating_vs_average_turnover_per_time_period(
+    restaurant=Restaurant.BUTCHER_USTER,
+    restaurant_review_data_type=RestaurantReviewDataType.GOOGLE_REVIEW,
+    time_period='m',
+    rating_date_offset_in_months=0)
+
+dataAnalyzer.compute_correlation_between_average_turnover_and_average_rating(
+    restaurant=Restaurant.BUTCHER_USTER,
+    restaurant_review_data_type=RestaurantReviewDataType.GOOGLE_REVIEW,
+    time_period='m',
+    rating_date_offset_in_months=0)
+
+dataAnalyzer.compute_correlation_between_average_turnover_and_overall_rating_development(
+    restaurant=Restaurant.BUTCHER_USTER,
+    restaurant_review_data_type=RestaurantReviewDataType.GOOGLE_REVIEW,
+    time_period='m',
+    rating_date_offset_in_months=0)
 """
