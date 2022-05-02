@@ -238,6 +238,13 @@ class DataAnalyzer:
         # plt.savefig('haha.png',dpi=600)
         plt.show()
 
+    def compute_correlation_between_average_turnover_and_overall_rating_development_for_all_restaurants(
+            self, restaurant_review_data_type, time_period='m', rating_date_offset_in_months=0):
+
+        for restaurant in Restaurant:
+            self.compute_correlation_between_average_turnover_and_overall_rating_development(
+                restaurant, restaurant_review_data_type, time_period, rating_date_offset_in_months)
+
     def compute_correlation_between_average_turnover_and_overall_rating_development(self, restaurant,
                                                                                     restaurant_review_data_type,
                                                                                     time_period='m',
@@ -273,6 +280,7 @@ class DataAnalyzer:
             self.__filter_entries_from_dataframe_before_corona(
                 df_average_turnover_and_overall_rating_development_per_time_period)
 
+        print("Restaurant:", restaurant.value)
         print("df_average_turnover_and_overall_rating_development_per_time_period:\n")
         print(df_average_turnover_and_overall_rating_development_per_time_period)
 
@@ -288,6 +296,16 @@ class DataAnalyzer:
                 + restaurant.value
 
         self.__scatterplot_dataframe(df, x, y, title)
+
+    def compute_correlation_between_average_turnover_and_average_rating_for_all_restaurants(self,
+                                                                                            restaurant_review_data_type,
+                                                                                            time_period='m',
+                                                                                            rating_date_offset_in_months=0):
+        for restaurant in Restaurant:
+            self.compute_correlation_between_average_turnover_and_average_rating(restaurant,
+                                                                                 restaurant_review_data_type,
+                                                                                 time_period,
+                                                                                 rating_date_offset_in_months)
 
     def compute_correlation_between_average_turnover_and_average_rating(self, restaurant,
                                                                         restaurant_review_data_type,
@@ -323,6 +341,7 @@ class DataAnalyzer:
         df_average_turnover_and_average_rating_per_time_period = \
             self.__filter_entries_from_dataframe_before_corona(df_average_turnover_and_average_rating_per_time_period)
 
+        print("Restaurant:", restaurant.value)
         print("df_average_turnover_and_average_rating_per_time_period:\n")
         print(df_average_turnover_and_average_rating_per_time_period)
 
@@ -337,6 +356,13 @@ class DataAnalyzer:
                 + restaurant.value
 
         self.__scatterplot_dataframe(df, x, y, title)
+
+    def compute_correlation_between_average_rating_google_and_average_rating_tripadvisor_for_all_restaurants(
+            self, time_period='m'):
+
+        for restaurant in Restaurant:
+            self.compute_correlation_between_average_rating_google_and_average_rating_tripadvisor(restaurant,
+                                                                                                  time_period)
 
     def compute_correlation_between_average_rating_google_and_average_rating_tripadvisor(self, restaurant,
                                                                                          time_period='m'):
@@ -374,6 +400,7 @@ class DataAnalyzer:
         df_average_rating_tripadvisor_and_google_per_time_period = \
             self.__filter_entries_from_dataframe_before_corona(df_average_rating_tripadvisor_and_google_per_time_period)
 
+        print("Restaurant:", restaurant.value)
         print("df_average_rating_tripadvisor_and_google_per_time_period:\n")
         print(df_average_rating_tripadvisor_and_google_per_time_period)
 
@@ -405,6 +432,7 @@ class DataAnalyzer:
         # print(df_merged)
         return df_merged
 
+    # TODO: implement filter like Marco said
     def __filter_entries_from_dataframe_before_corona(self, df):
         corona_start_year = 2020
         return df[df['date'].dt.year < corona_start_year]
