@@ -9,6 +9,8 @@ from ba_code.data_processing_and_analysis.google_and_tripadvisor.restaurant_revi
     TripadvisorRestaurantReviewDataUri, GoogleRestaurantReviewDataUri, RestaurantReviewDataType
 import seaborn as sns
 import pandas as pd
+import numpy as np
+from dateutil.relativedelta import relativedelta
 
 
 class DataAnalyzer:
@@ -173,7 +175,7 @@ class DataAnalyzer:
         df_average_rating_per_time_period_google = google_restaurant_review_data_extractor \
             .get_average_rating_per_time_period_dataframe(time_period)
 
-        title = "Average rating tripadvisor vs average rating google " + self.__get_time_period_value(time_period) \
+        title = "Average rating tripadvisor vs average rating google per " + self.__get_time_period_value(time_period) \
                 + ":\n" + restaurant.value
         x1 = 'date'
         y1 = 'average_rating_per_time_period'
@@ -182,10 +184,13 @@ class DataAnalyzer:
         y2 = y1
         df2 = df_average_rating_per_time_period_google
 
+        x_max, x_min = self.__get_x_min_and_x_max_for_plot(df1, df2, x1, x2)
+
         plt.figure()
         ax = df1.plot(x=x1, y=y1, marker='o')
         df2.plot(ax=ax, x=x2, y=y2, marker='o')
         plt.title(title)
+        plt.xlim([x_min, x_max])
         plt.ylim([1, 5])
         plt.xlabel(x1)
         plt.ylabel(y1)
@@ -209,6 +214,8 @@ class DataAnalyzer:
         df2 = parameters_for_the_second_plot['df2']
         y2_label = parameters_for_the_second_plot['y2_label']
         color2 = parameters_for_the_second_plot['color2']
+
+        x_max, x_min = self.__get_x_min_and_x_max_for_plot(df1, df2, x1, x2)
 
         # plot df1
         fig, ax1 = plt.subplots()
@@ -235,8 +242,34 @@ class DataAnalyzer:
         plt.title(title)
         plt.setp(ax1.get_xticklabels(), rotation=30, horizontalalignment='right')
         fig.legend(labels_for_legend, bbox_to_anchor=(1, 1), bbox_transform=ax1.transAxes)
+        plt.xlim([x_min, x_max])
         # plt.savefig('haha.png',dpi=600)
         plt.show()
+
+    def __get_x_min_and_x_max_for_plot(self, df1, df2, x1, x2):
+        # find x_min and x_max for the plot
+        df1[x1] = pd.to_datetime(df1[x1].dt.date)
+        df2[x2] = pd.to_datetime(df2[x2].dt.date)
+        date_min_df1 = df1[x1].min()
+        date_max_df1 = df1[x1].max()
+        date_min_df2 = df2[x2].min()
+        date_max_df2 = df2[x2].max()
+
+        date_threshold_in_months = 6
+        difference_between_min_dates = np.abs(date_min_df1 - date_min_df2) / np.timedelta64(1, 'M')
+        difference_between_max_dates = np.abs(date_max_df1 - date_max_df2) / np.timedelta64(1, 'M')
+
+        x_min = date_min_df1 if date_min_df1 < date_min_df2 else date_min_df1
+        x_max = date_max_df1 if date_max_df1 > date_max_df2 else date_max_df2
+        if difference_between_min_dates > date_threshold_in_months:
+            x_min = date_min_df2 if date_min_df1 < date_min_df2 else date_min_df1
+            x_min = x_min - relativedelta(months=date_threshold_in_months)
+        if difference_between_max_dates > date_threshold_in_months:
+            x_max = date_max_df2 if date_max_df1 > date_max_df2 else date_max_df1
+            x_max = x_max + relativedelta(months=date_threshold_in_months)
+
+        return x_max, x_min
+
 
     def compute_correlation_between_average_turnover_and_overall_rating_development_for_all_restaurants(
             self, restaurant_review_data_type, time_period='m', rating_date_offset_in_months=0):
