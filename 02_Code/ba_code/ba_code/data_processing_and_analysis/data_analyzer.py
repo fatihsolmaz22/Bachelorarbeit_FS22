@@ -75,7 +75,7 @@ class DataAnalyzer:
                 .get_overall_rating_development_over_time_period_dataframe(time_period, rating_date_offset_in_months)
 
         # define variables for plot
-        title = "Development of overall rating vs average turnover\n over " \
+        title = "Overall rating development vs average turnover\n over " \
                 + self.__get_time_period_value(time_period) + "s: " + restaurant.value
         labels_for_legend = ['average_turnover_per_' + self.__get_time_period_value(time_period),
                              'overall_rating_development']
@@ -238,10 +238,10 @@ class DataAnalyzer:
                  color=color2,
                  marker='o')
 
-        # fig.tight_layout()  # otherwise the right y-label is slightly clipped
         plt.title(title)
         plt.setp(ax1.get_xticklabels(), rotation=30, horizontalalignment='right')
-        fig.legend(labels_for_legend, bbox_to_anchor=(1, 1), bbox_transform=ax1.transAxes)
+        #fig.legend(labels_for_legend, bbox_to_anchor=(1, 1), bbox_transform=ax1.transAxes)
+        fig.tight_layout()  # otherwise the right y-label is slightly clipped
         plt.xlim([x_min, x_max])
         # plt.savefig('haha.png',dpi=600)
         plt.show()
@@ -269,7 +269,6 @@ class DataAnalyzer:
             x_max = x_max + relativedelta(months=date_threshold_in_months)
 
         return x_max, x_min
-
 
     def compute_correlation_between_average_turnover_and_overall_rating_development_for_all_restaurants(
             self, restaurant_review_data_type, time_period='m', rating_date_offset_in_months=0):
