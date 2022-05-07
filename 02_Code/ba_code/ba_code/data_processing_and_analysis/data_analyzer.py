@@ -11,7 +11,7 @@ import seaborn as sns
 import pandas as pd
 import numpy as np
 from dateutil.relativedelta import relativedelta
-
+from datetime import datetime
 
 class DataAnalyzer:
 
@@ -52,18 +52,21 @@ class DataAnalyzer:
             self,
             restaurant_review_data_type,
             time_period='m',
-            rating_date_offset_in_months=0):
+            rating_date_offset_in_months=0,
+            filter_corona_data=False):
 
         for restaurant in Restaurant:
             self.plot_overall_rating_development_and_average_turnover_per_time_period(restaurant,
                                                                                       restaurant_review_data_type,
                                                                                       time_period,
-                                                                                      rating_date_offset_in_months)
+                                                                                      rating_date_offset_in_months,
+                                                                                      filter_corona_data)
 
     def plot_overall_rating_development_and_average_turnover_per_time_period(self, restaurant,
                                                                              restaurant_review_data_type,
                                                                              time_period='m',
-                                                                             rating_date_offset_in_months=0):
+                                                                             rating_date_offset_in_months=0,
+                                                                             filter_corona_data=False):
 
         df_average_turnover_per_time_period = self.__prognolite_restaurant_data_extractor \
             .get_average_turnover_per_time_period_dataframe(restaurant, time_period)
@@ -97,25 +100,30 @@ class DataAnalyzer:
             'color2': 'blue'
         }
 
-        self.__plot_turnover_and_rating_in_one_figure(title=title,
+        self.__plot_turnover_and_rating_in_one_figure(restaurant=restaurant,
+                                                      title=title,
                                                       labels_for_legend=labels_for_legend,
                                                       parameters_for_the_first_plot=parameters_for_the_first_plot,
-                                                      parameters_for_the_second_plot=parameters_for_the_second_plot)
+                                                      parameters_for_the_second_plot=parameters_for_the_second_plot,
+                                                      filter_corona_data=filter_corona_data)
 
     def plot_average_rating_vs_average_turnover_per_time_period_for_all_restaurants(self,
                                                                                     restaurant_review_data_type,
                                                                                     time_period='m',
-                                                                                    rating_date_offset_in_months=0):
+                                                                                    rating_date_offset_in_months=0,
+                                                                                    filter_corona_data=False):
         for restaurant in Restaurant:
             self.plot_average_rating_vs_average_turnover_per_time_period(restaurant,
                                                                          restaurant_review_data_type,
                                                                          time_period,
-                                                                         rating_date_offset_in_months)
+                                                                         rating_date_offset_in_months,
+                                                                         filter_corona_data)
 
     def plot_average_rating_vs_average_turnover_per_time_period(self, restaurant,
                                                                 restaurant_review_data_type,
                                                                 time_period='m',
-                                                                rating_date_offset_in_months=0):
+                                                                rating_date_offset_in_months=0,
+                                                                filter_corona_data=False):
 
         df_average_turnover_per_time_period = self.__prognolite_restaurant_data_extractor \
             .get_average_turnover_per_time_period_dataframe(restaurant, time_period)
@@ -149,16 +157,19 @@ class DataAnalyzer:
             'color2': 'blue'
         }
 
-        self.__plot_turnover_and_rating_in_one_figure(title=title,
+        self.__plot_turnover_and_rating_in_one_figure(restaurant=restaurant,
+                                                      title=title,
                                                       labels_for_legend=labels_for_legend,
                                                       parameters_for_the_first_plot=parameters_for_the_first_plot,
-                                                      parameters_for_the_second_plot=parameters_for_the_second_plot)
+                                                      parameters_for_the_second_plot=parameters_for_the_second_plot,
+                                                      filter_corona_data=filter_corona_data)
 
-    def plot_average_rating_google_and_average_rating_tripadvisor_for_all_restaurants(self, time_period='m'):
+    def plot_average_rating_google_and_average_rating_tripadvisor_for_all_restaurants(self, time_period='m',
+                                                                                      filter_corona_data=False):
         for restaurant in Restaurant:
-            self.plot_average_rating_google_and_average_rating_tripadvisor(restaurant, time_period)
+            self.plot_average_rating_google_and_average_rating_tripadvisor(restaurant, time_period, filter_corona_data)
 
-    def plot_average_rating_google_and_average_rating_tripadvisor(self, restaurant, time_period='m'):
+    def plot_average_rating_google_and_average_rating_tripadvisor(self, restaurant, time_period='m', filter_corona_data=False):
         # get tripadvisor_restaurant_review_data_extractor for a restaurant
         tripadvisor_restaurant_review_data_extractor = \
             self.__get_restaurant_review_data_extractor(restaurant, RestaurantReviewDataType.TRIPADVISOR_REVIEW)
@@ -186,6 +197,9 @@ class DataAnalyzer:
 
         x_max, x_min = self.__get_x_min_and_x_max_for_plot(df1, df2, x1, x2)
 
+        if filter_corona_data:
+            x_max = datetime.strptime('2020', '%Y')
+
         plt.figure()
         ax = df1.plot(x=x1, y=y1, marker='o')
         df2.plot(ax=ax, x=x2, y=y2, marker='o')
@@ -197,10 +211,13 @@ class DataAnalyzer:
         plt.legend()
         plt.show()
 
-    def __plot_turnover_and_rating_in_one_figure(self, title,
+    def __plot_turnover_and_rating_in_one_figure(self,
+                                                 restaurant,
+                                                 title,
                                                  labels_for_legend,
                                                  parameters_for_the_first_plot,
-                                                 parameters_for_the_second_plot):
+                                                 parameters_for_the_second_plot,
+                                                 filter_corona_data):
         # parameters for the first plot
         x1 = parameters_for_the_first_plot['x1']
         y1 = parameters_for_the_first_plot['y1']
@@ -216,6 +233,10 @@ class DataAnalyzer:
         color2 = parameters_for_the_second_plot['color2']
 
         x_max, x_min = self.__get_x_min_and_x_max_for_plot(df1, df2, x1, x2)
+
+        # TODO: only for comparison plots, before corona (remove if not needed)
+        if filter_corona_data:
+            x_max = datetime.strptime('2020', '%Y')
 
         # plot df1
         fig, ax1 = plt.subplots()
@@ -243,8 +264,17 @@ class DataAnalyzer:
         #fig.legend(labels_for_legend, bbox_to_anchor=(1, 1), bbox_transform=ax1.transAxes)
         fig.tight_layout()  # otherwise the right y-label is slightly clipped
         plt.xlim([x_min, x_max])
-        # plt.savefig('haha.png',dpi=600)
+        picture_name = self.get_picture_name(restaurant, filter_corona_data)
+        plt.savefig('{}.png'.format(picture_name),dpi=600)
         plt.show()
+
+    @staticmethod
+    def get_picture_name(restaurant, filter_corona_data):
+        if filter_corona_data:
+            picture_name = restaurant.value + "-before-corona"
+        else:
+            picture_name = restaurant.value + "-after-corona"
+        return picture_name
 
     def __get_x_min_and_x_max_for_plot(self, df1, df2, x1, x2):
         # find x_min and x_max for the plot
@@ -271,16 +301,29 @@ class DataAnalyzer:
         return x_max, x_min
 
     def compute_correlation_between_average_turnover_and_overall_rating_development_for_all_restaurants(
-            self, restaurant_review_data_type, time_period='m', rating_date_offset_in_months=0):
+            self, restaurant_review_data_type, time_period='m', rating_date_offset_in_months=0, filter_corona_data=False):
 
+        restaurant_name_list = []
+        pearson_list = []
+        spearman_list = []
         for restaurant in Restaurant:
-            self.compute_correlation_between_average_turnover_and_overall_rating_development(
-                restaurant, restaurant_review_data_type, time_period, rating_date_offset_in_months)
+            pearson_corr_value, spearman_corr_value = self.compute_correlation_between_average_turnover_and_overall_rating_development(
+                restaurant, restaurant_review_data_type, time_period, rating_date_offset_in_months, filter_corona_data)
+
+            restaurant_name = self.get_picture_name(restaurant, filter_corona_data)
+            restaurant_name_list.append(restaurant_name)
+            pearson_list.append(pearson_corr_value)
+            spearman_list.append(spearman_corr_value)
+
+        return pd.DataFrame({"restaurant_name": restaurant_name_list,
+                             "pearson": pearson_list,
+                             "spearman": spearman_list})
 
     def compute_correlation_between_average_turnover_and_overall_rating_development(self, restaurant,
                                                                                     restaurant_review_data_type,
                                                                                     time_period='m',
-                                                                                    rating_date_offset_in_months=0):
+                                                                                    rating_date_offset_in_months=0,
+                                                                                    filter_corona_data=False):
         # get df_average_turnover_per_time_period
         df_average_turnover_per_time_period = self.__prognolite_restaurant_data_extractor \
             .get_average_turnover_per_time_period_dataframe(restaurant, time_period)
@@ -308,16 +351,19 @@ class DataAnalyzer:
                                                df2=df_overall_rating_development_over_time_period)
 
         # filter df_average_turnover_per_time_period before corona
-        df_average_turnover_and_overall_rating_development_per_time_period = \
-            self.__filter_entries_from_dataframe_before_corona(
-                df_average_turnover_and_overall_rating_development_per_time_period)
+        if filter_corona_data:
+            df_average_turnover_and_overall_rating_development_per_time_period = \
+                self.__filter_entries_from_dataframe_before_corona(
+                    df_average_turnover_and_overall_rating_development_per_time_period)
 
         print("Restaurant:", restaurant.value)
-        print("df_average_turnover_and_overall_rating_development_per_time_period:\n")
-        print(df_average_turnover_and_overall_rating_development_per_time_period)
+        #print("df_average_turnover_and_overall_rating_development_per_time_period:\n")
+        #print(df_average_turnover_and_overall_rating_development_per_time_period)
 
-        self.__compute_pearson_and_spearman_correlation(
+        pearson_corr_matrix, spearman_corr_matrix = self.__compute_pearson_and_spearman_correlation(
             df_average_turnover_and_overall_rating_development_per_time_period)
+        pearson_corr_value = pearson_corr_matrix.iloc[0, 1]
+        spearman_corr_value = spearman_corr_matrix.iloc[0, 1]
 
         # scatterplot average rating vs average turnover
         df = df_average_turnover_and_overall_rating_development_per_time_period
@@ -327,22 +373,38 @@ class DataAnalyzer:
                 + self.__get_time_period_value(time_period) + ":\n" \
                 + restaurant.value
 
-        self.__scatterplot_dataframe(df, x, y, title)
+        self.__scatterplot_dataframe(restaurant, filter_corona_data, df, x, y, title)
+
+        return pearson_corr_value, spearman_corr_value
 
     def compute_correlation_between_average_turnover_and_average_rating_for_all_restaurants(self,
                                                                                             restaurant_review_data_type,
                                                                                             time_period='m',
-                                                                                            rating_date_offset_in_months=0):
+                                                                                            rating_date_offset_in_months=0,
+                                                                                            filter_corona_data=False):
+        restaurant_name_list = []
+        pearson_list = []
+        spearman_list = []
         for restaurant in Restaurant:
-            self.compute_correlation_between_average_turnover_and_average_rating(restaurant,
+            pearson_corr_value, spearman_corr_value = self.compute_correlation_between_average_turnover_and_average_rating(restaurant,
                                                                                  restaurant_review_data_type,
                                                                                  time_period,
-                                                                                 rating_date_offset_in_months)
+                                                                                 rating_date_offset_in_months,
+                                                                                 filter_corona_data)
+            restaurant_name = self.get_picture_name(restaurant, filter_corona_data)
+            restaurant_name_list.append(restaurant_name)
+            pearson_list.append(pearson_corr_value)
+            spearman_list.append(spearman_corr_value)
+
+        return pd.DataFrame({"restaurant_name": restaurant_name_list,
+                             "pearson": pearson_list,
+                             "spearman": spearman_list})
 
     def compute_correlation_between_average_turnover_and_average_rating(self, restaurant,
                                                                         restaurant_review_data_type,
                                                                         time_period='m',
-                                                                        rating_date_offset_in_months=0):
+                                                                        rating_date_offset_in_months=0,
+                                                                        filter_corona_data=False):
         # get df_average_turnover_per_time_period
         df_average_turnover_per_time_period = \
             self.__prognolite_restaurant_data_extractor \
@@ -370,14 +432,17 @@ class DataAnalyzer:
                                                df2=df_average_rating_per_time_period)
 
         # filter df_average_turnover_per_time_period before corona
-        df_average_turnover_and_average_rating_per_time_period = \
-            self.__filter_entries_from_dataframe_before_corona(df_average_turnover_and_average_rating_per_time_period)
+        if filter_corona_data:
+            df_average_turnover_and_average_rating_per_time_period = \
+                self.__filter_entries_from_dataframe_before_corona(df_average_turnover_and_average_rating_per_time_period)
 
-        print("Restaurant:", restaurant.value)
-        print("df_average_turnover_and_average_rating_per_time_period:\n")
-        print(df_average_turnover_and_average_rating_per_time_period)
+        print("\nRestaurant:", restaurant.value)
+        #print("df_average_turnover_and_average_rating_per_time_period:\n")
+        #print(df_average_turnover_and_average_rating_per_time_period)
 
-        self.__compute_pearson_and_spearman_correlation(df_average_turnover_and_average_rating_per_time_period)
+        pearson_corr_matrix, spearman_corr_matrix = self.__compute_pearson_and_spearman_correlation(df_average_turnover_and_average_rating_per_time_period)
+        pearson_corr_value = pearson_corr_matrix.iloc[0, 1]
+        spearman_corr_value = spearman_corr_matrix.iloc[0, 1]
 
         # scatterplot average rating vs average turnover
         df = df_average_turnover_and_average_rating_per_time_period
@@ -387,17 +452,33 @@ class DataAnalyzer:
                 + self.__get_time_period_value(time_period) + ":\n" \
                 + restaurant.value
 
-        self.__scatterplot_dataframe(df, x, y, title)
+        self.__scatterplot_dataframe(restaurant, filter_corona_data, df, x, y, title)
+
+        return pearson_corr_value, spearman_corr_value
 
     def compute_correlation_between_average_rating_google_and_average_rating_tripadvisor_for_all_restaurants(
-            self, time_period='m'):
+            self, time_period='m', filter_corona_data=False):
 
+        restaurant_name_list = []
+        pearson_list = []
+        spearman_list = []
         for restaurant in Restaurant:
-            self.compute_correlation_between_average_rating_google_and_average_rating_tripadvisor(restaurant,
-                                                                                                  time_period)
+            pearson_corr_value, spearman_corr_value = self.compute_correlation_between_average_rating_google_and_average_rating_tripadvisor(restaurant,
+                                                                                                  time_period,
+                                                                                                  filter_corona_data)
+            restaurant_name = self.get_picture_name(restaurant, filter_corona_data)
+            restaurant_name_list.append(restaurant_name)
+            pearson_list.append(pearson_corr_value)
+            spearman_list.append(spearman_corr_value)
+
+        return pd.DataFrame({"restaurant_name":restaurant_name_list,
+                      "pearson":pearson_list,
+                      "spearman":spearman_list})
+
 
     def compute_correlation_between_average_rating_google_and_average_rating_tripadvisor(self, restaurant,
-                                                                                         time_period='m'):
+                                                                                         time_period='m',
+                                                                                         filter_corona_data=False):
 
         # get tripadvisor_restaurant_review_data_extractor for a restaurant
         tripadvisor_restaurant_review_data_extractor = \
@@ -429,14 +510,17 @@ class DataAnalyzer:
                                                df2=df_average_rating_per_time_period_google)
 
         # filter df_average_turnover_per_time_period before corona
-        df_average_rating_tripadvisor_and_google_per_time_period = \
-            self.__filter_entries_from_dataframe_before_corona(df_average_rating_tripadvisor_and_google_per_time_period)
+        if filter_corona_data:
+            df_average_rating_tripadvisor_and_google_per_time_period = \
+                self.__filter_entries_from_dataframe_before_corona(df_average_rating_tripadvisor_and_google_per_time_period)
 
         print("Restaurant:", restaurant.value)
         print("df_average_rating_tripadvisor_and_google_per_time_period:\n")
         print(df_average_rating_tripadvisor_and_google_per_time_period)
 
-        self.__compute_pearson_and_spearman_correlation(df_average_rating_tripadvisor_and_google_per_time_period)
+        pearson_corr_matrix, spearman_corr_matrix = self.__compute_pearson_and_spearman_correlation(df_average_rating_tripadvisor_and_google_per_time_period)
+        pearson_corr_value = pearson_corr_matrix.iloc[0, 1]
+        spearman_corr_value = spearman_corr_matrix.iloc[0, 1]
 
         # scatterplot average rating vs average turnover
         df = df_average_rating_tripadvisor_and_google_per_time_period \
@@ -448,7 +532,9 @@ class DataAnalyzer:
                 + self.__get_time_period_value(time_period) + ":\n" \
                 + restaurant.value
 
-        self.__scatterplot_dataframe(df, x, y, title)
+        self.__scatterplot_dataframe(restaurant, filter_corona_data, df, x, y, title)
+
+        return pearson_corr_value, spearman_corr_value
 
     def __join_two_dataframes_on_date(self, df1, df2):
         # df1 join df2
@@ -472,11 +558,14 @@ class DataAnalyzer:
     def __compute_pearson_and_spearman_correlation(self, df):
         # pearson correlation
         print("\nPearson correlation:")
-        print(df.corr(method="pearson"))
+        pearson_correlation = df.corr(method="pearson")
+        print(pearson_correlation)
 
         # spearman correlation
         print("\nSpearman correlation:")
-        print(df.corr(method="spearman"))
+        spearman_correlation = df.corr(method="spearman")
+        print(spearman_correlation)
+        return pearson_correlation, spearman_correlation
 
     def __get_restaurant_review_data_extractor(self, restaurant, restaurant_review_data_type):
         restaurant_review_data_extractor = None
@@ -488,10 +577,13 @@ class DataAnalyzer:
 
         return restaurant_review_data_extractor
 
-    def __scatterplot_dataframe(self, df, x, y, title):
+    def __scatterplot_dataframe(self, restaurant, filter_corona_data, df, x, y, title):
         plt.figure()
         sns.set_style("darkgrid")
         sns.scatterplot(data=df, x=x, y=y).set(title=title)
+        # print(title)
+        picture_name = self.get_picture_name(restaurant, filter_corona_data)
+        plt.savefig('{}.png'.format(picture_name),dpi=600)
         plt.show()
 
     def __get_time_period_value(self, time_period):
@@ -585,3 +677,35 @@ dataAnalyzer.compute_correlation_between_average_turnover_and_overall_rating_dev
     time_period='m',
     rating_date_offset_in_months=0)
 """
+
+def main():
+    dataAnalyzer = DataAnalyzer()
+
+    # TODO: 1. get plots of all rest overall rating vs turnover
+    # dataAnalyzer.plot_overall_rating_development_and_average_turnover_per_time_period_for_all_restaurants(
+    #     restaurant_review_data_type=RestaurantReviewDataType.GOOGLE_REVIEW,
+    #     time_period="m",
+    #     rating_date_offset_in_months=0)
+
+    # TODO: look at correlations overall rating vs turnover
+    # dataAnalyzer.compute_correlation_between_average_turnover_and_overall_rating_development_for_all_restaurants(
+    #     restaurant_review_data_type=RestaurantReviewDataType.GOOGLE_REVIEW,
+    #     time_period="m",
+    #     rating_date_offset_in_months=0
+    # )
+
+    # TODO: 2. get plots of all rest average rating vs turnover
+    # dataAnalyzer.compute_correlation_between_average_turnover_and_average_rating_for_all_restaurants(
+    #     restaurant_review_data_type=RestaurantReviewDataType.GOOGLE_REVIEW,
+    #     time_period="m",
+    #     rating_date_offset_in_months=0
+    # )
+
+    # TODO: look at correlations average rating vs turnover
+    dataAnalyzer.compute_correlation_between_average_turnover_and_average_rating_for_all_restaurants(
+        time_period="m",
+        restaurant_review_data_type=RestaurantReviewDataType.GOOGLE_REVIEW)
+
+
+if __name__ == '__main__':
+    main()
