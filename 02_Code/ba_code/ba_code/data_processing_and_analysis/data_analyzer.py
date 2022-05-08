@@ -62,36 +62,47 @@ class DataAnalyzer:
                                  time_period='m',
                                  rating_date_offset_in_months=0,
                                  filter_corona_data=False):
+
         for restaurant in Restaurant:
-            if analyzer_option == AnalyzerOption.OVERALL_RATING_VS_AVERAGE_TURNOVER:
-                self.plot_overall_rating_development_and_average_turnover_per_time_period(restaurant,
-                                                                                          restaurant_review_data_type,
-                                                                                          time_period,
-                                                                                          rating_date_offset_in_months,
-                                                                                          filter_corona_data)
+            self.plot(analyzer_option, restaurant, restaurant_review_data_type, time_period,
+                      rating_date_offset_in_months, filter_corona_data)
 
-            elif analyzer_option == AnalyzerOption.AVERAGE_RATING_VS_AVERAGE_TURNOVER:
-                self.plot_average_rating_and_average_turnover_per_time_period(restaurant,
-                                                                              restaurant_review_data_type,
-                                                                              time_period,
-                                                                              rating_date_offset_in_months,
-                                                                              filter_corona_data)
+    def plot(self, analyzer_option,
+             restaurant,
+             restaurant_review_data_type,
+             time_period='m',
+             rating_date_offset_in_months=0,
+             filter_corona_data=False):
 
-            elif analyzer_option == AnalyzerOption.OVERALL_RATING_GOOGLE_VS_OVERALL_RATING_TRIPADVISOR:
-                self.plot_overall_rating_google_and_overall_rating_tripadvisor(restaurant, time_period,
-                                                                               filter_corona_data)
+        if analyzer_option == AnalyzerOption.OVERALL_RATING_VS_AVERAGE_TURNOVER:
+            self.__plot_overall_rating_development_and_average_turnover_per_time_period(restaurant,
+                                                                                        restaurant_review_data_type,
+                                                                                        time_period,
+                                                                                        rating_date_offset_in_months,
+                                                                                        filter_corona_data)
 
-            elif analyzer_option == AnalyzerOption.AVERAGE_RATING_GOOGLE_VS_AVERAGE_RATING_TRIPADVISOR:
-                self.plot_average_rating_google_and_average_rating_tripadvisor(restaurant, time_period,
-                                                                               filter_corona_data)
-            else:
-                print("Invalid AnalyzerOption")
+        elif analyzer_option == AnalyzerOption.AVERAGE_RATING_VS_AVERAGE_TURNOVER:
+            self.__plot_average_rating_and_average_turnover_per_time_period(restaurant,
+                                                                            restaurant_review_data_type,
+                                                                            time_period,
+                                                                            rating_date_offset_in_months,
+                                                                            filter_corona_data)
 
-    def plot_overall_rating_development_and_average_turnover_per_time_period(self, restaurant,
-                                                                             restaurant_review_data_type,
-                                                                             time_period='m',
-                                                                             rating_date_offset_in_months=0,
-                                                                             filter_corona_data=False):
+        elif analyzer_option == AnalyzerOption.OVERALL_RATING_GOOGLE_VS_OVERALL_RATING_TRIPADVISOR:
+            self.__plot_overall_rating_google_and_overall_rating_tripadvisor(restaurant, time_period,
+                                                                             filter_corona_data)
+
+        elif analyzer_option == AnalyzerOption.AVERAGE_RATING_GOOGLE_VS_AVERAGE_RATING_TRIPADVISOR:
+            self.__plot_average_rating_google_and_average_rating_tripadvisor(restaurant, time_period,
+                                                                             filter_corona_data)
+        else:
+            print("Invalid AnalyzerOption")
+
+    def __plot_overall_rating_development_and_average_turnover_per_time_period(self, restaurant,
+                                                                               restaurant_review_data_type,
+                                                                               time_period='m',
+                                                                               rating_date_offset_in_months=0,
+                                                                               filter_corona_data=False):
 
         df_average_turnover_per_time_period = self.__prognolite_restaurant_data_extractor \
             .get_average_turnover_per_time_period_dataframe(restaurant, time_period)
@@ -132,11 +143,11 @@ class DataAnalyzer:
                                                       parameters_for_the_second_plot=parameters_for_the_second_plot,
                                                       filter_corona_data=filter_corona_data)
 
-    def plot_average_rating_and_average_turnover_per_time_period(self, restaurant,
-                                                                 restaurant_review_data_type,
-                                                                 time_period='m',
-                                                                 rating_date_offset_in_months=0,
-                                                                 filter_corona_data=False):
+    def __plot_average_rating_and_average_turnover_per_time_period(self, restaurant,
+                                                                   restaurant_review_data_type,
+                                                                   time_period='m',
+                                                                   rating_date_offset_in_months=0,
+                                                                   filter_corona_data=False):
 
         df_average_turnover_per_time_period = self.__prognolite_restaurant_data_extractor \
             .get_average_turnover_per_time_period_dataframe(restaurant, time_period)
@@ -234,8 +245,8 @@ class DataAnalyzer:
         plt.savefig('{}-lineplot.png'.format(picture_name), dpi=600)
         plt.show()
 
-    def plot_overall_rating_google_and_overall_rating_tripadvisor(self, restaurant, time_period='m',
-                                                                  filter_corona_data=False):
+    def __plot_overall_rating_google_and_overall_rating_tripadvisor(self, restaurant, time_period='m',
+                                                                    filter_corona_data=False):
         # get tripadvisor_restaurant_review_data_extractor for a restaurant
         tripadvisor_restaurant_review_data_extractor = \
             self.__get_restaurant_review_data_extractor(restaurant, RestaurantReviewDataType.TRIPADVISOR_REVIEW)
@@ -263,8 +274,8 @@ class DataAnalyzer:
 
         self.__plot_google_and_tripadvisor_rating(title, df1, x1, y1, df2, x2, y2, filter_corona_data)
 
-    def plot_average_rating_google_and_average_rating_tripadvisor(self, restaurant, time_period='m',
-                                                                  filter_corona_data=False):
+    def __plot_average_rating_google_and_average_rating_tripadvisor(self, restaurant, time_period='m',
+                                                                    filter_corona_data=False):
         # get tripadvisor_restaurant_review_data_extractor for a restaurant
         tripadvisor_restaurant_review_data_extractor = \
             self.__get_restaurant_review_data_extractor(restaurant, RestaurantReviewDataType.TRIPADVISOR_REVIEW)
@@ -354,37 +365,10 @@ class DataAnalyzer:
         spearman_list = []
 
         for restaurant in Restaurant:
-            if analyzer_option == AnalyzerOption.OVERALL_RATING_VS_AVERAGE_TURNOVER:
-                pearson_corr_value, spearman_corr_value = \
-                    self.compute_correlation_between_overall_rating_and_average_turnover(
-                        restaurant, restaurant_review_data_type, time_period, rating_date_offset_in_months,
-                        filter_corona_data)
-
-            elif analyzer_option == AnalyzerOption.AVERAGE_RATING_VS_AVERAGE_TURNOVER:
-                pearson_corr_value, spearman_corr_value = \
-                    self.compute_correlation_between_average_rating_and_average_turnover(
-                        restaurant,
-                        restaurant_review_data_type,
-                        time_period,
-                        rating_date_offset_in_months,
-                        filter_corona_data)
-
-            elif analyzer_option == AnalyzerOption.OVERALL_RATING_GOOGLE_VS_OVERALL_RATING_TRIPADVISOR:
-                pearson_corr_value, spearman_corr_value = \
-                    self.compute_correlation_between_overall_rating_google_and_overall_rating_tripadvisor(
-                        restaurant,
-                        time_period,
-                        filter_corona_data)
-
-            elif analyzer_option == AnalyzerOption.AVERAGE_RATING_GOOGLE_VS_AVERAGE_RATING_TRIPADVISOR:
-                pearson_corr_value, spearman_corr_value = \
-                    self.compute_correlation_between_average_rating_google_and_average_rating_tripadvisor(
-                        restaurant,
-                        time_period,
-                        filter_corona_data)
-            else:
-                print("Invalid AnalyzerOption")
-                return
+            pearson_corr_value, spearman_corr_value = self.compute_correlation(analyzer_option, restaurant,
+                                                                               restaurant_review_data_type, time_period,
+                                                                               rating_date_offset_in_months,
+                                                                               filter_corona_data)
 
             restaurant_name = self.get_picture_name(restaurant, filter_corona_data)
             restaurant_name_list.append(restaurant_name)
@@ -395,11 +379,53 @@ class DataAnalyzer:
                              "pearson": pearson_list,
                              "spearman": spearman_list})
 
-    def compute_correlation_between_overall_rating_and_average_turnover(self, restaurant,
-                                                                        restaurant_review_data_type,
-                                                                        time_period='m',
-                                                                        rating_date_offset_in_months=0,
-                                                                        filter_corona_data=False):
+    def compute_correlation(self, analyzer_option,
+                            restaurant,
+                            restaurant_review_data_type,
+                            time_period='m',
+                            rating_date_offset_in_months=0,
+                            filter_corona_data=False):
+
+        if analyzer_option == AnalyzerOption.OVERALL_RATING_VS_AVERAGE_TURNOVER:
+            pearson_corr_value, spearman_corr_value = \
+                self.__compute_correlation_between_overall_rating_and_average_turnover(
+                    restaurant, restaurant_review_data_type, time_period, rating_date_offset_in_months,
+                    filter_corona_data)
+
+        elif analyzer_option == AnalyzerOption.AVERAGE_RATING_VS_AVERAGE_TURNOVER:
+            pearson_corr_value, spearman_corr_value = \
+                self.__compute_correlation_between_average_rating_and_average_turnover(
+                    restaurant,
+                    restaurant_review_data_type,
+                    time_period,
+                    rating_date_offset_in_months,
+                    filter_corona_data)
+
+        elif analyzer_option == AnalyzerOption.OVERALL_RATING_GOOGLE_VS_OVERALL_RATING_TRIPADVISOR:
+            pearson_corr_value, spearman_corr_value = \
+                self.__compute_correlation_between_overall_rating_google_and_overall_rating_tripadvisor(
+                    restaurant,
+                    time_period,
+                    filter_corona_data)
+
+        elif analyzer_option == AnalyzerOption.AVERAGE_RATING_GOOGLE_VS_AVERAGE_RATING_TRIPADVISOR:
+            pearson_corr_value, spearman_corr_value = \
+                self.__compute_correlation_between_average_rating_google_and_average_rating_tripadvisor(
+                    restaurant,
+                    time_period,
+                    filter_corona_data)
+        else:
+            pearson_corr_value = None
+            spearman_corr_value = None
+            print("Invalid AnalyzerOption")
+
+        return pearson_corr_value, spearman_corr_value
+
+    def __compute_correlation_between_overall_rating_and_average_turnover(self, restaurant,
+                                                                          restaurant_review_data_type,
+                                                                          time_period='m',
+                                                                          rating_date_offset_in_months=0,
+                                                                          filter_corona_data=False):
         df_average_turnover_per_time_period = \
             self.__prepare_df_average_turnover_per_time_period_for_correlation(restaurant, time_period)
 
@@ -428,11 +454,11 @@ class DataAnalyzer:
 
         return pearson_corr_value, spearman_corr_value
 
-    def compute_correlation_between_average_rating_and_average_turnover(self, restaurant,
-                                                                        restaurant_review_data_type,
-                                                                        time_period='m',
-                                                                        rating_date_offset_in_months=0,
-                                                                        filter_corona_data=False):
+    def __compute_correlation_between_average_rating_and_average_turnover(self, restaurant,
+                                                                          restaurant_review_data_type,
+                                                                          time_period='m',
+                                                                          rating_date_offset_in_months=0,
+                                                                          filter_corona_data=False):
         df_average_turnover_per_time_period = \
             self.__prepare_df_average_turnover_per_time_period_for_correlation(restaurant, time_period)
 
@@ -474,10 +500,10 @@ class DataAnalyzer:
 
         return df_average_turnover_per_time_period
 
-    def compute_correlation_between_overall_rating_google_and_overall_rating_tripadvisor(self,
-                                                                                         restaurant,
-                                                                                         time_period='m',
-                                                                                         filter_corona_data=False):
+    def __compute_correlation_between_overall_rating_google_and_overall_rating_tripadvisor(self,
+                                                                                           restaurant,
+                                                                                           time_period='m',
+                                                                                           filter_corona_data=False):
 
         # get tripadvisor_restaurant_review_data_extractor for a restaurant
         tripadvisor_restaurant_review_data_extractor = \
@@ -520,9 +546,9 @@ class DataAnalyzer:
 
         return pearson_corr_value, spearman_corr_value
 
-    def compute_correlation_between_average_rating_google_and_average_rating_tripadvisor(self, restaurant,
-                                                                                         time_period='m',
-                                                                                         filter_corona_data=False):
+    def __compute_correlation_between_average_rating_google_and_average_rating_tripadvisor(self, restaurant,
+                                                                                           time_period='m',
+                                                                                           filter_corona_data=False):
 
         # get tripadvisor_restaurant_review_data_extractor for a restaurant
         tripadvisor_restaurant_review_data_extractor = \
@@ -654,12 +680,26 @@ dataAnalyzer.plot_for_all_restaurants(analyzer_option=AnalyzerOption.AVERAGE_RAT
                                           rating_date_offset_in_months=0,
                                           filter_corona_data=False)
                                           
+dataAnalyzer.plot(analyzer_option=AnalyzerOption.OVERALL_RATING_GOOGLE_VS_OVERALL_RATING_TRIPADVISOR,
+                  restaurant=Restaurant.BUTCHER_USTER,
+                  restaurant_review_data_type=RestaurantReviewDataType.GOOGLE_REVIEW,
+                  time_period='m',
+                  rating_date_offset_in_months=0,
+                  filter_corona_data=False)
+                                          
 dataAnalyzer.compute_correlation_for_all_restaurants(
     analyzer_option=AnalyzerOption.OVERALL_RATING_VS_AVERAGE_TURNOVER,
     restaurant_review_data_type=RestaurantReviewDataType.GOOGLE_REVIEW,
     time_period='m',
     rating_date_offset_in_months=0,
-    filter_corona_data=False)    
+    filter_corona_data=False)
+    
+dataAnalyzer.compute_correlation(analyzer_option=AnalyzerOption.OVERALL_RATING_GOOGLE_VS_OVERALL_RATING_TRIPADVISOR,
+                                 restaurant=Restaurant.BUTCHER_USTER,
+                                 restaurant_review_data_type=RestaurantReviewDataType.GOOGLE_REVIEW,
+                                 time_period='m',
+                                 rating_date_offset_in_months=0,
+                                 filter_corona_data=False)
 """
 
 
