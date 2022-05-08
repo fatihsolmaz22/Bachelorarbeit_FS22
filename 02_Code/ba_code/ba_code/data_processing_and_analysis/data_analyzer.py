@@ -231,7 +231,7 @@ class DataAnalyzer:
         fig.tight_layout()  # otherwise the right y-label is slightly clipped
         plt.xlim([x_min, x_max])
         picture_name = self.get_picture_name(restaurant, filter_corona_data)
-        plt.savefig('{}.png'.format(picture_name), dpi=600)
+        plt.savefig('{}-lineplot.png'.format(picture_name), dpi=600)
         plt.show()
 
     def plot_overall_rating_google_and_overall_rating_tripadvisor(self, restaurant, time_period='m',
@@ -624,7 +624,7 @@ class DataAnalyzer:
         sns.set_style("darkgrid")
         sns.scatterplot(data=df, x=x, y=y).set(title=title)
         picture_name = self.get_picture_name(restaurant, filter_corona_data)
-        plt.savefig('{}.png'.format(picture_name), dpi=600)
+        plt.savefig('{}-corr.png'.format(picture_name), dpi=600)
         plt.show()
 
     @staticmethod
