@@ -89,7 +89,8 @@ class PrognoliteRestaurantDataExtractor:
 
         return df_average_turnover_per_time_period
 
-    def __print_invalid_time_period_message(self):
+    @staticmethod
+    def __print_invalid_time_period_message():
         print("Invalid time period, enter one of the following time periods:")
         print("'d': Day")
         print("'m': Month")

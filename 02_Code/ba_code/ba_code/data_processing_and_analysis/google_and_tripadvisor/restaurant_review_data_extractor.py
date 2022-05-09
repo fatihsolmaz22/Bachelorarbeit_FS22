@@ -56,7 +56,8 @@ class RestaurantReviewDataExtractor:
             'df_review_data': df_review_data,
         }
 
-    def __extract_author_and_review_data(self, all_reviews):
+    @staticmethod
+    def __extract_author_and_review_data(all_reviews):
         author_base_infos = []
         author_stats = []
         author_distributions = []
@@ -75,7 +76,8 @@ class RestaurantReviewDataExtractor:
 
         return [author_base_infos, author_stats, author_distributions, review_data]
 
-    def __create_author_data_dataframes(self, author_base_infos, author_distribution, author_stats):
+    @staticmethod
+    def __create_author_data_dataframes(author_base_infos, author_distribution, author_stats):
         # df_author_base_infos, TODO: Fatih maybe you should extract the exact date
         df_author_base_infos = pd.DataFrame(author_base_infos)
         df_author_base_infos['author_member_since'] = pd.to_datetime(df_author_base_infos['author_member_since'],
@@ -87,13 +89,15 @@ class RestaurantReviewDataExtractor:
 
         return [df_author_base_infos, df_author_distribution, df_author_stats]
 
-    def __create_review_data_dataframe(self, review_data):
+    @staticmethod
+    def __create_review_data_dataframe(review_data):
         df_review_data = pd.DataFrame(review_data)
         df_review_data['date'] = pd.to_datetime(df_review_data['date'], format='%d-%m-%Y')
 
         return df_review_data
 
-    def __remove_duplicates_in_dataframes(self, df_review_data, dfs_author_data):
+    @staticmethod
+    def __remove_duplicates_in_dataframes(df_review_data, dfs_author_data):
         no_duplicates = [not duplicate for duplicate in df_review_data.duplicated().to_list()]
         df_review_data = df_review_data[no_duplicates].reset_index(drop=True)
         df_review_data.index.name = 'review_id'
@@ -262,7 +266,8 @@ class RestaurantReviewDataExtractor:
 
         return df_average_rating_per_time_period
 
-    def __print_invalid_time_period_message(self):
+    @staticmethod
+    def __print_invalid_time_period_message():
         print("Invalid time period, enter one of the following time periods:")
         print("'d': Day")
         print("'m': Month")

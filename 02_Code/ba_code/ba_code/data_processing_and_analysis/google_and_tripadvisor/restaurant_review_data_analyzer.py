@@ -148,7 +148,8 @@ class RestaurantReviewDataAnalyzer:
 
         self.__plot_dataframe(df_overall_rating_development_over_time_period, x, y, title, x_label, y_label)
 
-    def __plot_dataframe(self, df, x, y, title, x_label, y_label):
+    @staticmethod
+    def __plot_dataframe(df, x, y, title, x_label, y_label):
         plt.figure()
         df.plot(x=x, y=y, marker='o')
         plt.ylim([1, 5])
@@ -210,7 +211,8 @@ class RestaurantReviewDataAnalyzer:
         plt.legend(loc='lower right', prop=fontP)
         plt.show()
 
-    def __boxplot_dataframe(self, df, x, y):
+    @staticmethod
+    def __boxplot_dataframe(df, x, y):
         plt.figure()
         sns.boxplot(data=df,
                     x=x,
@@ -240,7 +242,8 @@ class RestaurantReviewDataAnalyzer:
     def get_restaurant_names(self):
         return self.__restaurant_review_data_extractors_dict.keys()
 
-    def __get_value_of_time_period(self, time_period):
+    @staticmethod
+    def __get_value_of_time_period(time_period):
         time_period_value = ''
         if time_period == 'd':
             time_period_value = 'day'

@@ -68,7 +68,8 @@ class PrognoliteRestaurantDataAnalyzer:
         self.__plot_dataframe(df_turnover_development_since_beginning, x, y,
                               title, x_label, y_label)
 
-    def __get_value_of_time_period(self, time_period):
+    @staticmethod
+    def __get_value_of_time_period(time_period):
         time_period_value = ''
         if time_period == 'd':
             time_period_value = 'day'
@@ -80,7 +81,8 @@ class PrognoliteRestaurantDataAnalyzer:
             time_period_value = 'year'
         return time_period_value
 
-    def __plot_dataframe(self, df, x, y, title, x_label, y_label):
+    @staticmethod
+    def __plot_dataframe(df, x, y, title, x_label, y_label):
         plt.figure()
         df.plot(x=x, y=y, marker='o')
         plt.title(title)
