@@ -143,10 +143,18 @@ class DataAnalyzer:
                     + self.__get_time_period_value(time_period) + "s (residual): " + restaurant.value
             parameters_for_the_first_plot['y1'] = 'residual'
 
+            if df_average_turnover_per_time_period_decomposed['residual'].isnull().all():
+                print("Couldn't perform decompose and generate plot for", restaurant.value)
+                return
+
         elif decompose_option == DecomposeOption.RESIDUAL_PLUS_TREND:
             title = "Overall rating development vs average turnover\n over " \
                     + self.__get_time_period_value(time_period) + "s (residual + trend): " + restaurant.value
             parameters_for_the_first_plot['y1'] = 'residual_plus_trend'
+
+            if df_average_turnover_per_time_period_decomposed['residual_plus_trend'].isnull().all():
+                print("Couldn't perform decompose and generate plot for", restaurant.value)
+                return
 
         # define variables for second plot (df2)
         parameters_for_the_second_plot = {
@@ -199,10 +207,18 @@ class DataAnalyzer:
                     + self.__get_time_period_value(time_period) + "s (residual): " + restaurant.value
             parameters_for_the_first_plot['y1'] = 'residual'
 
+            if df_average_turnover_per_time_period_decomposed['residual'].isnull().all():
+                print("Couldn't perform decompose and generate plot for", restaurant.value)
+                return
+
         elif decompose_option == DecomposeOption.RESIDUAL_PLUS_TREND:
             title = "Average rating vs average turnover\n over " \
                     + self.__get_time_period_value(time_period) + "s (residual + trend): " + restaurant.value
             parameters_for_the_first_plot['y1'] = 'residual_plus_trend'
+
+            if df_average_turnover_per_time_period_decomposed['residual_plus_trend'].isnull().all():
+                print("Couldn't perform decompose and generate plot for", restaurant.value)
+                return
 
         # define variables for second plot (df2)
         parameters_for_the_second_plot = {
@@ -341,9 +357,8 @@ class DataAnalyzer:
         if filter_corona_data:
             x_max = datetime.strptime('2020', '%Y')
 
-        plt.figure()
-        ax = df1.plot(x=x1, y=y1, marker='o')
-        df2.plot(ax=ax, x=x2, y=y2, marker='o')
+        ax = df1.plot(x=x1, y=y1, marker='o', label='Tripadvisor')
+        df2.plot(ax=ax, x=x2, y=y2, marker='o', label='Google')
         plt.title(title)
         plt.xlim([x_min, x_max])
         plt.ylim([1, 5])
@@ -465,6 +480,10 @@ class DataAnalyzer:
                                                                        time_period,
                                                                        decompose_option)
 
+        if df_average_turnover_per_time_period[y].isnull().all():
+            print("Couldn't perform decompose and compute correlation for", restaurant.value)
+            return None, None
+
         restaurant_review_data_extractor = self.__get_restaurant_review_data_extractor(restaurant,
                                                                                        restaurant_review_data_type)
 
@@ -500,6 +519,10 @@ class DataAnalyzer:
             self.__get_average_turnover_dataframe_with_plot_parameters(restaurant,
                                                                        time_period,
                                                                        decompose_option)
+
+        if df_average_turnover_per_time_period[y].isnull().all():
+            print("Couldn't perform decompose and compute correlation for", restaurant.value)
+            return None, None
 
         restaurant_review_data_extractor = self.__get_restaurant_review_data_extractor(restaurant,
                                                                                        restaurant_review_data_type)
@@ -565,13 +588,27 @@ class DataAnalyzer:
 
     @staticmethod
     def __decompose_average_turnover_per_time_period_dataframe(df_average_turnover_per_time_period):
-        decomposed_components = seasonal_decompose(df_average_turnover_per_time_period
-                                                   .set_index('date')['average_turnover_per_time_period'],
-                                                   model='additive')
+        df_average_turnover_per_time_period.dropna(subset=['average_turnover_per_time_period'], inplace=True)
 
-        df_resid = decomposed_components.resid.to_frame().reset_index()
-        df_seasonal = decomposed_components.seasonal.to_frame().reset_index()
-        df_trend = decomposed_components.trend.to_frame().reset_index()
+        try:
+            decomposed_components = seasonal_decompose(df_average_turnover_per_time_period
+                                                       .set_index('date')['average_turnover_per_time_period'],
+                                                       model='additive')
+            df_resid = decomposed_components.resid.to_frame().reset_index()
+            df_seasonal = decomposed_components.seasonal.to_frame().reset_index()
+            df_trend = decomposed_components.trend.to_frame().reset_index()
+        except:
+            empty_values = [np.nan for x in range(len(df_average_turnover_per_time_period))]
+
+            df_resid = pd.DataFrame({
+                'resid': empty_values
+            })
+            df_seasonal = pd.DataFrame({
+                'seasonal': empty_values
+            })
+            df_trend = pd.DataFrame({
+                'trend': empty_values
+            })
 
         df_average_turnover_per_time_period_decomposed = pd.DataFrame({
             'date': df_average_turnover_per_time_period['date'],
@@ -795,16 +832,16 @@ dataAnalyzer.compute_correlation(analyzer_option=AnalyzerOption.OVERALL_RATING_G
 
 def main():
     dataAnalyzer = DataAnalyzer()
-    # dataAnalyzer.plot(analyzer_option=AnalyzerOption.OVERALL_RATING_GOOGLE_VS_OVERALL_RATING_TRIPADVISOR,
-    #                   restaurant=Restaurant.BUTCHER_USTER,
+    # dataAnalyzer.plot(analyzer_option=AnalyzerOption.AVERAGE_RATING_VS_AVERAGE_TURNOVER,
+    #                   restaurant=Restaurant.NOOCH_BARFI,
     #                   restaurant_review_data_type=RestaurantReviewDataType.GOOGLE_REVIEW,
     #                   time_period='m',
     #                   rating_date_offset_in_months=0,
     #                   filter_corona_data=False,
     #                   decompose_option=DecomposeOption.RESIDUAL_PLUS_TREND)
     #
-    # dataAnalyzer.compute_correlation(analyzer_option=AnalyzerOption.OVERALL_RATING_GOOGLE_VS_OVERALL_RATING_TRIPADVISOR,
-    #                                  restaurant=Restaurant.BUTCHER_USTER,
+    # dataAnalyzer.compute_correlation(analyzer_option=AnalyzerOption.AVERAGE_RATING_VS_AVERAGE_TURNOVER,
+    #                                  restaurant=Restaurant.NOOCH_BARFI,
     #                                  restaurant_review_data_type=RestaurantReviewDataType.GOOGLE_REVIEW,
     #                                  time_period='m',
     #                                  rating_date_offset_in_months=0,
@@ -812,19 +849,21 @@ def main():
     #                                  decompose_option=DecomposeOption.RESIDUAL_PLUS_TREND)
 
     # TODO: 1. get plots of all rest overall rating vs turnover
-    # dataAnalyzer.plot_for_all_restaurants(analyzer_option=AnalyzerOption.OVERALL_RATING_VS_AVERAGE_TURNOVER,
+    # dataAnalyzer.plot_for_all_restaurants(analyzer_option=AnalyzerOption.AVERAGE_RATING_VS_AVERAGE_TURNOVER,
     #                                       restaurant_review_data_type=RestaurantReviewDataType.GOOGLE_REVIEW,
     #                                       time_period='m',
     #                                       rating_date_offset_in_months=0,
-    #                                       filter_corona_data=False)
+    #                                       filter_corona_data=False,
+    #                                       decompose_option=DecomposeOption.RESIDUAL_PLUS_TREND)
 
     # TODO: look at correlations overall rating vs turnover
     # dataAnalyzer.compute_correlation_for_all_restaurants(
-    #     analyzer_option=AnalyzerOption.OVERALL_RATING_VS_AVERAGE_TURNOVER,
+    #     analyzer_option=AnalyzerOption.AVERAGE_RATING_VS_AVERAGE_TURNOVER,
     #     restaurant_review_data_type=RestaurantReviewDataType.GOOGLE_REVIEW,
     #     time_period='m',
     #     rating_date_offset_in_months=0,
-    #     filter_corona_data=False)
+    #     filter_corona_data=False,
+    #     decompose_option=DecomposeOption.RESIDUAL_PLUS_TREND)
 
     # TODO: 2. get plots of all rest average rating vs turnover
     # dataAnalyzer.plot_for_all_restaurants(analyzer_option=AnalyzerOption.AVERAGE_RATING_VS_AVERAGE_TURNOVER,
