@@ -594,6 +594,9 @@ class DataAnalyzer:
             decomposed_components = seasonal_decompose(df_average_turnover_per_time_period
                                                        .set_index('date')['average_turnover_per_time_period'],
                                                        model='additive')
+            decomposed_components.plot()
+            plt.show()
+
             df_resid = decomposed_components.resid.to_frame().reset_index()
             df_seasonal = decomposed_components.seasonal.to_frame().reset_index()
             df_trend = decomposed_components.trend.to_frame().reset_index()
