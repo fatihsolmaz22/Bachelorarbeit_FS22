@@ -796,6 +796,32 @@ class DataAnalyzer:
             x_label = 'year'
         return x_label
 
+    def print_number_of_review_for_all_restaurants(self):
+
+        restaurants = []
+        number_of_reviews_tripadvisor = []
+        number_of_reviews_google = []
+
+        for restaurant in Restaurant:
+            tripadvisor_restaurant_review_data_extractor = \
+                self.__get_restaurant_review_data_extractor(restaurant,RestaurantReviewDataType.TRIPADVISOR_REVIEW)
+            google_review_data_extractor = \
+                self.__get_restaurant_review_data_extractor(restaurant,RestaurantReviewDataType.GOOGLE_REVIEW)
+
+            restaurants.append(restaurant.value)
+            number_of_reviews_tripadvisor.append(tripadvisor_restaurant_review_data_extractor.get_number_of_reviews())
+            number_of_reviews_google.append(google_review_data_extractor.get_number_of_reviews())
+
+        pd.set_option('display.max_columns', None)
+        df_number_of_review_for_each_restaurant = pd.DataFrame({
+            'restaurant': restaurants,
+            'number_of_reviews_tripadvisor': number_of_reviews_tripadvisor,
+            'number_of_reviews_google': number_of_reviews_google,
+        })
+
+        print(df_number_of_review_for_each_restaurant)
+
+
 
 # code template to create a dataAnalyzer
 """
