@@ -708,8 +708,8 @@ class DataAnalyzer:
                          "average_rating_per_time_period_y": "average_rating_per_time_period_google"})
         x = 'average_rating_per_time_period_tripadvisor'
         y = 'average_rating_per_time_period_google'
-        x_label = 'average_rating_per_time_period_tripadvisor'
-        y_label = 'average_rating_per_time_period_google'
+        x_label = 'average rating per time period tripadvisor'
+        y_label = 'average rating per time period google'
         title = 'average rating tripadvisor vs average rating google per ' \
                 + self.__get_time_period_value(time_period) + ":\n" \
                 + restaurant.value
