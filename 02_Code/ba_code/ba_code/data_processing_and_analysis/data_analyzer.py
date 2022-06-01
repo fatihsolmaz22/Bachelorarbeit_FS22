@@ -595,7 +595,7 @@ class DataAnalyzer:
         try:
             decomposed_components = \
                 seasonal_decompose(df_average_turnover_per_time_period
-                                   .set_index('date')['average turnover per time period'], model='additive')
+                                   .set_index('date')['average_turnover_per_time_period'], model='additive')
 
             observed = decomposed_components.observed
             trend = decomposed_components.trend
@@ -900,7 +900,7 @@ def main():
     # TODO: 1. get plots of all rest overall rating vs turnover
     # dataAnalyzer.plot_for_all_restaurants(analyzer_option=AnalyzerOption.AVERAGE_RATING_VS_AVERAGE_TURNOVER,
     #                                       restaurant_review_data_type=RestaurantReviewDataType.GOOGLE_REVIEW,
-    #                                       time_period='m',
+    #                                       time_period='Q',
     #                                       rating_date_offset_in_months=0,
     #                                       filter_corona_data=False,
     #                                       decompose_option=DecomposeOption.RESIDUAL_PLUS_TREND)
