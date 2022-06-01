@@ -319,7 +319,7 @@ class DataAnalyzer:
         y2 = y1
         df2 = df_overall_rating_per_time_period_google
 
-        self.__plot_google_and_tripadvisor_rating(title, df1, x1, y1, df2, x2, y2, filter_corona_data)
+        self.__plot_google_and_tripadvisor_rating(title, df1, x1, y1, df2, x2, y2, filter_corona_data, restaurant)
 
     def __plot_average_rating_google_and_average_rating_tripadvisor(self, restaurant, time_period='m',
                                                                     filter_corona_data=False):
@@ -348,9 +348,9 @@ class DataAnalyzer:
         y2 = y1
         df2 = df_average_rating_per_time_period_google
 
-        self.__plot_google_and_tripadvisor_rating(title, df1, x1, y1, df2, x2, y2, filter_corona_data)
+        self.__plot_google_and_tripadvisor_rating(title, df1, x1, y1, df2, x2, y2, filter_corona_data, restaurant)
 
-    def __plot_google_and_tripadvisor_rating(self, title, df1, x1, y1, df2, x2, y2, filter_corona_data):
+    def __plot_google_and_tripadvisor_rating(self, title, df1, x1, y1, df2, x2, y2, filter_corona_data, restaurant):
 
         x_max, x_min = self.__get_x_min_and_x_max_for_plot(df1, df2, x1, x2)
 
@@ -365,6 +365,8 @@ class DataAnalyzer:
         plt.xlabel(x1)
         plt.ylabel('rating')
         plt.legend()
+        picture_name = self.get_picture_name(restaurant, filter_corona_data)
+        plt.savefig('{}-lineplot.png'.format(picture_name), dpi=600)
         plt.show()
 
     @staticmethod
@@ -584,10 +586,10 @@ class DataAnalyzer:
         df_average_turnover_per_time_period['date'] = \
             pd.to_datetime(df_average_turnover_per_time_period['date'].dt.date)
 
-        return self.__decompose_average_turnover_per_time_period_dataframe(df_average_turnover_per_time_period)
+        return self.__decompose_average_turnover_per_time_period_dataframe(df_average_turnover_per_time_period, restaurant)
 
     @staticmethod
-    def __decompose_average_turnover_per_time_period_dataframe(df_average_turnover_per_time_period):
+    def __decompose_average_turnover_per_time_period_dataframe(df_average_turnover_per_time_period, restaurant):
         df_average_turnover_per_time_period.dropna(subset=['average_turnover_per_time_period'], inplace=True)
 
         try:
@@ -595,6 +597,8 @@ class DataAnalyzer:
                                                        .set_index('date')['average_turnover_per_time_period'],
                                                        model='additive')
             decomposed_components.plot()
+            picture_name = restaurant.value
+            plt.savefig('{}-decompose.png'.format(picture_name), dpi=600)
             plt.show()
 
             df_resid = decomposed_components.resid.to_frame().reset_index()
