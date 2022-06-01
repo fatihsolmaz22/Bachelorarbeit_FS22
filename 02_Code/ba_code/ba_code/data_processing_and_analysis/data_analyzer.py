@@ -591,15 +591,31 @@ class DataAnalyzer:
         df_average_turnover_per_time_period.dropna(subset=['average_turnover_per_time_period'], inplace=True)
 
         try:
-            decomposed_components = seasonal_decompose(df_average_turnover_per_time_period
-                                                       .set_index('date')['average_turnover_per_time_period'],
-                                                       model='additive')
-            decomposed_components.plot()
+            decomposed_components = \
+                seasonal_decompose(df_average_turnover_per_time_period
+                                   .set_index('date')['average turnover per time period'], model='additive')
+
+            observed = decomposed_components.observed
+            trend = decomposed_components.trend
+            seasonal = decomposed_components.seasonal
+            residual = decomposed_components.resid
+
+            df = pd.DataFrame({"observed": observed, "trend": trend, "seasonal": seasonal, "residual": residual})
+
+            fig, axes = plt.subplots(nrows=4, ncols=1)
+            fig.suptitle('Average turnover per time period decomposed')
+            for i, ax in enumerate(axes):
+                ax = df.iloc[:, i].plot(ax=ax)
+                ax.set_ylabel(df.iloc[:, i].name)
+                if i == 3:
+                    plt.setp(ax.xaxis.get_minorticklabels(), rotation=30)
+                    plt.setp(ax.xaxis.get_majorticklabels(), rotation=30)
+                ax.label_outer()
             plt.show()
 
-            df_resid = decomposed_components.resid.to_frame().reset_index()
-            df_seasonal = decomposed_components.seasonal.to_frame().reset_index()
-            df_trend = decomposed_components.trend.to_frame().reset_index()
+            df_resid = residual.to_frame().reset_index()
+            df_seasonal = seasonal.to_frame().reset_index()
+            df_trend = trend.to_frame().reset_index()
         except:
             empty_values = [np.nan for x in range(len(df_average_turnover_per_time_period))]
 
@@ -804,9 +820,9 @@ class DataAnalyzer:
 
         for restaurant in Restaurant:
             tripadvisor_restaurant_review_data_extractor = \
-                self.__get_restaurant_review_data_extractor(restaurant,RestaurantReviewDataType.TRIPADVISOR_REVIEW)
+                self.__get_restaurant_review_data_extractor(restaurant, RestaurantReviewDataType.TRIPADVISOR_REVIEW)
             google_review_data_extractor = \
-                self.__get_restaurant_review_data_extractor(restaurant,RestaurantReviewDataType.GOOGLE_REVIEW)
+                self.__get_restaurant_review_data_extractor(restaurant, RestaurantReviewDataType.GOOGLE_REVIEW)
 
             restaurants.append(restaurant.value)
             number_of_reviews_tripadvisor.append(tripadvisor_restaurant_review_data_extractor.get_number_of_reviews())
@@ -820,7 +836,6 @@ class DataAnalyzer:
         })
 
         print(df_number_of_review_for_each_restaurant)
-
 
 
 # code template to create a dataAnalyzer
