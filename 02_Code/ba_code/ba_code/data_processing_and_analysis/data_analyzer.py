@@ -126,7 +126,7 @@ class DataAnalyzer:
 
         # define variables for plot
         title = "Overall rating development vs average turnover\n over " \
-                + self.__get_time_period_value(time_period) + "s: " + restaurant.value
+                + self.__get_time_period_value(time_period) + "s (observed): " + restaurant.value
         labels_for_legend = ['average_turnover_per_' + self.__get_time_period_value(time_period),
                              'overall_rating_development']
         # define variables for the first plot (df1)
@@ -190,7 +190,7 @@ class DataAnalyzer:
 
         # define variables for plot
         title = "Average rating vs average turnover per " + self.__get_time_period_value(time_period) \
-                + ":\n" + restaurant.value
+                + " (observed):\n" + restaurant.value
         labels_for_legend = ['average_turnover_per_' + self.__get_time_period_value(time_period),
                              'average_rating_per_' + self.__get_time_period_value(time_period)]
         # define variables for the first plot (df1)
@@ -203,8 +203,8 @@ class DataAnalyzer:
         }
 
         if decompose_option == DecomposeOption.RESIDUAL:
-            title = "Average rating vs average turnover\n over " \
-                    + self.__get_time_period_value(time_period) + "s (residual): " + restaurant.value
+            title = "Average rating vs average turnover\n per " \
+                    + self.__get_time_period_value(time_period) + " (residual): " + restaurant.value
             parameters_for_the_first_plot['y1'] = 'residual'
 
             if df_average_turnover_per_time_period_decomposed['residual'].isnull().all():
@@ -212,8 +212,8 @@ class DataAnalyzer:
                 return
 
         elif decompose_option == DecomposeOption.RESIDUAL_PLUS_TREND:
-            title = "Average rating vs average turnover\n over " \
-                    + self.__get_time_period_value(time_period) + "s (residual + trend): " + restaurant.value
+            title = "Average rating vs average turnover\n per " \
+                    + self.__get_time_period_value(time_period) + " (residual + trend): " + restaurant.value
             parameters_for_the_first_plot['y1'] = 'residual_plus_trend'
 
             if df_average_turnover_per_time_period_decomposed['residual_plus_trend'].isnull().all():
