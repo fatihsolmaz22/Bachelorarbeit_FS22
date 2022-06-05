@@ -125,8 +125,8 @@ class DataAnalyzer:
                 .get_overall_rating_development_over_time_period_dataframe(time_period, rating_date_offset_in_months)
 
         # define variables for plot
-        title = "Overall rating development vs average turnover\n over " \
-                + self.__get_time_period_value(time_period) + "s (observed): " + restaurant.value
+        title = "Overall rating development vs average turnover (observed)\n over " \
+                + self.__get_time_period_value(time_period) + "s: " + restaurant.value
         labels_for_legend = ['average_turnover_per_' + self.__get_time_period_value(time_period),
                              'overall_rating_development']
         # define variables for the first plot (df1)
@@ -134,23 +134,25 @@ class DataAnalyzer:
             'x1': 'date',
             'y1': 'average_turnover_per_time_period',
             'df1': df_average_turnover_per_time_period_decomposed,
-            'y1_label': 'average turnover in CHF',
+            'y1_label': 'average turnover (observed) in CHF',
             'color1': 'red'
         }
 
         if decompose_option == DecomposeOption.RESIDUAL:
-            title = "Overall rating development vs average turnover\n over " \
-                    + self.__get_time_period_value(time_period) + "s (residual): " + restaurant.value
+            title = "Overall rating development vs average turnover (residual)\n over " \
+                    + self.__get_time_period_value(time_period) + "s: " + restaurant.value
             parameters_for_the_first_plot['y1'] = 'residual'
+            parameters_for_the_first_plot['y1_label'] = 'average turnover (residual) in CHF'
 
             if df_average_turnover_per_time_period_decomposed['residual'].isnull().all():
                 print("Couldn't perform decompose and generate plot for", restaurant.value)
                 return
 
         elif decompose_option == DecomposeOption.RESIDUAL_PLUS_TREND:
-            title = "Overall rating development vs average turnover\n over " \
-                    + self.__get_time_period_value(time_period) + "s (residual + trend): " + restaurant.value
+            title = "Overall rating development vs average turnover (residual + trend)\n over " \
+                    + self.__get_time_period_value(time_period) + "s: " + restaurant.value
             parameters_for_the_first_plot['y1'] = 'residual_plus_trend'
+            parameters_for_the_first_plot['y1_label'] = 'average turnover (residual + trend) in CHF'
 
             if df_average_turnover_per_time_period_decomposed['residual_plus_trend'].isnull().all():
                 print("Couldn't perform decompose and generate plot for", restaurant.value)
@@ -189,8 +191,8 @@ class DataAnalyzer:
                 .get_average_rating_per_time_period_dataframe(time_period, rating_date_offset_in_months)
 
         # define variables for plot
-        title = "Average rating vs average turnover per " + self.__get_time_period_value(time_period) \
-                + " (observed):\n" + restaurant.value
+        title = "Average rating vs average turnover (observed)\n per " + self.__get_time_period_value(time_period) \
+                + ":" + restaurant.value
         labels_for_legend = ['average_turnover_per_' + self.__get_time_period_value(time_period),
                              'average_rating_per_' + self.__get_time_period_value(time_period)]
         # define variables for the first plot (df1)
@@ -198,23 +200,25 @@ class DataAnalyzer:
             'x1': 'date',
             'y1': 'average_turnover_per_time_period',
             'df1': df_average_turnover_per_time_period_decomposed,
-            'y1_label': 'average turnover in CHF',
+            'y1_label': 'average turnover (observed) in CHF',
             'color1': 'red'
         }
 
         if decompose_option == DecomposeOption.RESIDUAL:
-            title = "Average rating vs average turnover\n per " \
-                    + self.__get_time_period_value(time_period) + " (residual): " + restaurant.value
+            title = "Average rating vs average turnover (residual)\n per " \
+                    + self.__get_time_period_value(time_period) + ": " + restaurant.value
             parameters_for_the_first_plot['y1'] = 'residual'
+            parameters_for_the_first_plot['y1_label'] = 'average turnover (residual) in CHF'
 
             if df_average_turnover_per_time_period_decomposed['residual'].isnull().all():
                 print("Couldn't perform decompose and generate plot for", restaurant.value)
                 return
 
         elif decompose_option == DecomposeOption.RESIDUAL_PLUS_TREND:
-            title = "Average rating vs average turnover\n per " \
-                    + self.__get_time_period_value(time_period) + " (residual + trend): " + restaurant.value
+            title = "Average rating vs average turnover (residual + trend)\n per " \
+                    + self.__get_time_period_value(time_period) + ": " + restaurant.value
             parameters_for_the_first_plot['y1'] = 'residual_plus_trend'
+            parameters_for_the_first_plot['y1_label'] = 'average turnover (residual + trend) in CHF'
 
             if df_average_turnover_per_time_period_decomposed['residual_plus_trend'].isnull().all():
                 print("Couldn't perform decompose and generate plot for", restaurant.value)
@@ -502,9 +506,16 @@ class DataAnalyzer:
                                                            restaurant=restaurant)
         x = 'overall_rating_development'
         x_label = 'overall rating development'
-        title = 'overall rating development vs average turnover per ' \
-                + self.__get_time_period_value(time_period) + ":\n" \
-                + restaurant.value
+        title = 'Overall rating development vs average turnover (observed)\n over ' \
+                + self.__get_time_period_value(time_period) + "s: " + restaurant.value
+
+        if decompose_option == DecomposeOption.RESIDUAL:
+            title = "Overall rating development vs average turnover (residual)\n over " \
+                    + self.__get_time_period_value(time_period) + "s: " + restaurant.value
+
+        elif decompose_option == DecomposeOption.RESIDUAL_PLUS_TREND:
+            title = "Overall rating development vs average turnover (residual + trend)\n over " \
+                    + self.__get_time_period_value(time_period) + "s: " + restaurant.value
 
         self.__scatterplot_dataframe(restaurant, filter_corona_data,
                                      df_join_average_turnover_overall_rating, x, y, x_label, y_label, title)
@@ -542,9 +553,17 @@ class DataAnalyzer:
 
         x = 'average_rating_per_time_period'
         x_label = 'average rating'
-        title = 'average rating vs average turnover per ' \
-                + self.__get_time_period_value(time_period) + ":\n" \
-                + restaurant.value
+
+        title = 'Average rating vs average turnover (observed)\n per ' \
+                + self.__get_time_period_value(time_period) + ": " + restaurant.value
+
+        if decompose_option == DecomposeOption.RESIDUAL:
+            title = "Average rating vs average turnover (residual)\n per " \
+                    + self.__get_time_period_value(time_period) + ": " + restaurant.value
+
+        elif decompose_option == DecomposeOption.RESIDUAL_PLUS_TREND:
+            title = "Average rating vs average turnover (residual + trend)\n per " \
+                    + self.__get_time_period_value(time_period) + ": " + restaurant.value
 
         self.__scatterplot_dataframe(restaurant, filter_corona_data,
                                      df_join_average_turnover_average_rating, x, y, x_label, y_label, title)
@@ -569,7 +588,7 @@ class DataAnalyzer:
 
         else:
             y = 'average_turnover_per_time_period'
-            y_label = 'average turnover in CHF'
+            y_label = 'average turnover (observed) in CHF'
             df_average_turnover_per_time_period = \
                 df_average_turnover_per_time_period_decomposed[['date', y]]
 
@@ -799,9 +818,9 @@ class DataAnalyzer:
         sns.set_style("darkgrid")
         sns.scatterplot(data=df, x=x, y=y).set(title=title)
         picture_name = self.get_picture_name(restaurant, filter_corona_data)
-        plt.savefig('{}-corr.png'.format(picture_name), dpi=600)
         plt.xlabel(x_label)
         plt.ylabel(y_label)
+        plt.savefig('{}-corr.png'.format(picture_name), dpi=600)
         plt.show()
 
     @staticmethod
