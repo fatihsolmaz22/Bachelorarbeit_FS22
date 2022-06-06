@@ -22,7 +22,7 @@ class Restaurant(Enum):
     BUTCHER_METALLI = "fwg-butcher-metalli"
     NEGISHI_PILATUSSTRASSE = "fwg-negishi-pilatusstrasse"
     NOOCH_RICHTI = "fwg-nooch-richti"
-    OUTBACK_STAD = "fwg-outback-stad"
+    OUTBACK_STADELHOFEN = "fwg-outback-stad"
     NEGISHI_STEINEN = "fwg-negishi-steinen"
     NOOCH_USTER = "fwg-nooch-uster"
     BUTCHER_ZUERICH_WEST = "fwg-butcher-zuerichWest"
