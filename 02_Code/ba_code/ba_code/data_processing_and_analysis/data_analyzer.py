@@ -126,7 +126,7 @@ class DataAnalyzer:
 
         # define variables for plot
         title = "Overall rating development vs average turnover (observed)\n over " \
-                + self.__get_time_period_value(time_period) + "s: " + restaurant.value
+                + self.__get_time_period_value(time_period) + "s: " + self.__get_restaurant_name(restaurant)
         labels_for_legend = ['average_turnover_per_' + self.__get_time_period_value(time_period),
                              'overall_rating_development']
         # define variables for the first plot (df1)
@@ -140,7 +140,7 @@ class DataAnalyzer:
 
         if decompose_option == DecomposeOption.RESIDUAL:
             title = "Overall rating development vs average turnover (residual)\n over " \
-                    + self.__get_time_period_value(time_period) + "s: " + restaurant.value
+                    + self.__get_time_period_value(time_period) + "s: " + self.__get_restaurant_name(restaurant)
             parameters_for_the_first_plot['y1'] = 'residual'
             parameters_for_the_first_plot['y1_label'] = 'average turnover (residual) in CHF'
 
@@ -150,7 +150,7 @@ class DataAnalyzer:
 
         elif decompose_option == DecomposeOption.RESIDUAL_PLUS_TREND:
             title = "Overall rating development vs average turnover (residual + trend)\n over " \
-                    + self.__get_time_period_value(time_period) + "s: " + restaurant.value
+                    + self.__get_time_period_value(time_period) + "s: " + self.__get_restaurant_name(restaurant)
             parameters_for_the_first_plot['y1'] = 'residual_plus_trend'
             parameters_for_the_first_plot['y1_label'] = 'average turnover (residual + trend) in CHF'
 
@@ -192,7 +192,7 @@ class DataAnalyzer:
 
         # define variables for plot
         title = "Average rating vs average turnover (observed)\n per " + self.__get_time_period_value(time_period) \
-                + ":" + restaurant.value
+                + ":" + self.__get_restaurant_name(restaurant)
         labels_for_legend = ['average_turnover_per_' + self.__get_time_period_value(time_period),
                              'average_rating_per_' + self.__get_time_period_value(time_period)]
         # define variables for the first plot (df1)
@@ -206,7 +206,7 @@ class DataAnalyzer:
 
         if decompose_option == DecomposeOption.RESIDUAL:
             title = "Average rating vs average turnover (residual)\n per " \
-                    + self.__get_time_period_value(time_period) + ": " + restaurant.value
+                    + self.__get_time_period_value(time_period) + ": " + self.__get_restaurant_name(restaurant)
             parameters_for_the_first_plot['y1'] = 'residual'
             parameters_for_the_first_plot['y1_label'] = 'average turnover (residual) in CHF'
 
@@ -216,7 +216,7 @@ class DataAnalyzer:
 
         elif decompose_option == DecomposeOption.RESIDUAL_PLUS_TREND:
             title = "Average rating vs average turnover (residual + trend)\n per " \
-                    + self.__get_time_period_value(time_period) + ": " + restaurant.value
+                    + self.__get_time_period_value(time_period) + ": " + self.__get_restaurant_name(restaurant)
             parameters_for_the_first_plot['y1'] = 'residual_plus_trend'
             parameters_for_the_first_plot['y1_label'] = 'average turnover (residual + trend) in CHF'
 
@@ -315,7 +315,7 @@ class DataAnalyzer:
             .get_overall_rating_development_over_time_period_dataframe(time_period)
 
         title = "Overall rating tripadvisor vs overall rating google per " + self.__get_time_period_value(time_period) \
-                + ":\n" + restaurant.value
+                + ":\n" + self.__get_restaurant_name(restaurant)
         x1 = 'date'
         y1 = 'overall_rating_development'
         df1 = df_overall_rating_per_time_period_tripadvisor
@@ -344,7 +344,7 @@ class DataAnalyzer:
             .get_average_rating_per_time_period_dataframe(time_period)
 
         title = "Average rating tripadvisor vs average rating google per " + self.__get_time_period_value(time_period) \
-                + ":\n" + restaurant.value
+                + ":\n" + self.__get_restaurant_name(restaurant)
         x1 = 'date'
         y1 = 'average_rating_per_time_period'
         df1 = df_average_rating_per_time_period_tripadvisor
@@ -507,15 +507,15 @@ class DataAnalyzer:
         x = 'overall_rating_development'
         x_label = 'overall rating development'
         title = 'Overall rating development vs average turnover (observed)\n over ' \
-                + self.__get_time_period_value(time_period) + "s: " + restaurant.value
+                + self.__get_time_period_value(time_period) + "s: " + self.__get_restaurant_name(restaurant)
 
         if decompose_option == DecomposeOption.RESIDUAL:
             title = "Overall rating development vs average turnover (residual)\n over " \
-                    + self.__get_time_period_value(time_period) + "s: " + restaurant.value
+                    + self.__get_time_period_value(time_period) + "s: " + self.__get_restaurant_name(restaurant)
 
         elif decompose_option == DecomposeOption.RESIDUAL_PLUS_TREND:
             title = "Overall rating development vs average turnover (residual + trend)\n over " \
-                    + self.__get_time_period_value(time_period) + "s: " + restaurant.value
+                    + self.__get_time_period_value(time_period) + "s: " + self.__get_restaurant_name(restaurant)
 
         self.__scatterplot_dataframe(restaurant, filter_corona_data,
                                      df_join_average_turnover_overall_rating, x, y, x_label, y_label, title)
@@ -555,15 +555,15 @@ class DataAnalyzer:
         x_label = 'average rating'
 
         title = 'Average rating vs average turnover (observed)\n per ' \
-                + self.__get_time_period_value(time_period) + ": " + restaurant.value
+                + self.__get_time_period_value(time_period) + ": " + self.__get_restaurant_name(restaurant)
 
         if decompose_option == DecomposeOption.RESIDUAL:
             title = "Average rating vs average turnover (residual)\n per " \
-                    + self.__get_time_period_value(time_period) + ": " + restaurant.value
+                    + self.__get_time_period_value(time_period) + ": " + self.__get_restaurant_name(restaurant)
 
         elif decompose_option == DecomposeOption.RESIDUAL_PLUS_TREND:
             title = "Average rating vs average turnover (residual + trend)\n per " \
-                    + self.__get_time_period_value(time_period) + ": " + restaurant.value
+                    + self.__get_time_period_value(time_period) + ": " + self.__get_restaurant_name(restaurant)
 
         self.__scatterplot_dataframe(restaurant, filter_corona_data,
                                      df_join_average_turnover_average_rating, x, y, x_label, y_label, title)
@@ -705,7 +705,7 @@ class DataAnalyzer:
         y_label = 'overall rating development google'
         title = 'overall rating tripadvisor vs overall rating google per ' \
                 + self.__get_time_period_value(time_period) + ":\n" \
-                + restaurant.value
+                + self.__get_restaurant_name(restaurant)
 
         self.__scatterplot_dataframe(restaurant, filter_corona_data,
                                      df_join_overall_rating_google_and_tripadvisor, x, y, x_label, y_label, title)
@@ -752,7 +752,7 @@ class DataAnalyzer:
         y_label = 'average rating per time period google'
         title = 'average rating tripadvisor vs average rating google per ' \
                 + self.__get_time_period_value(time_period) + ":\n" \
-                + restaurant.value
+                + self.__get_restaurant_name(restaurant)
 
         self.__scatterplot_dataframe(restaurant, filter_corona_data,
                                      df_join_average_rating_google_and_tripadvisor, x, y, x_label, y_label, title)
@@ -822,6 +822,10 @@ class DataAnalyzer:
         plt.ylabel(y_label)
         plt.savefig('{}-corr.png'.format(picture_name), dpi=600)
         plt.show()
+
+    @staticmethod
+    def __get_restaurant_name(restaurant):
+        return " ".join(word.capitalize() for word in restaurant.name.split("_"))
 
     @staticmethod
     def __get_time_period_value(time_period):
