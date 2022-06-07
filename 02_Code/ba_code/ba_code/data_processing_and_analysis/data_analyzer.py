@@ -191,7 +191,7 @@ class DataAnalyzer:
                 .get_average_rating_per_time_period_dataframe(time_period, rating_date_offset_in_months)
 
         # define variables for plot
-        title = "Average rating vs average turnover (observed)\n per " + self.__get_time_period_value(time_period) \
+        title = "Running average rating vs average turnover (observed)\n per " + self.__get_time_period_value(time_period) \
                 + ":" + self.__get_restaurant_name(restaurant)
         labels_for_legend = ['average_turnover_per_' + self.__get_time_period_value(time_period),
                              'average_rating_per_' + self.__get_time_period_value(time_period)]
@@ -205,7 +205,7 @@ class DataAnalyzer:
         }
 
         if decompose_option == DecomposeOption.RESIDUAL:
-            title = "Average rating vs average turnover (residual)\n per " \
+            title = "Running average rating vs average turnover (residual)\n per " \
                     + self.__get_time_period_value(time_period) + ": " + self.__get_restaurant_name(restaurant)
             parameters_for_the_first_plot['y1'] = 'residual'
             parameters_for_the_first_plot['y1_label'] = 'average turnover (residual) in CHF'
@@ -215,7 +215,7 @@ class DataAnalyzer:
                 return
 
         elif decompose_option == DecomposeOption.RESIDUAL_PLUS_TREND:
-            title = "Average rating vs average turnover (residual + trend)\n per " \
+            title = "Running average rating vs average turnover (residual + trend)\n per " \
                     + self.__get_time_period_value(time_period) + ": " + self.__get_restaurant_name(restaurant)
             parameters_for_the_first_plot['y1'] = 'residual_plus_trend'
             parameters_for_the_first_plot['y1_label'] = 'average turnover (residual + trend) in CHF'
@@ -229,7 +229,7 @@ class DataAnalyzer:
             'x2': 'date',
             'y2': 'average_rating_per_time_period',
             'df2': df_average_rating_per_time_period,
-            'y2_label': 'average rating',
+            'y2_label': 'running average rating',
             'color2': 'blue'
         }
 
@@ -280,7 +280,7 @@ class DataAnalyzer:
         # plot df2 in the same plot
         ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
         ax2.set_ylabel(y2_label, color=color2)
-        ax2.set_ylim(1, 5)
+        ax2.set_ylim(1, 5.1)
         ax2.tick_params(axis='y', labelcolor=color2)
         ax2.plot(df2[x2],
                  df2[y2],
@@ -314,7 +314,7 @@ class DataAnalyzer:
         df_overall_rating_per_time_period_google = google_restaurant_review_data_extractor \
             .get_overall_rating_development_over_time_period_dataframe(time_period)
 
-        title = "Overall rating tripadvisor vs overall rating google per " + self.__get_time_period_value(time_period) \
+        title = "Overall rating Tripadvisor vs Google per " + self.__get_time_period_value(time_period) \
                 + ":\n" + self.__get_restaurant_name(restaurant)
         x1 = 'date'
         y1 = 'overall_rating_development'
@@ -343,7 +343,7 @@ class DataAnalyzer:
         df_average_rating_per_time_period_google = google_restaurant_review_data_extractor \
             .get_average_rating_per_time_period_dataframe(time_period)
 
-        title = "Average rating tripadvisor vs average rating google per " + self.__get_time_period_value(time_period) \
+        title = "Running average rating Tripadvisor vs Google per " + self.__get_time_period_value(time_period) \
                 + ":\n" + self.__get_restaurant_name(restaurant)
         x1 = 'date'
         y1 = 'average_rating_per_time_period'
@@ -365,7 +365,7 @@ class DataAnalyzer:
         df2.plot(ax=ax, x=x2, y=y2, marker='o', label='Google')
         plt.title(title)
         plt.xlim([x_min, x_max])
-        plt.ylim([1, 5])
+        plt.ylim([1, 5.1])
         plt.xlabel(x1)
         plt.ylabel('rating')
         plt.legend()
@@ -552,17 +552,17 @@ class DataAnalyzer:
                                                            restaurant=restaurant)
 
         x = 'average_rating_per_time_period'
-        x_label = 'average rating'
+        x_label = 'running average rating'
 
-        title = 'Average rating vs average turnover (observed)\n per ' \
+        title = 'Running average rating vs average turnover (observed)\n per ' \
                 + self.__get_time_period_value(time_period) + ": " + self.__get_restaurant_name(restaurant)
 
         if decompose_option == DecomposeOption.RESIDUAL:
-            title = "Average rating vs average turnover (residual)\n per " \
+            title = "Running average rating vs average turnover (residual)\n per " \
                     + self.__get_time_period_value(time_period) + ": " + self.__get_restaurant_name(restaurant)
 
         elif decompose_option == DecomposeOption.RESIDUAL_PLUS_TREND:
-            title = "Average rating vs average turnover (residual + trend)\n per " \
+            title = "Running average rating vs average turnover (residual + trend)\n per " \
                     + self.__get_time_period_value(time_period) + ": " + self.__get_restaurant_name(restaurant)
 
         self.__scatterplot_dataframe(restaurant, filter_corona_data,
@@ -623,19 +623,7 @@ class DataAnalyzer:
 
             df = pd.DataFrame({"observed": observed, "trend": trend, "seasonal": seasonal, "residual": residual})
 
-            fig, axes = plt.subplots(nrows=4, ncols=1)
-            fig.suptitle('Average turnover per time period decomposed')
-            for i, ax in enumerate(axes):
-                ax = df.iloc[:, i].plot(ax=ax)
-                ax.set_ylabel(df.iloc[:, i].name)
-                if i == 3:
-                    plt.setp(ax.xaxis.get_minorticklabels(), rotation=30)
-                    plt.setp(ax.xaxis.get_majorticklabels(), rotation=30)
-                ax.label_outer()
-
-            picture_name = restaurant.value
-            plt.savefig('{}-decompose.png'.format(picture_name), dpi=600)
-            plt.show()
+            DataAnalyzer.__plot_average_turnover_per_time_period_decomposed(restaurant, df)
 
             df_resid = residual.to_frame().reset_index()
             df_seasonal = seasonal.to_frame().reset_index()
@@ -663,6 +651,21 @@ class DataAnalyzer:
         })
 
         return df_average_turnover_per_time_period_decomposed
+
+    @staticmethod
+    def __plot_average_turnover_per_time_period_decomposed(restaurant, df):
+        fig, axes = plt.subplots(nrows=4, ncols=1)
+        fig.suptitle('Average turnover per time period decomposed')
+        for i, ax in enumerate(axes):
+            ax = df.iloc[:, i].plot(ax=ax)
+            ax.set_ylabel(df.iloc[:, i].name)
+            if i == 3:
+                plt.setp(ax.xaxis.get_minorticklabels(), rotation=0)
+                plt.setp(ax.xaxis.get_majorticklabels(), rotation=0)
+            ax.label_outer()
+        picture_name = restaurant.value
+        plt.savefig('{}-decompose.png'.format(picture_name), dpi=600)
+        plt.show()
 
     def __compute_correlation_between_overall_rating_google_and_overall_rating_tripadvisor(self,
                                                                                            restaurant,
@@ -701,9 +704,9 @@ class DataAnalyzer:
                          "overall_rating_development_y": "overall_rating_development_google"})
         x = 'overall_rating_development_tripadvisor'
         y = 'overall_rating_development_google'
-        x_label = 'overall rating development tripadvisor'
-        y_label = 'overall rating development google'
-        title = 'overall rating tripadvisor vs overall rating google per ' \
+        x_label = 'overall rating development Tripadvisor'
+        y_label = 'overall rating development Google'
+        title = 'Overall rating development Tripadvisor vs Google per ' \
                 + self.__get_time_period_value(time_period) + ":\n" \
                 + self.__get_restaurant_name(restaurant)
 
@@ -748,9 +751,9 @@ class DataAnalyzer:
                          "average_rating_per_time_period_y": "average_rating_per_time_period_google"})
         x = 'average_rating_per_time_period_tripadvisor'
         y = 'average_rating_per_time_period_google'
-        x_label = 'average rating per time period tripadvisor'
-        y_label = 'average rating per time period google'
-        title = 'average rating tripadvisor vs average rating google per ' \
+        x_label = 'running average rating Tripadvisor'
+        y_label = 'running average rating Google'
+        title = 'Running average rating Tripadvisor vs Google per ' \
                 + self.__get_time_period_value(time_period) + ":\n" \
                 + self.__get_restaurant_name(restaurant)
 
@@ -815,7 +818,7 @@ class DataAnalyzer:
 
     def __scatterplot_dataframe(self, restaurant, filter_corona_data, df, x, y, x_label, y_label, title):
         plt.figure()
-        sns.set_style("darkgrid")
+        #sns.set_style("darkgrid")
         sns.scatterplot(data=df, x=x, y=y).set(title=title)
         picture_name = self.get_picture_name(restaurant, filter_corona_data)
         plt.xlabel(x_label)
@@ -825,7 +828,7 @@ class DataAnalyzer:
 
     @staticmethod
     def __get_restaurant_name(restaurant):
-        return " ".join(word.capitalize() for word in restaurant.name.split("_"))
+        return "Restaurant " + " ".join(word.capitalize() for word in restaurant.name.split("_"))
 
     @staticmethod
     def __get_time_period_value(time_period):
