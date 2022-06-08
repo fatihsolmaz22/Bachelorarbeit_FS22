@@ -286,7 +286,7 @@ class DataAnalyzer:
                  df2[y2],
                  color=color2,
                  marker='o')
-
+        #sns.set_style("whitegrid", {'axes.grid': False})
         plt.title(title)
         plt.setp(ax1.get_xticklabels(), rotation=30, horizontalalignment='right')
         # fig.legend(labels_for_legend, bbox_to_anchor=(1, 1), bbox_transform=ax1.transAxes)
@@ -363,6 +363,7 @@ class DataAnalyzer:
 
         ax = df1.plot(x=x1, y=y1, marker='o', label='Tripadvisor')
         df2.plot(ax=ax, x=x2, y=y2, marker='o', label='Google')
+        #sns.set_style("whitegrid", {'axes.grid': False})
         plt.title(title)
         plt.xlim([x_min, x_max])
         plt.ylim([1, 5.1])
@@ -655,6 +656,7 @@ class DataAnalyzer:
     @staticmethod
     def __plot_average_turnover_per_time_period_decomposed(restaurant, df):
         fig, axes = plt.subplots(nrows=4, ncols=1)
+        #sns.set_style("whitegrid", {'axes.grid': False})
         fig.suptitle('Average turnover per time period decomposed')
         for i, ax in enumerate(axes):
             ax = df.iloc[:, i].plot(ax=ax)
@@ -818,7 +820,7 @@ class DataAnalyzer:
 
     def __scatterplot_dataframe(self, restaurant, filter_corona_data, df, x, y, x_label, y_label, title):
         plt.figure()
-        #sns.set_style("darkgrid")
+        sns.set_style("darkgrid")
         sns.scatterplot(data=df, x=x, y=y).set(title=title)
         picture_name = self.get_picture_name(restaurant, filter_corona_data)
         plt.xlabel(x_label)
