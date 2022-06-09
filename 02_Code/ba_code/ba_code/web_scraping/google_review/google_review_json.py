@@ -3,14 +3,12 @@ import requests
 import time
 import pickle
 import datetime
-import math
-from ba_code.web_scraping.scraping.scraping_tool import ScrapingTool
 from ba_code.web_scraping.google_review.google_constants import RestListJsonFormat
-# main_page_element = ScrapingTool.get_main_page_element("https://www.google.com")
 from ba_code.web_scraping.google_review.google_scraper import get_overall_rating_and_reviews_count
 from ba_code.web_scraping.tripadvisor_review.tripadvisor_json_format import RestaurantInfo, AllReviews, AuthorData
 from ba_code.web_scraping.tripadvisor_review.tripadvisor_json_format import AuthorStats, AuthorDistribution, ReviewData
 from ba_code.path import TRIPADVISOR_RESTAURANT_GOOGLE_DATASET_PATH
+
 # Saving cookies:
 # import pickle
 #
@@ -55,10 +53,10 @@ with open("google_rest_list.json") as rest_list_file:
         # page_limit = 1
         for i in range(0, page_limit+1):
             print("Page {} of {}".format(i, page_limit))
-            x = s.get(reviews_link_template.format(i))
-            x = x.text[4:]#.replace(")]}'\n", "")
+            json_faulty = s.get(reviews_link_template.format(i))
+            json_fixed = json_faulty.text[4:]#.replace(")]}'\n", "")
 
-            review_data = json.loads(x)
+            review_data = json.loads(json_fixed)
 
             reviews_10 = review_data[2]
             try:
@@ -103,18 +101,7 @@ with open("google_rest_list.json") as rest_list_file:
                                     ReviewData.LIKES: None
                                 }
                         }]
-                # stars_1 = review_data[5][0]
-                # stars_2 = review_data[5][1]
-                # stars_3 = review_data[5][2]
-                # stars_4 = review_data[5][3]
-                # stars_5 = review_data[5][4]
-                #
-                # distr = [stars_1, stars_2, stars_3, stars_4, stars_5]
-                # sum_of_amount_mult_by_stars = 0
-                # for j in range(0, len(distr)):
-                #     sum_of_amount_mult_by_stars += (j+1)*distr[j]
-                # result = sum_of_amount_mult_by_stars / sum(distr)
-                # print("overall rating calculated", result)
+
                 print("-------------------------\n")
                 time.sleep(1)
             except Exception:

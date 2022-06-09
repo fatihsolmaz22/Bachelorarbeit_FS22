@@ -9,6 +9,8 @@ from ba_code.web_scraping.tripadvisor_review.tripadvisor_json_format import Rest
 from ba_code.web_scraping.tripadvisor_review.tripadvisor_json_format import AuthorStats, AuthorDistribution, ReviewData
 from selenium.webdriver.common.by import By
 from ba_code.path import TRIPADVISOR_RESTAURANT_DATA_PATH
+from ba_code.web_scraping.tripadvisor_review.tripadvisor_scraper_rest_list import get_list_of_rest
+
 
 
 def click_on_all_languages(main_page_element):
@@ -123,21 +125,20 @@ def get_distr_as_dict_from_list(list_of_distr):
 
     return distr_dict
 
-from ba_code.web_scraping.tripadvisor_review.tripadvisor_scraper_rest_list import get_list_of_rest
 def main():
     list_of_rest = get_list_of_rest()
     for restaurant in list_of_rest:
         all_reviews_data = []
 
-        main_page_element = ScrapingTool.get_main_page_element(restaurant) # .value
+        main_page_element = ScrapingTool.get_main_page_element(restaurant)
 
-        # TODO: get overall rating of restaurant
+        # get overall rating of restaurant
         overall_rating = get_overall_rating_of_restaurant(main_page_element)
 
         print("\n\nRestaurant link:", restaurant) # .value
         print(overall_rating)
 
-        # TODO: get review count of restaurant
+        # get review count of restaurant
         reviews_count = int(ScrapingTool.get_html_elements_by_css_selector(
             html_element=main_page_element,
             html_tag=HtmlTags.SPAN_TAG,
@@ -171,7 +172,7 @@ def main():
                 author_distr_dict = get_distr_as_dict_from_list([])
 
                 try:
-                    # TODO: click on profile of author
+                    # click on profile of author
                     ScrapingTool.click_element_on_page(
                         main_page_element=main_page_element,
                         search_in_element=review_element,
@@ -180,7 +181,7 @@ def main():
                         attribute_value=HtmlAttributeValues.AUTHOR_PROFILE
                     )
 
-                    # TODO: get author container
+                    # get author container
                     author_container = ScrapingTool.get_html_elements_by_css_selector(
                         html_element=main_page_element,
                         html_tag=HtmlTags.SPAN_TAG,
@@ -189,7 +190,7 @@ def main():
                         get_first_element=True
                     )
 
-                    # TODO: get author level
+                    # get author level
                     author_level = 0
                     try:
                         author_level = int(ScrapingTool.get_html_elements_by_css_selector(
@@ -204,7 +205,7 @@ def main():
 
                     print("Author Level:", author_level)
 
-                    # TODO: get "member since" info
+                    # get "member since" info
                     author_description = ScrapingTool.get_html_elements_by_css_selector(
                         html_element=author_container,
                         html_tag=HtmlTags.UL,
@@ -219,7 +220,7 @@ def main():
 
                     print("Author member since:", author_member_since)
 
-                    # TODO: get author stats container
+                    # get author stats container
                     author_stats_container = ScrapingTool.get_html_elements_by_css_selector(
                         html_element=author_container,
                         html_tag=HtmlTags.UL,
@@ -228,7 +229,7 @@ def main():
                         get_first_element=True
                     )
 
-                    # TODO: get dict of stats of author
+                    # get dict of stats of author
                     author_stats_element_list = ScrapingTool.get_html_elements_by_css_selector(
                         html_element=author_stats_container,
                         html_tag=HtmlTags.SPAN_TAG,
@@ -240,7 +241,7 @@ def main():
                     author_stats_dict = get_stats_as_dict_from_list(author_stats_list)
                     print(author_stats_dict)
 
-                    # TODO get review distribution as dict of author
+                    # get review distribution as dict of author
                     author_distr_list = []
                     try:
                         author_distr_container = ScrapingTool.get_html_elements_by_css_selector(
@@ -264,7 +265,7 @@ def main():
                     author_distr_dict = get_distr_as_dict_from_list(author_distr_list)
                     print(author_distr_dict)
 
-                    # TODO: close author profile ui
+                    # close author profile ui
 
                     ScrapingTool.click_element_on_page(
                         main_page_element=main_page_element,
@@ -278,11 +279,11 @@ def main():
                 except Exception:
                     pass
 
-                # TODO: review date (Format: 29-09-2015)
+                # review date (Format: 29-09-2015)
                 date_of_review = get_date_of_review(review_element)
                 print(date_of_review)
 
-                # TODO: review title
+                # review title
                 review_title = ""
                 review_title = ScrapingTool.get_html_elements_by_css_selector(
                     html_element=review_element,
@@ -294,16 +295,16 @@ def main():
                 ).text.replace("\n", "")
                 print(review_title)
 
-                # TODO: rating
+                # rating
                 rating_of_review = get_rating_of_review(review_element)
                 print(rating_of_review)
 
-                # TODO: text of review
+                # text of review
                 content_of_review = ""
                 content_of_review = get_content_of_review(review_element)
                 print(content_of_review)
 
-                # TODO: Likes of review
+                # Likes of review
                 likes = 0
 
                 try:
@@ -341,11 +342,11 @@ def main():
                              }
                     }]
 
-            # TODO: here it goes to the next page of the restaurant review website
+            # here it goes to the next page of the restaurant review website
             has_next_page = go_next_page(main_page_element)
             page_count += 1
 
-        restaurant_info_json = {RestaurantInfo.RESTAURANT_NAME:restaurant.split("Reviews-")[1].replace(".html", ""),#.name,
+        restaurant_info_json = {RestaurantInfo.RESTAURANT_NAME:restaurant.split("Reviews-")[1].replace(".html", ""),
                                 RestaurantInfo.OVERALL_RATING:overall_rating,
                                 RestaurantInfo.ALL_REVIEWS:all_reviews_data,
                                 RestaurantInfo.REVIEWS_COUNT:reviews_count}
@@ -353,7 +354,7 @@ def main():
         jsonString = json.dumps(restaurant_info_json)
         with open("{}/tripadvisor_review_data_{}.json".format(
                 TRIPADVISOR_RESTAURANT_DATA_PATH,
-                restaurant.split("Reviews-")[1].replace(".html", "")), "w+") as json_file:#name), "w+") as json_file:
+                restaurant.split("Reviews-")[1].replace(".html", "")), "w+") as json_file:
             json_file.write(jsonString)
 
 if __name__ == "__main__":
