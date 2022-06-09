@@ -192,7 +192,7 @@ class DataAnalyzer:
 
         # define variables for plot
         title = "Running average rating vs average turnover (observed)\n per " + self.__get_time_period_value(time_period) \
-                + ":" + self.__get_restaurant_name(restaurant)
+                + ": " + self.__get_restaurant_name(restaurant)
         labels_for_legend = ['average_turnover_per_' + self.__get_time_period_value(time_period),
                              'average_rating_per_' + self.__get_time_period_value(time_period)]
         # define variables for the first plot (df1)
