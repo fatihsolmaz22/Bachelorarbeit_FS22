@@ -820,7 +820,7 @@ class DataAnalyzer:
 
     def __scatterplot_dataframe(self, restaurant, filter_corona_data, df, x, y, x_label, y_label, title):
         plt.figure()
-        sns.set_style("darkgrid")
+        #sns.set_style("darkgrid")
         sns.scatterplot(data=df, x=x, y=y).set(title=title)
         picture_name = self.get_picture_name(restaurant, filter_corona_data)
         plt.xlabel(x_label)
