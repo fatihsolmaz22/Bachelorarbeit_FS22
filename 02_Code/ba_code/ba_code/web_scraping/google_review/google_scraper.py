@@ -8,11 +8,10 @@ from ba_code.web_scraping.google_review.google_constants import RestaurantURLs, 
 from ba_code.web_scraping.scraping.scraping_constants import HtmlTags, HtmlAttributes, XPathStringFunctions
 
 def get_overall_rating_and_reviews_count(url):
-    # TODO: get main page element
-    # url = "https://www.google.com/maps/place/Outback+Lodge/@47.3669614,8.5455772,17z/data=!3m1!4b1!4m5!3m4!1s0x479aa0acb95d309d:0xd08132daefd16338!8m2!3d47.3669614!4d8.5477659"
-    main_page_element = ScrapingTool.get_main_page_element(url, time_sleep=5, google=True)
+    # get main page element
+    main_page_element = ScrapingTool.get_main_page_element(url, time_sleep=5)
 
-    # TODO: click on "agree to terms"
+    # click on "agree to terms"
     ScrapingTool.click_element_on_page(
         main_page_element=main_page_element,
         search_in_element=main_page_element,
@@ -20,7 +19,7 @@ def get_overall_rating_and_reviews_count(url):
         attribute_name=HtmlAttributes.ID,
         attribute_value=HtmlAttributeValues.AGREE_TO_TERMS)
 
-    # TODO: get overall rating
+    # get overall rating
     overall_rating = float(ScrapingTool.get_html_elements_by_css_selector(
         html_element=main_page_element,
         html_tag=HtmlTags.SPAN_TAG,
@@ -29,7 +28,7 @@ def get_overall_rating_and_reviews_count(url):
         get_first_element=True
     ).text.replace(",", "."))
 
-    # TODO: get total reviews count & calculate how many times you have to scroll (10 reviews per scroll)
+    # get total reviews count & calculate how many times you have to scroll (10 reviews per scroll)
     total_reviews_count = int(ScrapingTool.get_html_elements_by_css_selector(
         html_element=main_page_element,
         html_tag=HtmlTags.A_TAG,

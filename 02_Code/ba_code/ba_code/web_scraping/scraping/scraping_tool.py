@@ -3,30 +3,19 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 import time
-import pickle
-
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 from ba_code.web_scraping.scraping.scraping_constants import XPathTemplates
 
 class ScrapingTool:
 
     @staticmethod
-    def get_main_page_element(url, time_sleep=15, google=False):
+    def get_main_page_element(url, time_sleep=15):
         s = Service(ChromeDriverManager().install())
         chrome_options = Options()
         chrome_options.add_argument("--no-sandbox") # linux only
         chrome_options.add_argument("--headless")
         driver = webdriver.Chrome(service=s, options=chrome_options)
-        # if google:
-        #     print("switched to google")
-        #     driver.get("https://www.google.com/")
-        #     time.sleep(2)
-        # cookies = pickle.load(open("cookies.pkl", "rb"))
-        # for cookie in cookies:
-        #     driver.add_cookie(cookie)
         driver.get(url)
         time.sleep(time_sleep)
         return driver
@@ -58,15 +47,6 @@ class ScrapingTool:
     @staticmethod
     def click_element_on_page(main_page_element, search_in_element, html_tag, attribute_name, attribute_value):
         css_selector = ScrapingTool.__get_css_selector(html_tag, attribute_name, attribute_value)
-        # wait = WebDriverWait(search_in_element, 10)
-        # element_to_click = wait.until(EC.element_to_be_clickable((By.XPATH, css_selector)))
-        # is_not_clickable = True
-        # while is_not_clickable:
-        #     try:
-        element_to_click = search_in_element.find_element(by=By.XPATH, value=css_selector)#.click()
+        element_to_click = search_in_element.find_element(by=By.XPATH, value=css_selector)
         main_page_element.execute_script("arguments[0].click();", element_to_click)
-        is_not_clickable = False
         time.sleep(5)
-            # except Exception:
-            #     time.sleep(2)
-            #     pass

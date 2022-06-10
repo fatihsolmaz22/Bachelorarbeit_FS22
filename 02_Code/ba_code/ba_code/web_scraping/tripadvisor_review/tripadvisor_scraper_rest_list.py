@@ -1,11 +1,7 @@
-import json
-import datetime
 import time
-from enum import Enum
 from selenium.common.exceptions import NoSuchElementException
 from ba_code.web_scraping.scraping.scraping_tool import ScrapingTool
-from ba_code.web_scraping.tripadvisor_review.tripadvisor_constants import RestaurantURLs, HtmlAttributeValues
-from ba_code.web_scraping.scraping.scraping_constants import HtmlTags, HtmlAttributes, XPathStringFunctions
+from ba_code.web_scraping.scraping.scraping_constants import HtmlTags, HtmlAttributes
 
 LINK_ELEMENT = "bHGqj Cj b"
 NEXT_PAGE = "nav next rndBtn ui_button primary taLnk"
@@ -63,7 +59,7 @@ def get_list_of_rest():
         limit = i+30
 
         print("amount of links gathered:", len(list_of_links))
-        # TODO: here it goes to the next page of the restaurant review website
+        # here it goes to the next page of the restaurant review website
         has_next_page = go_next_page(main_page_element)
         page_count += 1
 

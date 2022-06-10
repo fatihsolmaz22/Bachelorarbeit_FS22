@@ -1,15 +1,7 @@
-from enum import Enum
-
 class RestListJsonFormat:
     RESTAURANT_NAME = "restaurant_name"
     REVIEWS_INFO_LINK = "reviews_info_link"
     REVIEWS_LINK_TEMPLATE = "reviews_link_template"
-
-class RestaurantURLs(Enum):
-    # TODO: add google review links
-
-    def __str__(self):
-        return str(self.name.replace("_", " ").title())
 
 class HtmlAttributeValues:
     AGREE_TO_TERMS = "L2AGLb"

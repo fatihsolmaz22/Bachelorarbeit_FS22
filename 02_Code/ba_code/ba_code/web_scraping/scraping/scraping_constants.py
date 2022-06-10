@@ -20,6 +20,3 @@ class HtmlAttributes:
     TITLE = "title"
     ID = "id"
     DATA_VALUE = "data-value"
-
-
-# input[@class="btn-primary btn-lg btn"]
