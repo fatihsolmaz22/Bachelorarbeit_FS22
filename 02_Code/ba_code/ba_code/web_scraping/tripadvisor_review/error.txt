@@ -1,3 +1,0 @@
-selenium.common.exceptions.NoSuchElementException: Message: no such element: Unable to locate element: {"method":"xpath","selector":".//div[@class="memberOverlayLink clickable"]"}
-  (Session info: chrome=100.0.4896.60)
-Stacktrace:
