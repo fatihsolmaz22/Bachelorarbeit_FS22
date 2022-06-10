@@ -43,7 +43,6 @@ with open("google_rest_list.json") as rest_list_file:
         print("restaurant:", rest_name)
         print("overall rating real:", overall_rating)
 
-        # page_limit = 1
         for i in range(0, page_limit+1):
             print("Page {} of {}".format(i, page_limit))
             json_faulty = s.get(reviews_link_template.format(i))
@@ -108,7 +107,7 @@ with open("google_rest_list.json") as rest_list_file:
         jsonString = json.dumps(restaurant_info_json)
         with open("{}/google_review_data_{}.json".format(
                 TRIPADVISOR_RESTAURANT_GOOGLE_DATASET_PATH,
-                rest_name), "w+") as json_file: # was  restaurant.name), "w+")
+                rest_name), "w+") as json_file:
             json_file.write(jsonString)
 
 cookies_pkl_file.close()
