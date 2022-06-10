@@ -9,12 +9,6 @@ from ba_code.web_scraping.tripadvisor_review.tripadvisor_json_format import Rest
 from ba_code.web_scraping.tripadvisor_review.tripadvisor_json_format import AuthorStats, AuthorDistribution, ReviewData
 from ba_code.path import TRIPADVISOR_RESTAURANT_GOOGLE_DATASET_PATH
 
-# Saving cookies:
-# import pickle
-#
-# driver.get("http://www.google.com")
-# pickle.dump( driver.get_cookies() , open("cookies.pkl","wb"))
-
 def get_distr_as_dict_from_list(list_of_distr):
     distr_dict = {}
     for i in range(5):
@@ -43,7 +37,6 @@ with open("google_rest_list.json") as rest_list_file:
         rest_name = restaurant[RestListJsonFormat.RESTAURANT_NAME]
         reviews_link_template = restaurant[RestListJsonFormat.REVIEWS_LINK_TEMPLATE]
 
-        # reviews_info_link = restaurant[RestListJsonFormat.REVIEWS_INFO_LINK]
         reviews_info_link = "https://www.google.com/search?q=" + "+".join(rest_name.split("_"))
         overall_rating, reviews_count, page_limit = get_overall_rating_and_reviews_count(reviews_info_link)
 
@@ -54,7 +47,7 @@ with open("google_rest_list.json") as rest_list_file:
         for i in range(0, page_limit+1):
             print("Page {} of {}".format(i, page_limit))
             json_faulty = s.get(reviews_link_template.format(i))
-            json_fixed = json_faulty.text[4:]#.replace(")]}'\n", "")
+            json_fixed = json_faulty.text[4:]
 
             review_data = json.loads(json_fixed)
 
@@ -118,5 +111,4 @@ with open("google_rest_list.json") as rest_list_file:
                 rest_name), "w+") as json_file: # was  restaurant.name), "w+")
             json_file.write(jsonString)
 
-# TODO: scraper needs same cookies for captcha test
 cookies_pkl_file.close()
